@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Disfluency</string>
     <string name="login">Iniciar Sesion</string>
+    <string name="username">Nombre de Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="show_password">Mostrar Contraseña</string>
+    <string name="hide_password">Ocultar Contraseña</string>
 </resources>
