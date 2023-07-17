@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Disfluency</string>
+    <string name="login">Iniciar Sesion</string>
 </resources>
