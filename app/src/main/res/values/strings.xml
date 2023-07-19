@@ -5,4 +5,5 @@
     <string name="password">Contraseña</string>
     <string name="show_password">Mostrar Contraseña</string>
     <string name="hide_password">Ocultar Contraseña</string>
+    <string name="home">Home</string>
 </resources>

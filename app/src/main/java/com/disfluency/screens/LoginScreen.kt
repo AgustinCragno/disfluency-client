@@ -13,45 +13,73 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.disfluency.R
 import com.disfluency.components.animation.DisfluencyAnimatedLogoRise
+import com.disfluency.model.Patient
+import com.disfluency.model.Therapist
+import com.disfluency.navigation.routing.Route
+import com.disfluency.viewmodel.LoggedUserViewModel
 
 private val LOGO_OFFSET = 120.dp
 
 @Composable
-fun LoginScreen(){
-    val animationState = remember { mutableStateOf(false) }
+fun LoginScreen(
+    navController: NavController,
+    viewModel: LoggedUserViewModel = viewModel()
+){
+    val animationState = remember { mutableStateOf(!viewModel.firstLogin) }
 
     Box(modifier = Modifier.fillMaxSize()){
         AnimatedVisibility(visible = animationState.value, enter = fadeIn(animationSpec = tween(delayMillis = 500))) {
-            UsernameAndPasswordForm(onSubmit = { /* TODO */ })
+            UsernameAndPasswordForm(onSubmit = { account, password -> viewModel.login(account, password) })
         }
         DisfluencyAnimatedLogoRise(animationState = animationState, riseOffset = LOGO_OFFSET)
+    }
+
+    if (viewModel.isLoggedIn){
+        LaunchedEffect(Unit) {
+            navController.navigate(
+                when (viewModel.getLoggedUser().role) {
+                    is Therapist -> Route.Therapist.Home.path
+                    is Patient -> Route.Patient.Home.path
+                    else -> throw IllegalStateException("The current user role is not valid")
+                }
+            )
+        }
     }
 }
 
 @Composable
-fun UsernameAndPasswordForm(onSubmit: () -> Unit){
-
+fun UsernameAndPasswordForm(
+    onSubmit: (String, String) -> Unit
+){
     var username by remember{ mutableStateOf("") }
     var password by remember{ mutableStateOf("") }
     var visiblePassword by remember { mutableStateOf(false) }
 
-    val enabledButton = remember(username, password){
+    val submitEnabled = remember(username, password){
         username.isNotBlank() && password.isNotBlank()
     }
+
+    val focusManager = LocalFocusManager.current
+
+    val submitAction = { onSubmit(username, password) }
 
     Column(
         Modifier
             .fillMaxSize()
             .offset(y = LOGO_OFFSET / 2)
-            .wrapContentSize(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+            .wrapContentSize(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
         OutlinedTextField(
             value = username,
@@ -71,7 +99,10 @@ fun UsernameAndPasswordForm(onSubmit: () -> Unit){
                 imeAction = ImeAction.Send,
                 keyboardType = KeyboardType.Password
             ),
-            keyboardActions = KeyboardActions(onSend = { onSubmit() }),
+            keyboardActions = KeyboardActions(onSend = {
+                focusManager.clearFocus()
+                submitAction()
+            }),
             singleLine = true,
             visualTransformation = if (visiblePassword) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
@@ -84,7 +115,7 @@ fun UsernameAndPasswordForm(onSubmit: () -> Unit){
             }
         )
 
-        Button(onClick = onSubmit, enabled = enabledButton) {
+        Button(onClick = submitAction, enabled = submitEnabled) {
             Text(stringResource(R.string.login))
         }
     }
