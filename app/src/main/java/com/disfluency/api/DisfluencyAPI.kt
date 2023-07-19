@@ -1,17 +1,17 @@
 package com.disfluency.api
 
 import com.disfluency.api.service.UserService
+import com.disfluency.utilities.PropertiesReader
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 
 object DisfluencyAPI {
-
-    //TODO: read from property file
-    private const val API_BASE_URL = "http://192.168.0.20:8081/"
-
     private val retrofit: Retrofit by lazy {
+        val host = PropertiesReader.getProperty("API_HOST")
+        val port = PropertiesReader.getProperty("API_PORT")
+
         Retrofit.Builder()
-            .baseUrl(API_BASE_URL)
+            .baseUrl("http://$host:$port/")
             .addConverterFactory(JacksonConverterFactory.create())
             .build()
     }
