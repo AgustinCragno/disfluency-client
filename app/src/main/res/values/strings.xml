@@ -7,4 +7,5 @@
     <string name="hide_password">Ocultar Contraseña</string>
     <string name="home">Home</string>
     <string name="incorrect_user_or_password">El usuario y/o la contraseña son incorrectos</string>
+    <string name="my_patients">Mis Pacientes</string>
 </resources>
