@@ -1,6 +1,5 @@
 package com.disfluency.viewmodel
 
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.disfluency.api.error.UserNotFoundException
 import com.disfluency.data.UserRepository
 import com.disfluency.model.User
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class LoggedUserViewModel : ViewModel() {

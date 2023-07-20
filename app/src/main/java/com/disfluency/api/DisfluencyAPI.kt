@@ -1,5 +1,6 @@
 package com.disfluency.api
 
+import com.disfluency.api.service.PatientService
 import com.disfluency.api.service.UserService
 import com.disfluency.utilities.PropertiesReader
 import retrofit2.Retrofit
@@ -17,4 +18,5 @@ object DisfluencyAPI {
     }
 
     val userService: UserService by lazy { retrofit.create(UserService::class.java) }
+    val patientService: PatientService by lazy { retrofit.create(PatientService::class.java) }
 }

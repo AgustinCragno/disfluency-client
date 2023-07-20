@@ -17,7 +17,7 @@ sealed class BottomNavigationItem(val route: Route, val icon: ImageVector) {
 
     object Therapist {
         object Home : BottomNavigationItem(Route.Therapist.Home, Icons.Outlined.Home)
-        object Patients : BottomNavigationItem(Route.Therapist.Patients, Icons.Outlined.ContactMail)
+        object Patients : BottomNavigationItem(Route.Therapist.MyPatients, Icons.Outlined.ContactMail)
 
         fun items(): List<BottomNavigationItem>{
             return this::class.nestedClasses.map { it.objectInstance as BottomNavigationItem }

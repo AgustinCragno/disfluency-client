@@ -11,17 +11,17 @@ sealed class Route(val path: String, val title: Int) {
 
     object Therapist {
         object Home: Route("home-therapist", R.string.home)
-        object Patients: Route("patients", R.string.my_patients)
+        object MyPatients: Route("patients", R.string.my_patients)
+        object NewPatient: Route("patients/new", R.string.new_patient)
+        object PatientDetail: Route("patients/{id}", R.string.patient){
+            fun routeTo(patientId: String): String{
+                return path.replace("{id}", patientId)
+            }
+        }
     }
 }
 
-private val ALL_ROUTES = Route::class.nestedClasses.flatMap {
-    val instance = it.objectInstance
-    if (instance is Route) listOf(instance)
-    else {
-        instance!!::class.nestedClasses.map { ob -> ob.objectInstance as Route }
-    }
-}
+private val ALL_ROUTES = Route::class.sealedSubclasses.map { it.objectInstance as Route }
 
 fun getTitleByRoute(path: String): Int{
     return ALL_ROUTES.first { it.path == path }.title
