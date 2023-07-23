@@ -1,7 +1,6 @@
 package com.disfluency.screens.therapist
 
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -24,7 +23,6 @@ import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.inputs.*
 import com.disfluency.components.stepper.PageStepper
 import com.disfluency.components.stepper.StepScreen
-import com.disfluency.data.PatientRepository
 import com.disfluency.model.Patient
 import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
@@ -42,7 +40,6 @@ import java.time.LocalTime
 import java.time.Period
 import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewPatientScreen(
     therapist: Therapist,
@@ -72,7 +69,7 @@ fun NewPatientScreen(
             TurnSelectionScreen(weeklyTurn = weeklyTurn, weeklyHour = weeklyHour)
         },
         StepScreen("Confirmar"){
-            NewPatientConfirmationScreen(
+            ConfirmationScreen(
                 avatar = AvatarManager.getAvatarId(avatarIndex.value),
                 name = name.value,
                 lastName = lastName.value,
@@ -107,32 +104,19 @@ fun NewPatientScreen(
                 delay(200)
                 submitted = true
             }
-
-//            phono.addPatient(patient)
-//            CoroutineScope(Dispatchers.IO).launch {
-//                newPatient.value = PatientRepository.addPatientToTherapist(patient, phono.id)
-//                Log.i("HTTP", "Creating patient: $patient")
-//            }
-//            CoroutineScope(Dispatchers.IO).launch {
-//                delay(200)
-//                submitted = true
-//            }
         }
     )
 
     if (submitted){
         LaunchedEffect(Unit){
             navController.popBackStack()
-//            navController.navigate(Route.NewPatientSuccess.route)
-            navController.navigate(Route.Therapist.MyPatients.path)
-            //TODO: volver a poner el success screen, en esa puedo validar el estado desde el viewModel
-            // y confirmarle definitivamente mirando al estado
+            navController.navigate(Route.Therapist.ConfirmationNewPatient.path)
         }
     }
 }
 
 @Composable
-fun AvatarSelectionScreen(avatarIndex: MutableState<Int>){
+private fun AvatarSelectionScreen(avatarIndex: MutableState<Int>){
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         AvatarPicker(selectedAvatarIndex = avatarIndex)
         Text(
@@ -145,7 +129,7 @@ fun AvatarSelectionScreen(avatarIndex: MutableState<Int>){
 }
 
 @Composable
-fun PatientDataScreen(name: MutableState<String>, lastName: MutableState<String>, id: MutableState<String>, email: MutableState<String>, dateOfBirth: MutableState<LocalDate?>){
+private fun PatientDataScreen(name: MutableState<String>, lastName: MutableState<String>, id: MutableState<String>, email: MutableState<String>, dateOfBirth: MutableState<LocalDate?>){
     Column {
         MandatoryTextInput(state = name, label = stringResource(R.string.name))
         MandatoryTextInput(state = lastName, label = stringResource(R.string.last_name))
@@ -155,7 +139,7 @@ fun PatientDataScreen(name: MutableState<String>, lastName: MutableState<String>
     }
 }
 
-fun validateDataInputs(name: MutableState<String>, lastName: MutableState<String>, id: MutableState<String>, email: MutableState<String>, dateOfBirth: MutableState<LocalDate?>): Boolean {
+private fun validateDataInputs(name: MutableState<String>, lastName: MutableState<String>, id: MutableState<String>, email: MutableState<String>, dateOfBirth: MutableState<LocalDate?>): Boolean {
     return listOf(name, lastName, id, email).all { MandatoryValidation().validate(it.value) }
             && DigitsOnlyValidation().validate(id.value)
             && EmailValidation().validate(email.value)
@@ -163,7 +147,7 @@ fun validateDataInputs(name: MutableState<String>, lastName: MutableState<String
 }
 
 @Composable
-fun TurnSelectionScreen(weeklyTurn: SnapshotStateList<DayOfWeek>, weeklyHour: MutableState<LocalTime?>){
+private fun TurnSelectionScreen(weeklyTurn: SnapshotStateList<DayOfWeek>, weeklyHour: MutableState<LocalTime?>){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -175,13 +159,13 @@ fun TurnSelectionScreen(weeklyTurn: SnapshotStateList<DayOfWeek>, weeklyHour: Mu
     }
 }
 
-fun validateTurnInputs(weeklyTurn: SnapshotStateList<DayOfWeek>, weeklyHour: MutableState<LocalTime?>): Boolean{
+private fun validateTurnInputs(weeklyTurn: SnapshotStateList<DayOfWeek>, weeklyHour: MutableState<LocalTime?>): Boolean{
     return weeklyTurn.isNotEmpty() && weeklyHour.value != null
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun NewPatientConfirmationScreen(avatar: Int, name: String, lastName: String, id: String, email: String, dateOfBirth: LocalDate, weeklyTurn: List<DayOfWeek>, weeklyHour: LocalTime){
+private fun ConfirmationScreen(avatar: Int, name: String, lastName: String, id: String, email: String, dateOfBirth: LocalDate, weeklyTurn: List<DayOfWeek>, weeklyHour: LocalTime){
 
     Column(modifier = Modifier.width(280.dp)) {
         Card(

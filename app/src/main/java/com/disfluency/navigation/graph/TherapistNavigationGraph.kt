@@ -12,6 +12,7 @@ import com.disfluency.navigation.structure.AppScaffold
 import com.disfluency.screens.therapist.HomeTherapistScreen
 import com.disfluency.screens.therapist.MyPatientsScreen
 import com.disfluency.screens.therapist.NewPatientScreen
+import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
 import com.disfluency.viewmodel.PatientsViewModel
 
 @Composable
@@ -34,6 +35,9 @@ fun TherapistNavigationGraph(therapist: Therapist){
                 backStackEntry.arguments?.getString("id")?.let {
 
                 }
+            }
+            composable(Route.Therapist.ConfirmationNewPatient.path){
+                NewPatientConfirmationScreen(navController = navHostController, viewModel = patientsViewModel)
             }
         }
     }

@@ -18,6 +18,8 @@ sealed class Route(val path: String, val title: Int) {
                 return path.replace("{id}", patientId)
             }
         }
+
+        object ConfirmationNewPatient: Route("patients/new/confirmation", -1)
     }
 }
 
@@ -27,5 +29,11 @@ fun getTitleByRoute(path: String): Int{
     return ALL_ROUTES.first { it.path == path }.title
 }
 
-val NO_BOTTOM_BAR_ROUTES = listOf<Route>().map { it.path }
-val NO_TOP_BAR_ROUTES = listOf<Route>(Route.Therapist.NewPatient).map { it.path }
+val NO_BOTTOM_BAR_ROUTES = listOf<Route>(
+    Route.Therapist.ConfirmationNewPatient
+).map { it.path }
+
+val NO_TOP_BAR_ROUTES = listOf(
+    Route.Therapist.NewPatient,
+    Route.Therapist.ConfirmationNewPatient
+).map { it.path }
