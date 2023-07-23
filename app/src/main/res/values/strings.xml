@@ -15,4 +15,15 @@
     <string name="patient">Paciente</string>
     <string name="search">Buscar</string>
     <string name="create">Crear</string>
+    <string name="required_field">Este campo es requerido</string>
+    <string name="confirm">Confirmar</string>
+    <string name="go_back">Volver</string>
+    <string name="name">Nombre</string>
+    <string name="last_name">Apellido</string>
+    <string name="person_id">DNI</string>
+    <string name="email">Correo Electronico</string>
+    <string name="date_of_birth">Fecha de Nacimiento</string>
+    <string name="weekly_turn">Dia/s Asignado/s</string>
+    <string name="weekly_hour">Horario Semanal</string>
+    <string name="cancel">Cancelar</string>
 </resources>

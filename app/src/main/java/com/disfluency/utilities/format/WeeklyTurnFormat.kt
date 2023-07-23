@@ -6,7 +6,7 @@ import com.disfluency.R
 import java.time.DayOfWeek
 
 @Composable
-fun weeklyTurnFormat(weeklyTurn: List<DayOfWeek>): String{
+fun formatWeeklyTurn(weeklyTurn: List<DayOfWeek>): String{
     val days = weeklyTurn
         .map { d -> formatDayOfWeek(dayOfWeek = d) }
         .map { d -> d[0].uppercaseChar() + d.substring(1) }

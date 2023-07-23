@@ -12,7 +12,7 @@ data class Patient(
     val dateOfBirth: LocalDate,
     val email: String,
     val joinedSince: LocalDate,
-    private val avatarIndex: Int,
+    val avatarIndex: Int,
     val weeklyTurn: List<DayOfWeek>,
     val weeklyHour: LocalTime
 ) : UserRole {

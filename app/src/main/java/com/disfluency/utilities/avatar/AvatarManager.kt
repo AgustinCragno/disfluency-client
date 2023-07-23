@@ -4,9 +4,8 @@ import android.content.Context
 import com.disfluency.R
 
 object AvatarManager {
-    private const val AVATAR_NAMING_FORMAT = "avatar_%d.png"
 
-    private var avatars = LinkedHashMap<String, Int>()
+    private var avatars = LinkedHashMap<Int, Int>()
 
     fun initialize(context: Context){
         val avatarList = context.resources.obtainTypedArray(R.array.avatar_list)
@@ -14,18 +13,29 @@ object AvatarManager {
         for (i in 0 until avatarList.length()){
             val id = avatarList.getResourceId(i, -1)
             val file = avatarList.getString(i)!!.substringAfterLast("/")
-            avatars[file] = id
+            avatars[getIndexNumber(file)] = id
         }
 
         avatarList.recycle()
     }
 
     fun getAvatarId(index: Int): Int{
-        return avatars[AVATAR_NAMING_FORMAT.format(index)] ?: throw AvatarNotFoundException(index)
+        return avatars[index] ?: throw AvatarNotFoundException(index)
+    }
+
+    fun getAvatars(): List<Int> {
+        return avatars.values.toList()
+    }
+
+    fun getIndices(): List<Int> {
+        return avatars.keys.toList()
     }
 
     fun getAvatarIndex(id: Int): Int{
-        val file = avatars.filterValues { id == it }.keys.first()
-        return file.substringAfter("_").substringBefore(".").toInt()
+        return avatars.filterValues { id == it }.keys.first()
+    }
+
+    private fun getIndexNumber(fileName: String): Int {
+        return fileName.substringAfter("_").substringBefore(".").toInt()
     }
 }

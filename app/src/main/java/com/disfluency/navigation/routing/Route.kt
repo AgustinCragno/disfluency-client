@@ -28,4 +28,4 @@ fun getTitleByRoute(path: String): Int{
 }
 
 val NO_BOTTOM_BAR_ROUTES = listOf<Route>().map { it.path }
-val NO_TOP_BAR_ROUTES = listOf<Route>().map { it.path }
+val NO_TOP_BAR_ROUTES = listOf<Route>(Route.Therapist.NewPatient).map { it.path }

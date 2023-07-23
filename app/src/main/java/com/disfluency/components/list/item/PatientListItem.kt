@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.disfluency.R
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.model.Patient
-import com.disfluency.utilities.format.weeklyTurnFormat
+import com.disfluency.utilities.format.formatWeeklyTurn
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -42,7 +42,7 @@ fun PatientListItem(patient: Patient, onClick: () -> Unit = {}, leadingContentPr
             },
             supportingContent = {
                 Text(
-                    text = weeklyTurnFormat(patient.weeklyTurn),
+                    text = formatWeeklyTurn(patient.weeklyTurn),
                     style = MaterialTheme.typography.labelMedium
                 )
             },

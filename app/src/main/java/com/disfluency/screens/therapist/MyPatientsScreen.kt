@@ -34,7 +34,9 @@ fun MyPatientsScreen(
     navController: NavHostController,
     viewModel: PatientsViewModel = viewModel()
 ){
-    viewModel.getPatientsByTherapist(therapist.id)
+    LaunchedEffect(Unit){
+        viewModel.getPatientsByTherapist(therapist.id)
+    }
 
     var text by rememberSaveable { mutableStateOf("") }
 
