@@ -1,35 +1,45 @@
 package com.disfluency.components.inputs
 
+import android.app.DatePickerDialog
+import android.widget.DatePicker
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.disfluency.R
 import com.disfluency.utilities.format.formatLocalDateState
-import com.disfluency.utilities.format.formatMillisecondsAsLocalDate
 import java.time.LocalDate
 import java.time.ZoneOffset
+import java.util.*
 
-//TODO: Investigar si hay forma de cambiar el formato de las fechas en el DatePicker. Esta como mm/dd/aaaa.
-
-//TODO: arreglar dia que se elige disminuye en uno.
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateInput(state: MutableState<LocalDate?>, label: String){
     var formattedValue by rememberSaveable { mutableStateOf(formatLocalDateState(state)) }
-    val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Input)
-    var openDialog by remember { mutableStateOf(false) }
-
-    val disableDialog = { openDialog = false }
 
     var wrongValue: Boolean by remember { mutableStateOf(false) }
+
+    val calendar = Calendar.getInstance()
+    val currentYear = state.value?.year ?: calendar.get(Calendar.YEAR)
+    val currentMonth = state.value?.monthValue ?: (calendar.get(Calendar.MONTH) + 1)
+    val currentDay = state.value?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
+
+    val onDateSetListener: (DatePicker, Int, Int, Int) -> Unit = { _, year, month, day ->
+        state.value = LocalDate.of(year, month + 1, day)
+        formattedValue = formatLocalDateState(state)
+    }
+
+    val datePickerDialog = DatePickerDialog(LocalContext.current, onDateSetListener, currentYear, currentMonth, currentDay)
+    datePickerDialog.datePicker.maxDate = LocalDate.of(currentYear, currentMonth, currentDay + 1).atStartOfDay(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()!!
 
     Box {
         OutlinedTextField(
@@ -51,37 +61,6 @@ fun DateInput(state: MutableState<LocalDate?>, label: String){
 
         Box(modifier = Modifier
             .matchParentSize()
-            .clickable { openDialog = true })
-    }
-
-    val maxDateAsMilliseconds: Long? = LocalDate.now().atStartOfDay(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()
-    if (openDialog) {
-        DatePickerDialog(
-            onDismissRequest = disableDialog,
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        state.value = formatMillisecondsAsLocalDate(datePickerState.selectedDateMillis!!)
-                        formattedValue = formatLocalDateState(state)
-                        disableDialog()
-                    },
-                    enabled = datePickerState.selectedDateMillis!=null
-                ) {
-                    Text(stringResource(R.string.confirm))
-                }
-            },
-            dismissButton = {
-                TextButton(disableDialog) {
-                    Text(stringResource(R.string.go_back))
-                }
-            },
-            content = {
-                DatePicker(state = datePickerState, title = null, headline = null, showModeToggle = true,
-                    dateValidator = {
-                        maxDateAsMilliseconds!=null && it < maxDateAsMilliseconds
-                    }
-                )
-            }
-        )
+            .clickable { datePickerDialog.show() })
     }
 }
