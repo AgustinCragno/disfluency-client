@@ -3,6 +3,7 @@ package com.disfluency.data
 import android.util.Log
 import com.disfluency.api.DisfluencyAPI
 import com.disfluency.api.dto.PatientDTO
+import com.disfluency.api.error.PatientCreationException
 import com.disfluency.api.error.TherapistNotFoundException
 import com.disfluency.model.Patient
 import retrofit2.HttpException
@@ -28,8 +29,8 @@ class PatientRepository {
             Log.i("patients", "Successfully created patient: $patientResponse of therapist: $therapistId")
             return patientResponse.asPatient()
         } catch (e: HttpException){
-            //TODO: throw custom exception
-            throw Exception()
+            Log.i("patients", "Error creating patient: $patient ==> $e")
+            throw PatientCreationException(patient)
         }
     }
 }

@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.disfluency.R
 import com.disfluency.utilities.avatar.AvatarManager
 
 
@@ -27,6 +26,7 @@ fun AvatarPicker(selectedAvatarIndex: MutableState<Int>){
     val availableIndices = AvatarManager.getIndices()
 
     var internalIndex by remember { mutableStateOf(0) }
+    selectedAvatarIndex.value = availableIndices[internalIndex]
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -49,7 +49,7 @@ fun AvatarPicker(selectedAvatarIndex: MutableState<Int>){
         Image(
             modifier = Modifier
                 .size(90.dp),
-            painter = painterResource(id = AvatarManager.getAvatarId(availableIndices[internalIndex])),
+            painter = painterResource(id = AvatarManager.getAvatarId(selectedAvatarIndex.value)),
             contentDescription = "Avatar"
         )
 
