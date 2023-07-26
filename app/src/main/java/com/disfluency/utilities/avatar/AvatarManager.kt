@@ -7,6 +7,8 @@ object AvatarManager {
 
     private var avatars = LinkedHashMap<Int, Int>()
 
+    private const val DEFAULT_AVATAR = R.drawable.avatar_default
+
     fun initialize(context: Context){
         val avatarList = context.resources.obtainTypedArray(R.array.avatar_list)
 
@@ -20,7 +22,7 @@ object AvatarManager {
     }
 
     fun getAvatarId(index: Int): Int{
-        return avatars[index] ?: throw AvatarNotFoundException(index)
+        return avatars[index] ?: DEFAULT_AVATAR
     }
 
     fun getAvatars(): List<Int> {
