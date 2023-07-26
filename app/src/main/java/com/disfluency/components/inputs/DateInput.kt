@@ -29,9 +29,14 @@ fun DateInput(state: MutableState<LocalDate?>, label: String){
     var wrongValue: Boolean by remember { mutableStateOf(false) }
 
     val calendar = Calendar.getInstance()
-    val currentYear = state.value?.year ?: calendar.get(Calendar.YEAR)
-    val currentMonth = state.value?.monthValue ?: (calendar.get(Calendar.MONTH) + 1)
-    val currentDay = state.value?.dayOfMonth ?: calendar.get(Calendar.DAY_OF_MONTH)
+
+    val todaysYear = calendar.get(Calendar.YEAR)
+    val todaysMonth = calendar.get(Calendar.MONTH) + 1
+    val todaysDay = calendar.get(Calendar.DAY_OF_MONTH)
+
+    val currentYear = state.value?.year ?: todaysYear
+    val currentMonth = state.value?.monthValue ?: todaysMonth
+    val currentDay = state.value?.dayOfMonth ?: todaysDay
 
     val onDateSetListener: (DatePicker, Int, Int, Int) -> Unit = { _, year, month, day ->
         state.value = LocalDate.of(year, month + 1, day)
@@ -39,7 +44,7 @@ fun DateInput(state: MutableState<LocalDate?>, label: String){
     }
 
     val datePickerDialog = DatePickerDialog(LocalContext.current, onDateSetListener, currentYear, currentMonth, currentDay)
-    datePickerDialog.datePicker.maxDate = LocalDate.of(currentYear, currentMonth, currentDay + 1).atStartOfDay(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()!!
+    datePickerDialog.datePicker.maxDate = LocalDate.of(todaysYear, todaysMonth, todaysDay + 1).atStartOfDay(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()!!
 
     Box {
         OutlinedTextField(
