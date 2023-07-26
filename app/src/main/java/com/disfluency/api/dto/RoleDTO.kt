@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT, property = "type")
 @JsonSubTypes(
-    JsonSubTypes.Type(value = PatientDTO::class, name = "patient"),
+    JsonSubTypes.Type(value = PatientRoleDTO::class, name = "patient"),
     JsonSubTypes.Type(value = TherapistDTO::class, name = "therapist")
 )
 interface RoleDTO {
