@@ -38,6 +38,12 @@ sealed class Route(val path: String, val title: Int) {
                 return path.replace("{id}", patientId)
             }
         }
+
+        object ExerciseAssignmentDetail: Route("exercise-assignments/{id}", R.string.assigned_exercise){
+            fun routeTo(assignmentId: String): String{
+                return path.replace("{id}", assignmentId)
+            }
+        }
     }
 }
 

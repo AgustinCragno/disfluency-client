@@ -15,7 +15,8 @@ data class Patient(
     val joinedSince: LocalDate,
     val avatarIndex: Int,
     val weeklyTurn: List<DayOfWeek>,
-    val weeklyHour: LocalTime
+    val weeklyHour: LocalTime,
+    val exercises: List<ExerciseAssignment> = listOf()
 ) : UserRole {
     fun fullName(): String {
         return "$name $lastName"
@@ -30,13 +31,15 @@ data class Patient(
     }
 
     fun getCompletedExercisesCount(): Int {
-        //TODO: implement
-        return Random.nextInt(5)
+        return exercises
+            .map { e -> e.practiceAttempts }
+            .count { e -> e.isNotEmpty() }
     }
 
     fun getPendingExercisesCount(): Int {
-        //TODO: implement
-        return Random.nextInt(5)
+        return exercises
+            .map { e -> e.practiceAttempts }
+            .count { e -> e.isEmpty() }
     }
 
     fun getCompletedQuestionnairesCount(): Int {
