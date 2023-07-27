@@ -26,4 +26,15 @@
     <string name="weekly_turn">Dia/s Asignado/s</string>
     <string name="weekly_hour">Horario Semanal</string>
     <string name="cancel">Cancelar</string>
+    <string name="exercises">Ejercicios</string>
+    <string name="forms">Cuestionarios</string>
+    <string name="sessions">Sesiones</string>
+    <string name="patient_exercises">Ejercicios del Paciente</string>
+    <string name="patient_forms">Cuestionarios del Paciente</string>
+    <string name="patient_sessions">Sesiones del Paciente</string>
+    <string name="solved_exercises">Ejercicios Resueltos</string>
+    <string name="pending_exercises">Ejercicios Pendientes</string>
+    <string name="solved_forms">Cuestionarios Resueltos</string>
+    <string name="pending_forms">Cuestionarios Pendientes</string>
+    <string name="recorded_sessions">Sesiones Grabadas</string>
 </resources>

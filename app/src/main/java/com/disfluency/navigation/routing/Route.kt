@@ -20,6 +20,24 @@ sealed class Route(val path: String, val title: Int) {
         }
 
         object ConfirmationNewPatient: Route("patients/new/confirmation", -1)
+
+        object PatientExercises: Route("patients/{id}/exercises", R.string.patient_exercises){
+            fun routeTo(patientId: String): String{
+                return path.replace("{id}", patientId)
+            }
+        }
+
+        object PatientForms: Route("patients/{id}/forms", R.string.patient_forms){
+            fun routeTo(patientId: String): String{
+                return path.replace("{id}", patientId)
+            }
+        }
+
+        object PatientSessions: Route("patients/{id}/sessions", R.string.patient_sessions){
+            fun routeTo(patientId: String): String{
+                return path.replace("{id}", patientId)
+            }
+        }
     }
 }
 

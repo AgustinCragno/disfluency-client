@@ -60,7 +60,10 @@ fun BottomNavigation(navController: NavController, items: List<BottomNavigationI
             NavigationBarItem(
                 selected = currentRoute == item.route.path,
                 icon = { Icon(item.icon, contentDescription = stringResource(item.route.title)) },
-                label = { Text(text = stringResource(item.route.title)) },
+                label = {
+                    //TODO: usar auto-adjustable-size text
+                    Text(text = stringResource(item.route.title))
+                        },
                 onClick = {
                     navController.navigate(item.route.path) {
 
