@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.disfluency.R
+import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.components.skeleton.SkeletonLoader
 import com.disfluency.components.skeleton.list.ExerciseAssignmentListSkeleton
 import com.disfluency.components.thumbnail.ExerciseThumbnail
@@ -123,29 +124,5 @@ fun ExerciseAssignmentListItem(exerciseAssignment: ExerciseAssignment, navContro
 
 @Composable
 private fun NoAssignmentsMessage(){
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        contentAlignment = Alignment.Center
-    ){
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(
-                modifier = Modifier.size(120.dp),
-                painter = painterResource(id = R.drawable.speech_bubble),
-                contentDescription = "Speech",
-                alpha = 0.4f
-            )
-
-            Text(
-                modifier = Modifier.padding(16.dp).width(160.dp),
-                text = stringResource(id = R.string.patient_has_no_assigned_exercises),
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                textAlign = TextAlign.Center,
-                color = Color.Gray.copy(alpha = 0.7f)
-            )
-        }
-    }
-
+    ImageMessagePage(imageResource = R.drawable.speech_bubble, text = stringResource(id = R.string.patient_has_no_assigned_exercises))
 }
