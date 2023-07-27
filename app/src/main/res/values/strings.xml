@@ -37,4 +37,9 @@
     <string name="solved_forms">Cuestionarios Resueltos</string>
     <string name="pending_forms">Cuestionarios Pendientes</string>
     <string name="recorded_sessions">Sesiones Grabadas</string>
+    <string name="resolutions">resoluciones</string>
+    <string name="assigned_exercise">Ejercicio Asignado</string>
+    <string name="patient_has_no_assigned_exercises">El paciente no tiene ejercicios asignados</string>
+    <string name="patient_has_no_assigned_forms">El paciente no tiene cuestionarios asignados</string>
+    <string name="patient_has_no_recorded_sessions">El paciente no tiene sesiones grabadas</string>
 </resources>
