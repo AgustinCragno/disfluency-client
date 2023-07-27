@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.disfluency.api.dto.PatientDTO
 import com.disfluency.api.error.PatientCreationException
+import com.disfluency.api.error.PatientNotFoundException
 import com.disfluency.components.success.ConfirmationState
 import com.disfluency.data.PatientRepository
 import com.disfluency.model.Patient
@@ -35,5 +36,9 @@ class PatientsViewModel : ViewModel(){
         catch (exception: PatientCreationException){
             creationConfirmationState.value = ConfirmationState.ERROR
         }
+    }
+
+    fun getPatientById(patientId: String): Patient {
+        return patients.value?.first { it.id == patientId } ?: throw PatientNotFoundException(patientId)
     }
 }

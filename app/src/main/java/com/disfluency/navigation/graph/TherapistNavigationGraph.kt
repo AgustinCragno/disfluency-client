@@ -12,6 +12,7 @@ import com.disfluency.navigation.structure.AppScaffold
 import com.disfluency.screens.therapist.HomeTherapistScreen
 import com.disfluency.screens.therapist.MyPatientsScreen
 import com.disfluency.screens.therapist.NewPatientScreen
+import com.disfluency.screens.therapist.PatientDetailScreen
 import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
 import com.disfluency.viewmodel.PatientsViewModel
 
@@ -32,6 +33,21 @@ fun TherapistNavigationGraph(therapist: Therapist){
                 NewPatientScreen(therapist = therapist, navController = navHostController, viewModel = patientsViewModel)
             }
             composable(Route.Therapist.PatientDetail.path, listOf(navArgument("id"){})){ backStackEntry ->
+                backStackEntry.arguments?.getString("id")?.let {
+                    PatientDetailScreen(patientId = it, navController = navHostController, viewModel = patientsViewModel)
+                }
+            }
+            composable(Route.Therapist.PatientExercises.path, listOf(navArgument("id"){})){ backStackEntry ->
+                backStackEntry.arguments?.getString("id")?.let {
+
+                }
+            }
+            composable(Route.Therapist.PatientForms.path, listOf(navArgument("id"){})){ backStackEntry ->
+                backStackEntry.arguments?.getString("id")?.let {
+
+                }
+            }
+            composable(Route.Therapist.PatientSessions.path, listOf(navArgument("id"){})){ backStackEntry ->
                 backStackEntry.arguments?.getString("id")?.let {
 
                 }

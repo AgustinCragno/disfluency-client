@@ -4,6 +4,7 @@ import com.disfluency.utilities.avatar.AvatarManager
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import kotlin.random.Random
 
 data class Patient(
     val id: String,
@@ -26,5 +27,30 @@ data class Patient(
 
     fun avatar(): Int {
         return AvatarManager.getAvatarId(avatarIndex)
+    }
+
+    fun getCompletedExercisesCount(): Int {
+        //TODO: implement
+        return Random.nextInt(5)
+    }
+
+    fun getPendingExercisesCount(): Int {
+        //TODO: implement
+        return Random.nextInt(5)
+    }
+
+    fun getCompletedQuestionnairesCount(): Int {
+        //TODO: implement
+        return Random.nextInt(5)
+    }
+
+    fun getPendingQuestionnairesCount(): Int {
+        //TODO: implement
+        return Random.nextInt(5)
+    }
+
+    fun getRecordedSessionsCount(): Int {
+        //TODO: implement
+        return Random.nextInt(5)
     }
 }
