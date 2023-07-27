@@ -42,4 +42,6 @@
     <string name="patient_has_no_assigned_exercises">El paciente no tiene ejercicios asignados</string>
     <string name="patient_has_no_assigned_forms">El paciente no tiene cuestionarios asignados</string>
     <string name="patient_has_no_recorded_sessions">El paciente no tiene sesiones grabadas</string>
+    <string name="repeat_the_following_phrase">Repita la siguiente frase:</string>
+    <string name="example_generated_by_professional">Ejemplo generado por el profesional</string>
 </resources>

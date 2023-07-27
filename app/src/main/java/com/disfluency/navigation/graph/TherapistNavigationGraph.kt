@@ -14,11 +14,13 @@ import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.AppScaffold
 import com.disfluency.screens.therapist.*
 import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
+import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.PatientsViewModel
 
 @Composable
 fun TherapistNavigationGraph(therapist: Therapist){
     val patientsViewModel: PatientsViewModel = viewModel()
+    val exercisesViewModel: ExercisesViewModel = viewModel()
 
     AppScaffold(bottomNavigationItems = BottomNavigationItem.Therapist.items()) { navHostController ->
 
@@ -39,12 +41,12 @@ fun TherapistNavigationGraph(therapist: Therapist){
             }
             composable(Route.Therapist.PatientExercises.path, listOf(navArgument("id"){})){ backStackEntry ->
                 backStackEntry.arguments?.getString("id")?.let {
-                    PatientExerciseAssignmentsScreen(patientId = it, navController = navHostController)
+                    PatientExerciseAssignmentsScreen(patientId = it, navController = navHostController, viewModel = exercisesViewModel)
                 }
             }
             composable(Route.Therapist.ExerciseAssignmentDetail.path, listOf(navArgument("id"){})){ backStackEntry ->
                 backStackEntry.arguments?.getString("id")?.let {
-
+                    ExerciseAssignmentDetailScreen(assignmentId = it, navController = navHostController, viewModel = exercisesViewModel)
                 }
             }
             composable(Route.Therapist.PatientForms.path, listOf(navArgument("id"){})){ backStackEntry ->
