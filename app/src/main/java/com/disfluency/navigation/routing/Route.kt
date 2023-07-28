@@ -21,31 +21,15 @@ sealed class Route(val path: String, private vararg val params: String, val titl
         object Home: Route("home-therapist", title = R.string.home)
         object MyPatients: Route("patients", title = R.string.my_patients)
         object NewPatient: Route("patients/new", title = R.string.new_patient)
-        object PatientDetail: Route("patients/{id}", title = R.string.patient){
-            fun routeTo(patientId: String): String{
-                return path.replace("{id}", patientId)
-            }
-        }
+        object PatientDetail: Route("patients/{id}", "id", title = R.string.patient)
 
         object ConfirmationNewPatient: Route("patients/new/confirmation", title = -1)
 
-        object PatientExercises: Route("patients/{id}/exercises", title = R.string.patient_exercises){
-            fun routeTo(patientId: String): String{
-                return path.replace("{id}", patientId)
-            }
-        }
+        object PatientExercises: Route("patients/{id}/exercises", "id", title = R.string.patient_exercises)
 
-        object PatientForms: Route("patients/{id}/forms", title = R.string.patient_forms){
-            fun routeTo(patientId: String): String{
-                return path.replace("{id}", patientId)
-            }
-        }
+        object PatientForms: Route("patients/{id}/forms", "id", title = R.string.patient_forms)
 
-        object PatientSessions: Route("patients/{id}/sessions", title = R.string.patient_sessions){
-            fun routeTo(patientId: String): String{
-                return path.replace("{id}", patientId)
-            }
-        }
+        object PatientSessions: Route("patients/{id}/sessions", "id", title = R.string.patient_sessions)
 
         object ExerciseAssignmentDetail: Route("exercise-assignments/{id}", "id", title = R.string.assigned_exercise)
     }
