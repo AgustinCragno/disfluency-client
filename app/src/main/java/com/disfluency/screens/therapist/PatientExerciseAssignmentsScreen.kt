@@ -1,7 +1,6 @@
 package com.disfluency.screens.therapist
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,17 +11,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.disfluency.R
@@ -56,7 +48,7 @@ fun PatientExerciseAssignmentsScreen(patientId: String, navController: NavHostCo
             state = viewModel.assignments,
             content = {
                 viewModel.assignments.value?.let {
-                    ExerciseAssignmentList(exerciseAssignments = it, navController = navController)
+                    ExerciseAssignmentList(exerciseAssignments = it, navController = navController, onClickRoute = Route.Therapist.ExerciseAssignmentDetail)
                 }
             },
             skeleton = {
@@ -67,7 +59,7 @@ fun PatientExerciseAssignmentsScreen(patientId: String, navController: NavHostCo
 }
 
 @Composable
-fun ExerciseAssignmentList(exerciseAssignments: List<ExerciseAssignment>, navController: NavHostController){
+fun ExerciseAssignmentList(exerciseAssignments: List<ExerciseAssignment>, navController: NavHostController, onClickRoute: Route){
     if (exerciseAssignments.isEmpty()){
         NoAssignmentsMessage()
     }
@@ -77,16 +69,16 @@ fun ExerciseAssignmentList(exerciseAssignments: List<ExerciseAssignment>, navCon
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(exerciseAssignments) {ex ->
-            ExerciseAssignmentListItem(exerciseAssignment = ex, navController = navController)
+            ExerciseAssignmentListItem(exerciseAssignment = ex, navController = navController, onClickRoute = onClickRoute)
         }
     }
 }
 
 @Composable
-fun ExerciseAssignmentListItem(exerciseAssignment: ExerciseAssignment, navController: NavHostController){
+fun ExerciseAssignmentListItem(exerciseAssignment: ExerciseAssignment, navController: NavHostController, onClickRoute: Route){
     val onClick = {
         navController.navigate(
-            Route.Therapist.ExerciseAssignmentDetail.routeTo(exerciseAssignment.id)
+            onClickRoute.routeTo(exerciseAssignment.id)
         )
     }
 
