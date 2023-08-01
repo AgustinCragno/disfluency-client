@@ -44,7 +44,8 @@ fun DateInput(state: MutableState<LocalDate?>, label: String){
     }
 
     val datePickerDialog = DatePickerDialog(LocalContext.current, onDateSetListener, currentYear, currentMonth, currentDay)
-    datePickerDialog.datePicker.maxDate = LocalDate.of(todaysYear, todaysMonth, todaysDay + 1).atStartOfDay(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()!!
+    val dateTomorrow = LocalDate.of(todaysYear, todaysMonth, todaysDay).plusDays(1).atStartOfDay(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()!!
+    datePickerDialog.datePicker.maxDate = dateTomorrow
 
     Box {
         OutlinedTextField(

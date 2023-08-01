@@ -44,16 +44,16 @@ data class Patient(
 
     fun getCompletedQuestionnairesCount(): Int {
         //TODO: implement
-        return Random.nextInt(5)
+        return 0
     }
 
     fun getPendingQuestionnairesCount(): Int {
         //TODO: implement
-        return Random.nextInt(5)
+        return 0
     }
 
     fun getRecordedSessionsCount(): Int {
         //TODO: implement
-        return Random.nextInt(5)
+        return 0
     }
 }
