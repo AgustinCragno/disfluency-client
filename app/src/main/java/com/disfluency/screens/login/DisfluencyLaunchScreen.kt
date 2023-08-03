@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavOptionsBuilder
 import com.disfluency.R
 import com.disfluency.components.animation.DisfluencyAnimatedLogoRise
 import com.disfluency.navigation.routing.Route
@@ -47,7 +48,7 @@ private fun LaunchScreenContent(
     navController: NavController
 ){
     val logInAction = {
-        navController.navigate(Route.Login.path)
+        navController.navigate(route = Route.Login.path)
     }
 
     val signUpAction = {

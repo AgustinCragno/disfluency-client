@@ -36,7 +36,7 @@ import com.disfluency.utilities.random.randomSign
 fun SignUpLobbyScreen(navController: NavHostController) {
     val exitAnimationState = remember { mutableStateOf(false) }
 
-    SignUpLobbyScaffold(navController = navController) { paddingValues ->
+    SignUpLobbyScaffold(title = R.string.signup, navController = navController) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(top = paddingValues.calculateTopPadding())
@@ -91,6 +91,7 @@ fun SignUpLobbyScreen(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpLobbyScaffold(
+    title: Int,
     navController: NavHostController,
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -99,7 +100,7 @@ fun SignUpLobbyScaffold(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = stringResource(id = R.string.signup)
+                        text = stringResource(id = title)
                     )
                 },
                 navigationIcon = {

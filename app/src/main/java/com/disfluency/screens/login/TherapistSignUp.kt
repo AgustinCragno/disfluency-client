@@ -36,7 +36,7 @@ fun TherapistSignUpScreen(
     navController: NavHostController,
     viewModel: LoggedUserViewModel = viewModel()
 ){
-    SignUpLobbyScaffold(navController = navController) {
+    SignUpLobbyScaffold(title = R.string.signup, navController = navController) {
 
     }
 }

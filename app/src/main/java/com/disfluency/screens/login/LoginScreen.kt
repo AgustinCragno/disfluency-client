@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.animation.DisfluencyAnimatedLogo
 import com.disfluency.components.animation.DisfluencyAnimatedLogoRise
@@ -39,28 +40,32 @@ import com.disfluency.viewmodel.LoginState
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    navController: NavHostController,
     viewModel: LoggedUserViewModel = viewModel()
 ){
-    //TODO: hay como un minimo fade desde el launch a esta pantalla en el Logo
+    SignUpLobbyScaffold(title = R.string.login, navController = navController) {
 
-    //TODO: agregar algun texto que haga referencia a que es el log in
-    Box(modifier = Modifier.fillMaxSize()){
-        UsernameAndPasswordForm(
-            viewModel = viewModel,
-            onSubmit = { account, password -> viewModel.login(account, password) }
-        )
+        //TODO: agregar algun texto que haga referencia a que es el log in
+        Box(modifier = Modifier.fillMaxSize()){
+//            LogInContent(viewModel)
+            UsernameAndPasswordForm(
+                viewModel = viewModel,
+                onSubmit = { account, password -> viewModel.login(account, password) }
+            )
 
-        Column(
-            Modifier
-                .fillMaxSize()
-                .offset(y = -LOGO_OFFSET),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            DisfluencyLogo()
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .offset(y = -LOGO_OFFSET),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                DisfluencyLogo()
+            }
         }
     }
+
+
 
     if (viewModel.loginState == LoginState.AUTHENTICATED){
         LaunchedEffect(Unit) {
@@ -76,7 +81,24 @@ fun LoginScreen(
 }
 
 @Composable
-fun UsernameAndPasswordForm(
+private fun LogInContent(viewModel: LoggedUserViewModel){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+//        Spacer(modifier = Modifier.height(LOGO_OFFSET))
+
+        Text(
+//            modifier = Modifier.padding(top = 8.dp),
+            text = stringResource(id = R.string.app_name),
+            style = MaterialTheme.typography.displayMedium
+        )
+    }
+}
+
+@Composable
+private fun UsernameAndPasswordForm(
     viewModel: LoggedUserViewModel,
     onSubmit: (String, String) -> Unit
 ){
