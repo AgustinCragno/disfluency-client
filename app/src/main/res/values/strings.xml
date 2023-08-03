@@ -56,4 +56,22 @@
     <string name="patient_role_description">Practica ejercicios foneticos y complete cuestionarios de percepcion asignados por su terapeuta</string>
     <string name="therapist_role_description">Lleve registro de sus pacientes, realice analisis de disfluencias y envie material de terapia a sus pacientes para que completen de manera remota</string>
     <string name="signup_message">Facilite el tratamiento de la disfluencia. Registrese en Disfluency ya! Solo toma 5 minutos</string>
+    <string name="skip">Saltar</string>
+    <string name="next">Siguiente</string>
+    <string name="welcome">Bienvenido!</string>
+    <string name="onboarding_introduction_1">Disfluency ofrece acceso gratis a los usuarios paciente, sin embargo el medio para registrarse en la aplicacion difiere levemente para este tipo de usuarios</string>
+    <string name="onboarding_introduction_2">A continuacion, un diagrama de como puede acceder a Disfluency</string>
+    <string name="our_vision">Nuestra vision</string>
+    <string name="onboarding_vision_1">En Disfluency creemos que las terapias de disfluencias dan sus frutos cuando son llevadas a cabo por un profesional</string>
+    <string name="onboarding_vision_2">Es por eso que quien se encargara de registrarlo sera su propio fonoaudiologo!</string>
+    <string name="register">Registro</string>
+    <string name="onboarding_registration_1">Su terapeuta ingresara sus datos personales al sistema</string>
+    <string name="onboarding_registration_2">Una vez complete el alta se le enviara una invitacion a su correo electronico</string>
+    <string name="invite">Invitacion</string>
+    <string name="onboarding_invite_1">Recibira una invitacion de Disfluency a su correo electronico</string>
+    <string name="onboarding_invite_2">Al seguir el enlace de la invitacion, se le dirigira a una pagina para completar el registro como paciente</string>
+    <string name="and_done">Y listo!</string>
+    <string name="onboarding_recommend_1">Una vez completado el registro ya podra acceder a Disfluency y todo lo que ofrece nuestra aplicacion</string>
+    <string name="onboarding_recommend_2">Si su terapeuta no nos conoce, recomiendenos! Disfluency es la mejor herramienta para facilitar el tratamiento de disfluencias!</string>
+    <string name="understood">Entendido</string>
 </resources>

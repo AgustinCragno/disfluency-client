@@ -29,7 +29,7 @@ fun AppNavigation(){
             SignUpLobbyScreen(navController)
         }
         composable(Route.SignUpPatient.path){
-            SignUpPatientExplainScreen(navController)
+            SignUpPatientOnBoardingScreen(navController)
         }
         composable(Route.SignUpTherapist.path){
             TherapistSignUpScreen(navController, userViewModel)
