@@ -59,8 +59,11 @@ fun SignUpPatientOnBoardingScreen(navController: NavHostController){
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            TextButton(onClick = { navController.popBackStack() }) {
-                Text(text = stringResource(R.string.skip))
+            TextButton(
+                onClick = { navController.popBackStack() },
+                enabled = !isOnLastPage(pagerState, pages.size)
+            ) {
+                if (!isOnLastPage(pagerState, pages.size)) Text(text = stringResource(R.string.skip))
             }
 
             TextButton(
@@ -72,7 +75,7 @@ fun SignUpPatientOnBoardingScreen(navController: NavHostController){
             ) {
                 Text(
                     text = stringResource(
-                        if (pagerState.currentPage < pages.size - 1) R.string.next
+                        if (!isOnLastPage(pagerState, pages.size)) R.string.next
                         else R.string.understood
                     )
                 )
@@ -82,8 +85,13 @@ fun SignUpPatientOnBoardingScreen(navController: NavHostController){
 }
 
 @OptIn(ExperimentalPagerApi::class)
+private fun isOnLastPage(pagerState: PagerState, pagesCount: Int): Boolean {
+    return pagerState.currentPage >= pagesCount - 1
+}
+
+@OptIn(ExperimentalPagerApi::class)
 private suspend fun nextPage(pagerState: PagerState, navController: NavHostController, pagesCount: Int){
-    if (pagerState.currentPage >= pagesCount - 1){
+    if (isOnLastPage(pagerState, pagesCount)){
         navController.navigate(Route.SignUpLobby.path)
     }else{
         pagerState.animateScrollToPage(pagerState.currentPage + 1)

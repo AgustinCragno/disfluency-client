@@ -14,8 +14,7 @@ class LoggedUserViewModel : ViewModel() {
 
     private val userRepository = UserRepository()
 
-    var firstLogin by mutableStateOf(true)
-        private set
+    var firstLoadDone = mutableStateOf(false)
 
     private var user by mutableStateOf<User?>(null)
 
@@ -26,7 +25,6 @@ class LoggedUserViewModel : ViewModel() {
         loginState = LoginState.SUBMITTED
         try {
             user = userRepository.login(account, password)
-            firstLogin = false
             loginState = LoginState.AUTHENTICATED
         }
         catch (exception: UserNotFoundException){

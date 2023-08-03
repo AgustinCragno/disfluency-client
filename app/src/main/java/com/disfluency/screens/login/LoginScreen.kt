@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import com.disfluency.R
 import com.disfluency.components.animation.DisfluencyAnimatedLogo
 import com.disfluency.components.animation.DisfluencyAnimatedLogoRise
+import com.disfluency.components.animation.DisfluencyLogo
 import com.disfluency.model.Patient
 import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
@@ -41,7 +42,7 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoggedUserViewModel = viewModel()
 ){
-    val animationState = remember { mutableStateOf(true) }
+    //TODO: hay como un minimo fade desde el launch a esta pantalla en el Logo
 
     //TODO: agregar algun texto que haga referencia a que es el log in
     Box(modifier = Modifier.fillMaxSize()){
@@ -57,7 +58,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            DisfluencyAnimatedLogo(animationState = animationState)
+            DisfluencyLogo()
         }
     }
 

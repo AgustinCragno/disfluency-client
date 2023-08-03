@@ -37,18 +37,11 @@ fun DisfluencyAnimatedLogoRise(animationState: MutableState<Boolean>, riseOffset
     }
 }
 
-@OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun DisfluencyAnimatedLogo(animationState: MutableState<Boolean>){
-
-    val image = AnimatedImageVector.animatedVectorResource(R.drawable.disfluency_logo_animation)
     var atEnd by remember { mutableStateOf(animationState.value) }
 
-    Image(
-        painter = rememberAnimatedVectorPainter(animatedImageVector = image, atEnd = atEnd),
-        contentDescription = stringResource(R.string.app_name),
-        modifier = Modifier.size(170.dp, 170.dp)
-    )
+    DisfluencyLogo(atEnd)
 
     LaunchedEffect(Unit){
         if (!animationState.value){
@@ -60,4 +53,16 @@ fun DisfluencyAnimatedLogo(animationState: MutableState<Boolean>){
             animationState.value = true
         }
     }
+}
+
+@OptIn(ExperimentalAnimationGraphicsApi::class)
+@Composable
+fun DisfluencyLogo(atEnd: Boolean = true){
+    val image = AnimatedImageVector.animatedVectorResource(R.drawable.disfluency_logo_animation)
+
+    Image(
+        painter = rememberAnimatedVectorPainter(animatedImageVector = image, atEnd = atEnd),
+        contentDescription = stringResource(R.string.app_name),
+        modifier = Modifier.size(170.dp, 170.dp)
+    )
 }

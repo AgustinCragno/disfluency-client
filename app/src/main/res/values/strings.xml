@@ -74,4 +74,6 @@
     <string name="onboarding_recommend_1">Una vez completado el registro ya podra acceder a Disfluency y todo lo que ofrece nuestra aplicacion</string>
     <string name="onboarding_recommend_2">Si su terapeuta no nos conoce, recomiendenos! Disfluency es la mejor herramienta para facilitar el tratamiento de disfluencias!</string>
     <string name="understood">Entendido</string>
+    <string name="enter">Ingresar</string>
+    <string name="disfluency_slogan">Facilitá el tratamiento de la disfluencia</string>
 </resources>

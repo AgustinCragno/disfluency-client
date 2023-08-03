@@ -9,8 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,14 +33,12 @@ fun DisfluencyLaunchScreen(
      guardado en el telefono y pegarle al back para que valide si ya estamos loggeados, y ahi directamente
      ni bien termina la animacion lo mandamos al home.
      */
-    val animationState = remember { mutableStateOf(false) }
 
-    //TODO: hacer que no haga la animacion del logo una vez que vuelvo a esta pantalla
     Box(modifier = Modifier.fillMaxSize()){
-        AnimatedVisibility(visible = animationState.value, enter = fadeIn(animationSpec = tween(delayMillis = 500))) {
+        AnimatedVisibility(visible = viewModel.firstLoadDone.value, enter = fadeIn(animationSpec = tween(delayMillis = 500))) {
             LaunchScreenContent(navController = navController)
         }
-        DisfluencyAnimatedLogoRise(animationState = animationState, riseOffset = LOGO_OFFSET)
+        DisfluencyAnimatedLogoRise(animationState = viewModel.firstLoadDone, riseOffset = LOGO_OFFSET)
     }
 }
 
@@ -72,7 +68,7 @@ private fun LaunchScreenContent(
         )
         Text(
             modifier = Modifier.padding(top = 2.dp),
-            text = "Facilitá el tratamiento de la disfluencia",
+            text = stringResource(R.string.disfluency_slogan),
             style = MaterialTheme.typography.labelSmall
         )
 
@@ -82,7 +78,7 @@ private fun LaunchScreenContent(
             modifier = Modifier.width(250.dp),
             onClick = logInAction
         ) {
-            Text(text = "Ingresar")
+            Text(text = stringResource(R.string.enter))
         }
 
         OutlinedButton(
