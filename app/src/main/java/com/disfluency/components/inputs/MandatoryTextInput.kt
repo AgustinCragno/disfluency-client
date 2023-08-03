@@ -37,12 +37,20 @@ class DigitsOnlyValidation: InputValidation {
     }
 }
 
+class PasswordValidation: InputValidation {
+    override fun validate(input: String): Boolean {
+        TODO("Not yet implemented")
+        return true
+    }
+}
+
 @Composable
 fun ValidatedTextInput(
     state: MutableState<String>,
     label: String,
     keyboardOptions: KeyboardOptions,
-    validations: List<InputValidation>
+    validations: List<InputValidation>,
+    wrongValueMessage: String = "Ingrese un $label válido"
 ){
     var wrongValue: Boolean by remember { mutableStateOf(false) }
 
@@ -60,7 +68,7 @@ fun ValidatedTextInput(
         supportingText = {
             if(wrongValue)
                 if(state.value.isBlank()) Text(text = stringResource(id = R.string.required_field))
-                else Text("Ingrese un $label válido")
+                else Text(wrongValueMessage)
         }
     )
 }
@@ -92,5 +100,16 @@ fun MandatoryEmailInput(state: MutableState<String>, label: String){
         label = label,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Done),
         validations = listOf(MandatoryValidation(), EmailValidation())
+    )
+}
+
+@Composable
+fun MandatoryPasswordInput(state: MutableState<String>, label: String){
+    ValidatedTextInput(
+        state = state,
+        label = label,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next, capitalization = KeyboardCapitalization.Words),
+        validations = listOf(MandatoryValidation(), PasswordValidation()),
+        wrongValueMessage = "Contraseña invalida" //TODO: actualizar a que diga el formato de las pwd
     )
 }

@@ -46,4 +46,14 @@
     <string name="example_generated_by_professional">Ejemplo generado por el profesional</string>
     <string name="my_exercises">Mis Ejercicios</string>
     <string name="practice">Practicar</string>
+    <string name="user_info">Datos</string>
+    <string name="user">Usuario</string>
+    <string name="personal_info">Datos Personales</string>
+    <string name="user_avatar">Avatar de usuario</string>
+    <string name="signup">Registrarse</string>
+    <string name="as_patient">Como paciente</string>
+    <string name="as_therapist">Como terapeuta</string>
+    <string name="patient_role_description">Practica ejercicios foneticos y complete cuestionarios de percepcion asignados por su terapeuta</string>
+    <string name="therapist_role_description">Lleve registro de sus pacientes, realice analisis de disfluencias y envie material de terapia a sus pacientes para que completen de manera remota</string>
+    <string name="signup_message">Facilite el tratamiento de la disfluencia. Registrese en Disfluency ya! Solo toma 5 minutos</string>
 </resources>

@@ -10,7 +10,7 @@ import com.disfluency.model.Therapist
 import com.disfluency.navigation.graph.PatientNavigationGraph
 import com.disfluency.navigation.graph.TherapistNavigationGraph
 import com.disfluency.navigation.routing.Route
-import com.disfluency.screens.LoginScreen
+import com.disfluency.screens.login.*
 import com.disfluency.viewmodel.LoggedUserViewModel
 
 @Composable
@@ -18,9 +18,21 @@ fun AppNavigation(){
     val navController = rememberNavController()
     val userViewModel: LoggedUserViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = Route.Login.path){
+    NavHost(navController = navController, startDestination = Route.Launch.path){
+        composable(Route.Launch.path){
+            DisfluencyLaunchScreen(navController, userViewModel)
+        }
         composable(Route.Login.path){
             LoginScreen(navController, userViewModel)
+        }
+        composable(Route.SignUpLobby.path){
+            SignUpLobbyScreen(navController)
+        }
+        composable(Route.SignUpPatient.path){
+            SignUpPatientExplainScreen(navController)
+        }
+        composable(Route.SignUpTherapist.path){
+            TherapistSignUpScreen(navController, userViewModel)
         }
         composable(Route.Patient.Home.path){
             PatientNavigationGraph(patient = userViewModel.getLoggedUser().role as Patient)

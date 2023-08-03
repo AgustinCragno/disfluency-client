@@ -8,7 +8,11 @@ sealed class Route(val path: String, private vararg val params: String, val titl
         return args.foldIndexed(path) { index, argsPath, arg -> argsPath.replace("{${params[index]}}", arg) }
     }
 
+    object Launch: Route("launch", title = R.string.app_name)
     object Login: Route("login", title = R.string.login)
+    object SignUpLobby: Route("signup", title = R.string.signup)
+    object SignUpPatient: Route("signup/patient", title = R.string.signup)
+    object SignUpTherapist: Route("signup/therapist", title = R.string.signup)
 
     object Patient {
         object Home: Route("home-patient", title = R.string.home)

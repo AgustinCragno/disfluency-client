@@ -1,5 +1,6 @@
-package com.disfluency.screens
+package com.disfluency.screens.login
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.disfluency.R
+import com.disfluency.components.animation.DisfluencyAnimatedLogo
 import com.disfluency.components.animation.DisfluencyAnimatedLogoRise
 import com.disfluency.model.Patient
 import com.disfluency.model.Therapist
@@ -33,23 +35,30 @@ import com.disfluency.navigation.routing.Route
 import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.LoginState
 
-private val LOGO_OFFSET = 120.dp
-
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun LoginScreen(
     navController: NavController,
     viewModel: LoggedUserViewModel = viewModel()
 ){
-    val animationState = remember { mutableStateOf(!viewModel.firstLogin) }
+    val animationState = remember { mutableStateOf(true) }
 
+    //TODO: agregar algun texto que haga referencia a que es el log in
     Box(modifier = Modifier.fillMaxSize()){
-        AnimatedVisibility(visible = animationState.value, enter = fadeIn(animationSpec = tween(delayMillis = 500))) {
-            UsernameAndPasswordForm(
-                viewModel = viewModel,
-                onSubmit = { account, password -> viewModel.login(account, password) }
-            )
+        UsernameAndPasswordForm(
+            viewModel = viewModel,
+            onSubmit = { account, password -> viewModel.login(account, password) }
+        )
+
+        Column(
+            Modifier
+                .fillMaxSize()
+                .offset(y = -LOGO_OFFSET),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            DisfluencyAnimatedLogo(animationState = animationState)
         }
-        DisfluencyAnimatedLogoRise(animationState = animationState, riseOffset = LOGO_OFFSET)
     }
 
     if (viewModel.loginState == LoginState.AUTHENTICATED){
