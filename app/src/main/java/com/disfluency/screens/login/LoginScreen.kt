@@ -36,6 +36,7 @@ import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.LoginState
+import kotlinx.coroutines.delay
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -43,16 +44,15 @@ fun LoginScreen(
     navController: NavHostController,
     viewModel: LoggedUserViewModel = viewModel()
 ){
+    val animateVisibilityContent = remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit){
+        delay(50)
+        animateVisibilityContent.value = true
+    }
+
     SignUpLobbyScaffold(title = R.string.login, navController = navController) {
-
-        //TODO: agregar algun texto que haga referencia a que es el log in
         Box(modifier = Modifier.fillMaxSize()){
-//            LogInContent(viewModel)
-            UsernameAndPasswordForm(
-                viewModel = viewModel,
-                onSubmit = { account, password -> viewModel.login(account, password) }
-            )
-
             Column(
                 Modifier
                     .fillMaxSize()
@@ -61,6 +61,15 @@ fun LoginScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 DisfluencyLogo()
+            }
+
+            DisfluencyTitle()
+
+            AnimatedVisibility(visible = animateVisibilityContent.value, enter = fadeIn()) {
+                UsernameAndPasswordForm(
+                    viewModel = viewModel,
+                    onSubmit = { account, password -> viewModel.login(account, password) }
+                )
             }
         }
     }
@@ -81,16 +90,14 @@ fun LoginScreen(
 }
 
 @Composable
-private fun LogInContent(viewModel: LoggedUserViewModel){
+private fun DisfluencyTitle(){
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-//        Spacer(modifier = Modifier.height(LOGO_OFFSET))
-
         Text(
-//            modifier = Modifier.padding(top = 8.dp),
+            modifier = Modifier.padding(bottom = 29.dp),
             text = stringResource(id = R.string.app_name),
             style = MaterialTheme.typography.displayMedium
         )
@@ -117,23 +124,23 @@ private fun UsernameAndPasswordForm(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .offset(y = LOGO_OFFSET / 2),
+            .offset(y = LOGO_OFFSET + 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
 
         OutlinedTextField(
+            modifier = Modifier.padding(8.dp).height(50.dp),
             value = username,
             onValueChange = { username = it },
             placeholder = { Text(stringResource(R.string.username)) },
             singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            modifier = Modifier.padding(8.dp),
             enabled = viewModel.loginState < LoginState.SUBMITTED
         )
 
         OutlinedTextField(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(8.dp).height(50.dp),
             value = password,
             onValueChange = { password = it },
             placeholder = { Text(stringResource(R.string.password)) },
@@ -158,8 +165,12 @@ private fun UsernameAndPasswordForm(
             enabled = viewModel.loginState < LoginState.SUBMITTED
         )
 
-        Button(onClick = submitAction, enabled = submitEnabled) {
-            Text(stringResource(R.string.login))
+        Button(
+            modifier = Modifier.width(250.dp).padding(8.dp),
+            onClick = submitAction,
+            enabled = submitEnabled
+        ) {
+            Text(stringResource(R.string.enter))
         }
 
         val errorTextColor = animateColorAsState(targetValue = if (viewModel.loginState == LoginState.NOT_FOUND) MaterialTheme.colorScheme.error else Color.Transparent)

@@ -173,7 +173,7 @@ private fun UserRoleBanner(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.displayMedium,
-                    color = Color.LightGray
+                    color = Color.White
                 )
             }
         }
