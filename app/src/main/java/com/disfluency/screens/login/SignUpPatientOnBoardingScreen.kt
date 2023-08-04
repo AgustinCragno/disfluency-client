@@ -92,7 +92,7 @@ private fun isOnLastPage(pagerState: PagerState, pagesCount: Int): Boolean {
 @OptIn(ExperimentalPagerApi::class)
 private suspend fun nextPage(pagerState: PagerState, navController: NavHostController, pagesCount: Int){
     if (isOnLastPage(pagerState, pagesCount)){
-        navController.navigate(Route.SignUpLobby.path)
+        navController.popBackStack(Route.SignUpLobby.path, false)
     }else{
         pagerState.animateScrollToPage(pagerState.currentPage + 1)
     }
