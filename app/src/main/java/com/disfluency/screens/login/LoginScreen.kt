@@ -3,6 +3,8 @@ package com.disfluency.screens.login
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,6 +18,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -38,19 +41,11 @@ import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.LoginState
 import kotlinx.coroutines.delay
 
-@SuppressLint("UnrememberedMutableState")
 @Composable
 fun LoginScreen(
     navController: NavHostController,
     viewModel: LoggedUserViewModel = viewModel()
 ){
-    val animateVisibilityContent = remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit){
-        delay(50)
-        animateVisibilityContent.value = true
-    }
-
     SignUpLobbyScaffold(title = R.string.login, navController = navController) {
         Box(modifier = Modifier.fillMaxSize()){
             Column(
@@ -65,12 +60,10 @@ fun LoginScreen(
 
             DisfluencyTitle()
 
-            AnimatedVisibility(visible = animateVisibilityContent.value, enter = fadeIn()) {
-                UsernameAndPasswordForm(
-                    viewModel = viewModel,
-                    onSubmit = { account, password -> viewModel.login(account, password) }
-                )
-            }
+            UsernameAndPasswordForm(
+                viewModel = viewModel,
+                onSubmit = { account, password -> viewModel.login(account, password) }
+            )
         }
     }
 
@@ -109,6 +102,17 @@ private fun UsernameAndPasswordForm(
     viewModel: LoggedUserViewModel,
     onSubmit: (String, String) -> Unit
 ){
+    val animateVisibilityContent = remember { mutableStateOf(false) }
+    val alpha: Float by animateFloatAsState(
+        targetValue = if (animateVisibilityContent.value) 1f else 0f,
+        animationSpec = tween(durationMillis = 200, easing = LinearEasing)
+    )
+
+    LaunchedEffect(Unit){
+        delay(100)
+        animateVisibilityContent.value = true
+    }
+
     var username by remember{ mutableStateOf("") }
     var password by remember{ mutableStateOf("") }
     var visiblePassword by remember { mutableStateOf(false) }
@@ -124,7 +128,8 @@ private fun UsernameAndPasswordForm(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .offset(y = LOGO_OFFSET + 16.dp),
+            .offset(y = LOGO_OFFSET + 16.dp)
+            .alpha(alpha),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
