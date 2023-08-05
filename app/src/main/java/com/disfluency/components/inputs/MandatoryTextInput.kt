@@ -39,8 +39,14 @@ class DigitsOnlyValidation: InputValidation {
 
 class PasswordValidation: InputValidation {
     override fun validate(input: String): Boolean {
-        TODO("Not yet implemented")
+        //TODO: implementar una vez que se defina el formato de la password
         return true
+    }
+}
+
+class EqualToValidation(private val referenceValue: String): InputValidation {
+    override fun validate(input: String): Boolean {
+        return referenceValue == input
     }
 }
 
@@ -100,16 +106,5 @@ fun MandatoryEmailInput(state: MutableState<String>, label: String){
         label = label,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Done),
         validations = listOf(MandatoryValidation(), EmailValidation())
-    )
-}
-
-@Composable
-fun MandatoryPasswordInput(state: MutableState<String>, label: String){
-    ValidatedTextInput(
-        state = state,
-        label = label,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next, capitalization = KeyboardCapitalization.Words),
-        validations = listOf(MandatoryValidation(), PasswordValidation()),
-        wrongValueMessage = "Contraseña invalida" //TODO: actualizar a que diga el formato de las pwd
     )
 }

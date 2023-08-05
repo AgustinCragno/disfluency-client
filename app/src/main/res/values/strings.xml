@@ -76,4 +76,14 @@
     <string name="understood">Entendido</string>
     <string name="enter">Ingresar</string>
     <string name="disfluency_slogan">Facilitá el tratamiento de la disfluencia</string>
+    <string name="back">Atras</string>
+    <string name="agree_and_continue">Aceptar y Continuar</string>
+    <string name="invalid_password">Contraseña invalida</string>
+    <string name="repeat_password">Repetir Contraseña</string>
+    <string name="password_doesnt_match">La contraseña ingresada no coincide</string>
+    <string name="terms_and_conditions">Terminos y Condiciones</string>
+    <string name="ok">Ok</string>
+    <string name="terms_and_conditions_1">Al seleccionar Aceptar y Continuar, acepto los </string>
+    <string name="terms_and_conditions_2">Terminos y Condiciones</string>
+    <string name="invalid_email">Ingrese un email valido</string>
 </resources>
