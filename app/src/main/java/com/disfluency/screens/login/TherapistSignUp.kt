@@ -62,6 +62,7 @@ fun TherapistSignUpScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            //TODO: hacer el llamado al endpoint de signup
             SignUpForm(
                 viewModel = viewModel,
                 onSubmit = { email, password -> println("User: $email | Password: $password") }

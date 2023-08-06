@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
 import com.disfluency.model.Patient
 import com.disfluency.model.Therapist
 import com.disfluency.navigation.graph.PatientNavigationGraph
@@ -56,10 +55,10 @@ fun AppNavigation(){
             TherapistSignUpScreen(navController, userViewModel)
         }
         composable(Route.Patient.Home.path){
-            PatientNavigationGraph(patient = userViewModel.getLoggedUser().role as Patient)
+            PatientNavigationGraph(patient = userViewModel.getLoggedUser() as Patient)
         }
         composable(Route.Therapist.Home.path){
-            TherapistNavigationGraph(therapist = userViewModel.getLoggedUser().role as Therapist)
+            TherapistNavigationGraph(therapist = userViewModel.getLoggedUser() as Therapist)
         }
     }
 }

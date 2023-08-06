@@ -20,9 +20,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavOptionsBuilder
 import com.disfluency.R
+import com.disfluency.api.error.ExpiredTokenException
+import com.disfluency.api.session.SessionManager
 import com.disfluency.components.animation.DisfluencyAnimatedLogoRise
+import com.disfluency.model.Patient
+import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.viewmodel.LoggedUserViewModel
+import com.disfluency.viewmodel.LoginState
 import kotlinx.coroutines.delay
 
 
@@ -33,11 +38,23 @@ fun DisfluencyLaunchScreen(
     navController: NavController,
     viewModel: LoggedUserViewModel = viewModel()
 ){
-    /*
-    TODO: mientras carga el logo, deberiamos hacer el chequeo de agarran nuestro token de sesion
-     guardado en el telefono y pegarle al back para que valide si ya estamos loggeados, y ahi directamente
-     ni bien termina la animacion lo mandamos al home.
-     */
+    LaunchedEffect(Unit){
+        SessionManager.getRefreshToken()?.let {
+            viewModel.login(it)
+        }
+    }
+
+    if (viewModel.loginState == LoginState.AUTHENTICATED && viewModel.firstLoadDone.value){
+        LaunchedEffect(Unit) {
+            navController.navigate(
+                when (viewModel.getLoggedUser()) {
+                    is Therapist -> Route.Therapist.Home.path
+                    is Patient -> Route.Patient.Home.path
+                    else -> throw IllegalStateException("The current user role is not valid")
+                }
+            )
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()){
         AnimatedVisibility(visible = viewModel.firstLoadDone.value, enter = fadeIn(animationSpec = tween(delayMillis = 500))) {
@@ -84,7 +101,9 @@ private fun LaunchScreenContent(
         )
 
         Text(
-            modifier = Modifier.padding(top = 2.dp).alpha(alpha),
+            modifier = Modifier
+                .padding(top = 2.dp)
+                .alpha(alpha),
             text = stringResource(R.string.disfluency_slogan),
             style = MaterialTheme.typography.labelSmall
         )
@@ -92,7 +111,9 @@ private fun LaunchScreenContent(
         Spacer(modifier = Modifier.height(40.dp))
 
         Button(
-            modifier = Modifier.width(250.dp).alpha(alpha),
+            modifier = Modifier
+                .width(250.dp)
+                .alpha(alpha),
             onClick = logInAction
         ) {
             Text(text = stringResource(R.string.enter))
@@ -100,7 +121,9 @@ private fun LaunchScreenContent(
 
 
         OutlinedButton(
-            modifier = Modifier.width(250.dp).alpha(alpha),
+            modifier = Modifier
+                .width(250.dp)
+                .alpha(alpha),
             onClick = signUpAction
         ) {
             Text(text = stringResource(id = R.string.signup))

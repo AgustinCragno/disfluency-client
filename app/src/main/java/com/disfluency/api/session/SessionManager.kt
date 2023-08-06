@@ -30,7 +30,6 @@ object SessionManager {
     }
 
     fun getAccessToken(): String? {
-//        return accessToken
-        return "TOKEN_TEST"
+        return accessToken
     }
 }

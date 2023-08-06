@@ -72,7 +72,7 @@ fun LoginScreen(
     if (viewModel.loginState == LoginState.AUTHENTICATED){
         LaunchedEffect(Unit) {
             navController.navigate(
-                when (viewModel.getLoggedUser().role) {
+                when (viewModel.getLoggedUser()) {
                     is Therapist -> Route.Therapist.Home.path
                     is Patient -> Route.Patient.Home.path
                     else -> throw IllegalStateException("The current user role is not valid")
