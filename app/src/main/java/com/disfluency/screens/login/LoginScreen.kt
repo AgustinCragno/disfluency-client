@@ -1,6 +1,5 @@
 package com.disfluency.screens.login
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
@@ -9,31 +8,21 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.disfluency.R
-import com.disfluency.components.animation.DisfluencyAnimatedLogo
-import com.disfluency.components.animation.DisfluencyAnimatedLogoRise
 import com.disfluency.components.animation.DisfluencyLogo
+import com.disfluency.components.inputs.text.EmailInput
+import com.disfluency.components.inputs.text.NoValidation
+import com.disfluency.components.inputs.text.PasswordInput
 import com.disfluency.model.Patient
 import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
@@ -113,17 +102,14 @@ private fun UsernameAndPasswordForm(
         animateVisibilityContent.value = true
     }
 
-    var username by remember{ mutableStateOf("") }
-    var password by remember{ mutableStateOf("") }
-    var visiblePassword by remember { mutableStateOf(false) }
+    val username = remember{ mutableStateOf("") }
+    val password = remember{ mutableStateOf("") }
 
     val submitEnabled = remember(username, password, viewModel.loginState){
-        username.isNotBlank() && password.isNotBlank() && viewModel.loginState < LoginState.SUBMITTED
+        username.value.isNotBlank() && password.value.isNotBlank() && viewModel.loginState < LoginState.SUBMITTED
     }
 
-    val focusManager = LocalFocusManager.current
-
-    val submitAction = { onSubmit(username, password) }
+    val submitAction = { onSubmit(username.value, password.value) }
 
     Column(
         modifier = Modifier
@@ -133,45 +119,25 @@ private fun UsernameAndPasswordForm(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
-        OutlinedTextField(
-            modifier = Modifier.padding(8.dp).height(50.dp),
-            value = username,
-            onValueChange = { username = it },
-            placeholder = { Text(stringResource(R.string.username)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            enabled = viewModel.loginState < LoginState.SUBMITTED
+        EmailInput(
+            email = username,
+            enabled = viewModel.loginState < LoginState.SUBMITTED,
+            validation = NoValidation()
         )
 
-        OutlinedTextField(
-            modifier = Modifier.padding(8.dp).height(50.dp),
-            value = password,
-            onValueChange = { password = it },
-            placeholder = { Text(stringResource(R.string.password)) },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Send,
-                keyboardType = KeyboardType.Password
-            ),
-            keyboardActions = KeyboardActions(onSend = {
-                focusManager.clearFocus()
-                submitAction()
-            }),
-            singleLine = true,
-            visualTransformation = if (visiblePassword) VisualTransformation.None else PasswordVisualTransformation(),
-            trailingIcon = {
-                IconButton(onClick = { visiblePassword = !visiblePassword }) {
-                    if (visiblePassword)
-                        Icon(imageVector = Icons.Filled.Visibility, stringResource(id = R.string.hide_password))
-                    else
-                        Icon(imageVector = Icons.Filled.VisibilityOff, stringResource(id = R.string.show_password))
-                }
-            },
-            enabled = viewModel.loginState < LoginState.SUBMITTED
+        PasswordInput(
+            password = password,
+            labelId = R.string.password,
+            enabled = viewModel.loginState < LoginState.SUBMITTED,
+            onSubmit = submitAction,
+            validation = NoValidation(),
+            validationFailMessage = -1
         )
 
         Button(
-            modifier = Modifier.width(250.dp).padding(8.dp),
+            modifier = Modifier
+                .width(250.dp)
+                .padding(vertical = 16.dp),
             onClick = submitAction,
             enabled = submitEnabled
         ) {

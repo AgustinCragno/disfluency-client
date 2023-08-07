@@ -32,7 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.dialogs.TermsAndConditionsDialog
-import com.disfluency.components.inputs.*
+import com.disfluency.components.inputs.text.*
 import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.LoginState
 
@@ -118,7 +118,7 @@ private fun SignUpForm(
         Button(
             modifier = Modifier
                 .width(250.dp)
-                .padding(top = 8.dp),
+                .padding(vertical = 16.dp),
             onClick = submitAction,
             enabled = submitEnabled
         ) {
@@ -141,126 +141,13 @@ private fun SignUpForm(
 }
 
 @Composable
-private fun EmailInput(
-    email: MutableState<String>,
-    enabled: Boolean
-){
-    val fontSize = 14.sp
-
-    var wrongValue by remember { mutableStateOf(false) }
-
-    val onValueChange: (String) -> Unit = { it ->
-        email.value = it
-        wrongValue = !EmailValidation().validate(it)
-    }
-
-    val label: @Composable () -> Unit = {
-        Text(text = stringResource(R.string.email), fontSize = fontSize)
-    }
-
-    OutlinedTextField(
-        modifier = Modifier
-            .padding(2.dp)
-            .height(58.dp),
-        value = email.value,
-        onValueChange = onValueChange,
-        label = label,
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        isError = wrongValue,
-        enabled = enabled,
-        textStyle = TextStyle(fontSize = fontSize)
-    )
-
-    if(wrongValue){
-        Text(
-            text = stringResource(id = R.string.invalid_email),
-            fontSize = 12.sp,
-            color = Color.Red
-        )
-    }
-}
-
-//TODO: mover a inputs
-@Composable
-private fun PasswordInput(
-    password: MutableState<String>,
-    labelId: Int,
-    enabled: Boolean,
-    onSubmit: (() -> Unit)? = null,
-    validation: InputValidation,
-    validationFailMessage: Int
-){
-    val fontSize = 14.sp
-
-    var wrongValue by remember { mutableStateOf(false) }
-    var visiblePassword by remember { mutableStateOf(false) }
-
-    val onValueChange: (String) -> Unit = { it ->
-        password.value = it
-        wrongValue = !validation.validate(it)
-    }
-
-    val label: @Composable () -> Unit = {
-        Text(text = stringResource(labelId), fontSize = fontSize)
-    }
-
-    val keyboardOptions = KeyboardOptions(
-        imeAction = if (onSubmit == null) ImeAction.Next else ImeAction.Send,
-        keyboardType = KeyboardType.Password
-    )
-
-    val focusManager = LocalFocusManager.current
-    val keyboardActions = KeyboardActions(onSend = {
-        focusManager.clearFocus()
-        onSubmit?.invoke()
-    })
-
-    val visualTransformation = if (visiblePassword) VisualTransformation.None else PasswordVisualTransformation()
-
-    val trailingIcon: @Composable () -> Unit = {
-        IconButton(onClick = { visiblePassword = !visiblePassword }) {
-            if (visiblePassword)
-                Icon(imageVector = Icons.Filled.Visibility, stringResource(id = R.string.hide_password))
-            else
-                Icon(imageVector = Icons.Filled.VisibilityOff, stringResource(id = R.string.show_password))
-        }
-    }
-
-    OutlinedTextField(
-        modifier = Modifier
-            .padding(2.dp)
-            .height(58.dp),
-        value = password.value,
-        onValueChange = onValueChange,
-        label = label,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        singleLine = true,
-        visualTransformation = visualTransformation,
-        trailingIcon = trailingIcon,
-        isError = wrongValue,
-        enabled = enabled,
-        textStyle = TextStyle(fontSize = fontSize)
-    )
-
-    if(wrongValue){
-        Text(
-            text = stringResource(id = validationFailMessage),
-            fontSize = 12.sp,
-            color = Color.Red
-        )
-    }
-}
-
-@Composable
 private fun TermsAndConditions(){
     var openDialog by remember { mutableStateOf(false) }
 
-    val tnc = stringResource(R.string.terms_and_conditions_2)
+    val tnc = " " + stringResource(R.string.terms_and_conditions_2)
     val annotatedString = buildAnnotatedString {
         append(stringResource(R.string.terms_and_conditions_1))
-        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary), ) {
+        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary) ) {
             pushStringAnnotation(tag = tnc, annotation = tnc)
             append(tnc)
         }
@@ -268,8 +155,7 @@ private fun TermsAndConditions(){
 
     ClickableText(
         modifier = Modifier
-            .width(250.dp)
-            .padding(vertical = 8.dp),
+            .width(250.dp),
         text = annotatedString,
         onClick = { offset ->
             annotatedString.getStringAnnotations(offset, offset)
