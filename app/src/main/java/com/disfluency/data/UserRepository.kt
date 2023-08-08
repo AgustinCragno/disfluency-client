@@ -2,12 +2,11 @@ package com.disfluency.data
 
 import android.util.Log
 import com.disfluency.api.DisfluencyAPI
+import com.disfluency.api.dto.RefreshTokenDTO
 import com.disfluency.api.dto.UserDTO
 import com.disfluency.api.error.ExpiredTokenException
 import com.disfluency.api.error.UserNotFoundException
 import com.disfluency.api.session.SessionManager
-import com.disfluency.model.Therapist
-import com.disfluency.model.User
 import com.disfluency.model.UserRole
 import retrofit2.HttpException
 
@@ -30,12 +29,13 @@ class UserRepository {
     suspend fun login(refreshToken: String): UserRole {
         Log.i("login", "User login attempt by refresh token: $refreshToken")
         try {
-            val loginDTO = DisfluencyAPI.userService.loginByToken(refreshToken)
+            val loginDTO = DisfluencyAPI.userService.loginByToken(RefreshTokenDTO(refreshToken))
             Log.i("login", "Successfully logged in by refresh token: $refreshToken")
             SessionManager.saveAccessToken(loginDTO.accessToken)
             SessionManager.saveRefreshToken(loginDTO.refreshToken)
             return loginDTO.user.toRole()
         } catch (e: HttpException){
+            Log.i("login", "Could not login by token error: $e")
             throw ExpiredTokenException(refreshToken)
         }
     }

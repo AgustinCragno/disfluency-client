@@ -105,7 +105,7 @@ private fun UsernameAndPasswordForm(
     val username = remember{ mutableStateOf("") }
     val password = remember{ mutableStateOf("") }
 
-    val submitEnabled = remember(username, password, viewModel.loginState){
+    val submitEnabled = remember(username.value, password.value, viewModel.loginState){
         username.value.isNotBlank() && password.value.isNotBlank() && viewModel.loginState < LoginState.SUBMITTED
     }
 

@@ -5,6 +5,7 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -29,9 +30,11 @@ import com.disfluency.navigation.routing.Route
 import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.LoginState
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 val LOGO_OFFSET = 120.dp
+const val ON_AUTH_EXIT_TIME = 750
 
 @Composable
 fun DisfluencyLaunchScreen(
@@ -39,28 +42,44 @@ fun DisfluencyLaunchScreen(
     viewModel: LoggedUserViewModel = viewModel()
 ){
     LaunchedEffect(Unit){
-        SessionManager.getRefreshToken()?.let {
-            viewModel.login(it)
+        launch {
+            if (!viewModel.firstLoadDone.value){
+                SessionManager.getRefreshToken()?.let {
+                    viewModel.login(it)
+                }
+            }
         }
     }
 
     if (viewModel.loginState == LoginState.AUTHENTICATED && viewModel.firstLoadDone.value){
         LaunchedEffect(Unit) {
-            navController.navigate(
-                when (viewModel.getLoggedUser()) {
-                    is Therapist -> Route.Therapist.Home.path
-                    is Patient -> Route.Patient.Home.path
-                    else -> throw IllegalStateException("The current user role is not valid")
-                }
-            )
+            launch {
+                delay((ON_AUTH_EXIT_TIME * 0.5).toLong())
+                navController.navigate(
+                    when (viewModel.getLoggedUser()) {
+                        is Therapist -> Route.Therapist.Home.path
+                        is Patient -> Route.Patient.Home.path
+                        else -> throw IllegalStateException("The current user role is not valid")
+                    }
+                )
+            }
         }
     }
 
     Box(modifier = Modifier.fillMaxSize()){
-        AnimatedVisibility(visible = viewModel.firstLoadDone.value, enter = fadeIn(animationSpec = tween(delayMillis = 500))) {
+        AnimatedVisibility(
+            visible = viewModel.firstLoadDone.value && viewModel.loginState < LoginState.AUTHENTICATED,
+            enter = fadeIn(animationSpec = tween(delayMillis = 500))
+        ) {
             LaunchScreenContent(navController = navController)
         }
-        DisfluencyAnimatedLogoRise(animationState = viewModel.firstLoadDone, riseOffset = LOGO_OFFSET)
+
+        AnimatedVisibility(
+            visible = viewModel.loginState < LoginState.AUTHENTICATED  || !viewModel.firstLoadDone.value,
+            exit = fadeOut(tween(ON_AUTH_EXIT_TIME))
+        ) {
+            DisfluencyAnimatedLogoRise(viewModel = viewModel, riseOffset = LOGO_OFFSET)
+        }
     }
 }
 

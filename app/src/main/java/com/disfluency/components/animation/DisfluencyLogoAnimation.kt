@@ -15,14 +15,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.disfluency.R
+import com.disfluency.viewmodel.LoggedUserViewModel
+import com.disfluency.viewmodel.LoginState
 import kotlinx.coroutines.delay
 
 private const val ANIMATION_LENGTH = 800L
 private const val ANIMATION_CYCLE_COUNT = 4
 
 @Composable
-fun DisfluencyAnimatedLogoRise(animationState: MutableState<Boolean>, riseOffset: Dp){
-    val offset = animateDpAsState(targetValue = if (animationState.value) riseOffset else 0.dp,
+fun DisfluencyAnimatedLogoRise(viewModel: LoggedUserViewModel, riseOffset: Dp){
+    val riseAnimationState = remember(viewModel.loginState, viewModel.firstLoadDone.value) {
+        mutableStateOf(viewModel.loginState < LoginState.AUTHENTICATED && viewModel.firstLoadDone.value)
+    }
+
+    val offset = animateDpAsState(targetValue = if (riseAnimationState.value) riseOffset else 0.dp,
         animationSpec = tween(durationMillis = 1000)
     )
 
@@ -33,24 +39,27 @@ fun DisfluencyAnimatedLogoRise(animationState: MutableState<Boolean>, riseOffset
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        DisfluencyAnimatedLogo(animationState)
+        DisfluencyAnimatedLogo(viewModel)
     }
 }
 
 @Composable
-fun DisfluencyAnimatedLogo(animationState: MutableState<Boolean>){
-    var atEnd by remember { mutableStateOf(animationState.value) }
+private fun DisfluencyAnimatedLogo(viewModel: LoggedUserViewModel){
+    var atEnd by remember { mutableStateOf(viewModel.firstLoadDone.value) }
 
     DisfluencyLogo(atEnd)
 
     LaunchedEffect(Unit){
-        if (!animationState.value){
-            for (i in 0..ANIMATION_CYCLE_COUNT){
+        if (!viewModel.firstLoadDone.value){
+
+            var i = 0
+            while (i <= ANIMATION_CYCLE_COUNT || viewModel.loginState == LoginState.SUBMITTED){
                 delay(ANIMATION_LENGTH)
                 atEnd = !atEnd
+                i++
             }
 
-            animationState.value = true
+            viewModel.firstLoadDone.value = true
         }
     }
 }

@@ -10,7 +10,7 @@ class AuthInterceptor : Interceptor {
         val requestBuilder = chain.request().newBuilder()
 
         SessionManager.getAccessToken()?.let {
-            requestBuilder.addHeader("x-auth-secret-key", "Bearer $it")
+            requestBuilder.addHeader("Authorization", "Bearer $it")
         }
 
         return chain.proceed(requestBuilder.build())
