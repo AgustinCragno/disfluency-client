@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.disfluency.R
 import com.disfluency.viewmodel.LoggedUserViewModel
-import com.disfluency.viewmodel.LoginState
+import com.disfluency.viewmodel.states.LoginState
 import kotlinx.coroutines.delay
 
 private const val ANIMATION_LENGTH = 800L

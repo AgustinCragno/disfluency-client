@@ -20,29 +20,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.disfluency.components.success.ConfirmationScreen
+import com.disfluency.model.Patient
+import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.ui.theme.Green40
-import com.disfluency.viewmodel.PatientsViewModel
+import com.disfluency.viewmodel.SignUpViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.delay
 
-const val ON_SUCCESS_ANIMATION_TIME = 300
 
 @Composable
-fun NewPatientConfirmationScreen(navController: NavHostController, viewModel: PatientsViewModel){
+fun NewTherapistConfirmationScreen(navController: NavHostController, viewModel: SignUpViewModel){
     ConfirmationScreen(
-        loadingState = viewModel.creationConfirmationState,
+        loadingState = viewModel.signupState,
         loadingContent = { LoadingState() },
         successContent = { SuccessState() },
         errorContent = { ErrorState() }
     )
 
-    if (viewModel.creationConfirmationState.value > ConfirmationState.LOADING){
+    if (viewModel.signupState.value > ConfirmationState.LOADING){
         LaunchedEffect(Unit){
             delay(2000)
-            viewModel.creationConfirmationState.value = ConfirmationState.DONE
-            navController.popBackStack()
-            navController.navigate(Route.Therapist.MyPatients.path)
+            viewModel.signupState.value = ConfirmationState.DONE
+
+            navController.navigate(Route.Therapist.Home.path){
+                popUpTo(navController.graph.id){
+                    inclusive = true
+                }
+            }
         }
     }
 }
@@ -59,7 +64,7 @@ private fun LoadingState(){
             color = Color.White
         )
         Text(
-            text = "Espere un momento mientras se da de alta al paciente",
+            text = "Espere un momento mientras se da de alta al usuario",
             color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold
@@ -69,10 +74,11 @@ private fun LoadingState(){
 
 @Composable
 private fun SuccessState(){
+    //TODO: se podria mostrar el avatar y el nombre, que los mpuedo sacar dle viewModel
     IconMessage(
         imageVector = Icons.Filled.Done,
         color = Green40,
-        message = "Se creo el paciente correctamente"
+        message = "Se creo el usuario correctamente"
     )
 }
 
@@ -81,7 +87,7 @@ private fun ErrorState(){
     IconMessage(
         imageVector = Icons.Filled.Close,
         color = Color.Red,
-        message = "Ocurrio un error al dar de alta al paciente"
+        message = "Ocurrio un error al dar de alta al usuario"
     )
 }
 

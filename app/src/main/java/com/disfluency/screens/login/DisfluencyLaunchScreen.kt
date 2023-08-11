@@ -19,16 +19,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavOptionsBuilder
 import com.disfluency.R
-import com.disfluency.api.error.ExpiredTokenException
 import com.disfluency.api.session.SessionManager
 import com.disfluency.components.animation.DisfluencyAnimatedLogoRise
 import com.disfluency.model.Patient
 import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.viewmodel.LoggedUserViewModel
-import com.disfluency.viewmodel.LoginState
+import com.disfluency.viewmodel.states.LoginState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

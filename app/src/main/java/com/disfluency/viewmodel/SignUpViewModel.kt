@@ -5,9 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.disfluency.api.error.TherapistCreationException
+import com.disfluency.data.UserRepository
+import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.launch
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(private val loggedUserViewModel: LoggedUserViewModel) : ViewModel() {
+
+    private val userRepository = UserRepository()
 
     val email = mutableStateOf("")
     val password = mutableStateOf("")
@@ -16,10 +21,16 @@ class SignUpViewModel : ViewModel() {
     val name = mutableStateOf("")
     val lastName = mutableStateOf("")
 
-    var loginState by mutableStateOf(LoginState.INPUT)
-        private set
+    val signupState = mutableStateOf(ConfirmationState.DONE)
 
     fun signUp() = viewModelScope.launch {
-
+        signupState.value = ConfirmationState.LOADING
+        try {
+            val createdUser = userRepository.signup(email.value, password.value, name.value, lastName.value, avatarIndex.value)
+            signupState.value = ConfirmationState.SUCCESS
+            loggedUserViewModel.registerLoggedUser(createdUser)
+        }catch (e: TherapistCreationException){
+            signupState.value = ConfirmationState.ERROR
+        }
     }
 }

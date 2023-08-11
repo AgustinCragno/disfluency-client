@@ -13,7 +13,9 @@ import com.disfluency.navigation.graph.PatientNavigationGraph
 import com.disfluency.navigation.graph.TherapistNavigationGraph
 import com.disfluency.navigation.routing.Route
 import com.disfluency.screens.login.*
+import com.disfluency.screens.therapist.success.NewTherapistConfirmationScreen
 import com.disfluency.viewmodel.LoggedUserViewModel
+import com.disfluency.viewmodel.SignUpViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -23,6 +25,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 fun AppNavigation(){
     val navController = rememberAnimatedNavController()
     val userViewModel: LoggedUserViewModel = viewModel()
+    val signUpViewModel = SignUpViewModel(userViewModel)
 
     AnimatedNavHost(
         navController = navController,
@@ -52,7 +55,10 @@ fun AppNavigation(){
             SignUpPatientOnBoardingScreen(navController)
         }
         composable(Route.SignUpTherapist.path){
-            TherapistSignUpScreen(navController)
+            TherapistSignUpScreen(navController, signUpViewModel)
+        }
+        composable(Route.ConfirmationNewUser.path){
+            NewTherapistConfirmationScreen(navController, signUpViewModel)
         }
         composable(Route.Patient.Home.path){
             PatientNavigationGraph(patient = userViewModel.getLoggedUser() as Patient)

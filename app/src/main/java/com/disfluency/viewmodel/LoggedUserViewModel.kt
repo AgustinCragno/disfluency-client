@@ -10,6 +10,7 @@ import com.disfluency.api.error.UserNotFoundException
 import com.disfluency.data.UserRepository
 import com.disfluency.model.User
 import com.disfluency.model.UserRole
+import com.disfluency.viewmodel.states.LoginState
 import kotlinx.coroutines.launch
 
 class LoggedUserViewModel : ViewModel() {
@@ -26,8 +27,8 @@ class LoggedUserViewModel : ViewModel() {
     fun login(account: String, password: String) = viewModelScope.launch {
         loginState = LoginState.SUBMITTED
         try {
-            user = userRepository.login(account, password)
-            loginState = LoginState.AUTHENTICATED
+            val user = userRepository.login(account, password)
+            registerLoggedUser(user)
         }
         catch (exception: UserNotFoundException){
             loginState = LoginState.NOT_FOUND
@@ -37,8 +38,8 @@ class LoggedUserViewModel : ViewModel() {
     fun login(refreshToken: String) = viewModelScope.launch {
         loginState = LoginState.SUBMITTED
         try {
-            user = userRepository.login(refreshToken)
-            loginState = LoginState.AUTHENTICATED
+            val user = userRepository.login(refreshToken)
+            registerLoggedUser(user)
         }
         catch (exception: ExpiredTokenException){
             loginState = LoginState.EXPIRED
@@ -51,12 +52,12 @@ class LoggedUserViewModel : ViewModel() {
         loginState = LoginState.INPUT
     }
 
+    fun registerLoggedUser(userRole: UserRole){
+        user = userRole
+        loginState = LoginState.AUTHENTICATED
+    }
 
     fun getLoggedUser(): UserRole {
         return user ?: throw IllegalStateException("User has not logged in")
     }
-}
-
-enum class LoginState {
-    INPUT, NOT_FOUND, EXPIRED, SUBMITTED, AUTHENTICATED;
 }

@@ -24,7 +24,9 @@ import com.disfluency.R
 import com.disfluency.components.dialogs.TermsAndConditionsDialog
 import com.disfluency.components.inputs.avatar.AvatarPicker
 import com.disfluency.components.inputs.text.*
+import com.disfluency.navigation.routing.Route
 import com.disfluency.viewmodel.SignUpViewModel
+import com.disfluency.viewmodel.states.ConfirmationState
 
 @Composable
 fun TherapistSignUpScreen(
@@ -48,6 +50,12 @@ fun TherapistSignUpScreen(
                 2 -> DataAndAvatarPage(viewModel) { signUpStep-- }
             }
 
+        }
+    }
+
+    if (viewModel.signupState.value == ConfirmationState.LOADING){
+        LaunchedEffect(Unit){
+            navController.navigate(Route.ConfirmationNewUser.path)
         }
     }
 }
@@ -160,7 +168,9 @@ private fun DataAndAvatarPage(viewModel: SignUpViewModel, onCancel: () -> Unit) 
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            modifier = Modifier.width(300.dp).padding(horizontal = 8.dp),
+            modifier = Modifier
+                .width(300.dp)
+                .padding(horizontal = 8.dp),
             text = stringResource(R.string.almost_there),
             style = MaterialTheme.typography.displaySmall,
             fontWeight = FontWeight.Bold,
