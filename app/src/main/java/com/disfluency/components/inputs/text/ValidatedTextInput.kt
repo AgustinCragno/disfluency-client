@@ -35,7 +35,7 @@ fun ValidatedTextInput(
     }
 
     val labelText: @Composable () -> Unit = {
-        Text(text = stringResource(R.string.email), fontSize = fontSize)
+        Text(text = label, fontSize = fontSize)
     }
 
     val trailingIcon: @Composable () -> Unit = {

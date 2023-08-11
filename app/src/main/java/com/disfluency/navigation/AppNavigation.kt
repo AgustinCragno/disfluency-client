@@ -52,7 +52,7 @@ fun AppNavigation(){
             SignUpPatientOnBoardingScreen(navController)
         }
         composable(Route.SignUpTherapist.path){
-            TherapistSignUpScreen(navController, userViewModel)
+            TherapistSignUpScreen(navController)
         }
         composable(Route.Patient.Home.path){
             PatientNavigationGraph(patient = userViewModel.getLoggedUser() as Patient)

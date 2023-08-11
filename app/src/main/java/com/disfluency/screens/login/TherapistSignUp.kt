@@ -1,51 +1,39 @@
 package com.disfluency.screens.login
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.dialogs.TermsAndConditionsDialog
+import com.disfluency.components.inputs.avatar.AvatarPicker
 import com.disfluency.components.inputs.text.*
-import com.disfluency.viewmodel.LoggedUserViewModel
-import com.disfluency.viewmodel.LoginState
+import com.disfluency.viewmodel.SignUpViewModel
 
 @Composable
 fun TherapistSignUpScreen(
     navController: NavHostController,
-    viewModel: LoggedUserViewModel = viewModel()
+    viewModel: SignUpViewModel = viewModel()
 ){
-
-    //TODO: que esta pantalla sea solo para email y password
-    // luego hacemos que en el primer login, lo redirija a una pag para completar nombre
-    // y elegir avatar
-    // se puede hacer algo similar para el paciente
+    var signUpStep by remember {
+        mutableStateOf(1)
+    }
 
     SignUpLobbyScaffold(title = R.string.signup, navController = navController) { paddingValues ->
         Column(
@@ -55,53 +43,51 @@ fun TherapistSignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = stringResource(id = R.string.app_name),
-                style = MaterialTheme.typography.displayMedium
-            )
+            when(signUpStep){
+                1 -> UserAndPasswordPage(viewModel) { signUpStep++ }
+                2 -> DataAndAvatarPage(viewModel) { signUpStep-- }
+            }
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            //TODO: hacer el llamado al endpoint de signup
-            SignUpForm(
-                viewModel = viewModel,
-                onSubmit = { email, password -> println("User: $email | Password: $password") }
-            )
         }
     }
 }
 
+@Composable
+private fun UserAndPasswordPage(viewModel: SignUpViewModel, onSubmit: () -> Unit){
+    Text(
+        text = stringResource(id = R.string.app_name),
+        style = MaterialTheme.typography.displayMedium
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    SignUpForm(viewModel = viewModel, onSubmit = onSubmit)
+}
 
 @Composable
 private fun SignUpForm(
-    viewModel: LoggedUserViewModel,
-    onSubmit: (String, String) -> Unit
+    viewModel: SignUpViewModel, onSubmit: () -> Unit
 ){
-    val email = remember { mutableStateOf("") }
-    val password = remember{ mutableStateOf("") }
     val passwordRepeat = remember{ mutableStateOf("") }
 
-    val submitEnabled = remember(email.value, password.value, passwordRepeat.value, viewModel.loginState){
-        EmailValidation().validate(email.value)
-        && PasswordValidation().validate(password.value)
-        && EqualToValidation(password.value).validate(passwordRepeat.value)
-        && viewModel.loginState < LoginState.SUBMITTED
+    val submitEnabled = remember(viewModel.email.value, viewModel.password.value, passwordRepeat.value){
+        EmailValidation().validate(viewModel.email.value)
+        && PasswordValidation().validate(viewModel.password.value)
+        && EqualToValidation(viewModel.password.value).validate(passwordRepeat.value)
     }
-
-    val submitAction = { onSubmit(email.value, password.value) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         EmailInput(
-            email = email,
-            enabled = viewModel.loginState < LoginState.SUBMITTED
+            email = viewModel.email,
+            enabled = true
         )
 
         PasswordInput(
-            password = password,
+            password = viewModel.password,
             labelId = R.string.password,
-            enabled = viewModel.loginState < LoginState.SUBMITTED,
+            enabled = true,
             validation = PasswordValidation(),
             validationFailMessage = R.string.invalid_password
         )
@@ -109,34 +95,23 @@ private fun SignUpForm(
         PasswordInput(
             password = passwordRepeat,
             labelId = R.string.repeat_password,
-            enabled = viewModel.loginState < LoginState.SUBMITTED,
-            validation = EqualToValidation(password.value),
+            enabled = true,
+            validation = EqualToValidation(viewModel.password.value),
             validationFailMessage = R.string.password_doesnt_match,
-            onSubmit = submitAction
+            onSubmit = onSubmit
         )
 
         Button(
             modifier = Modifier
                 .width(250.dp)
                 .padding(vertical = 16.dp),
-            onClick = submitAction,
+            onClick = onSubmit,
             enabled = submitEnabled
         ) {
             Text(stringResource(R.string.agree_and_continue))
         }
 
         TermsAndConditions()
-    }
-
-    Column(
-        modifier = Modifier
-            .padding(32.dp),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        AnimatedVisibility(visible = viewModel.loginState == LoginState.SUBMITTED, enter = fadeIn(), exit = fadeOut()) {
-            CircularProgressIndicator()
-        }
     }
 }
 
@@ -167,6 +142,66 @@ private fun TermsAndConditions(){
     if (openDialog){
         TermsAndConditionsDialog {
             openDialog = false
+        }
+    }
+}
+
+
+@Composable
+private fun DataAndAvatarPage(viewModel: SignUpViewModel, onCancel: () -> Unit) {
+
+    val submitEnabled = remember(viewModel.name.value, viewModel.lastName.value){
+        MandatoryValidation().validate(viewModel.name.value)
+                && MandatoryValidation().validate(viewModel.lastName.value)
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            modifier = Modifier.width(300.dp).padding(horizontal = 8.dp),
+            text = stringResource(R.string.almost_there),
+            style = MaterialTheme.typography.displaySmall,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+
+        Text(
+            modifier = Modifier
+                .width(300.dp)
+                .padding(top = 2.dp, start = 8.dp, end = 8.dp),
+            text = stringResource(R.string.complete_info_to_enter_disfluency),
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Gray,
+            textAlign = TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(58.dp))
+
+        AvatarPicker(selectedAvatarIndex = viewModel.avatarIndex)
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        MandatoryTextInput(state = viewModel.name, label = stringResource(id = R.string.name))
+        MandatoryTextInput(state = viewModel.lastName, label = stringResource(id = R.string.last_name))
+
+        Button(
+            modifier = Modifier
+                .width(250.dp)
+                .padding(top = 16.dp),
+            onClick = { viewModel.signUp() },
+            enabled = submitEnabled
+        ) {
+            Text(stringResource(R.string.confirm))
+        }
+
+        OutlinedButton(
+            modifier = Modifier
+                .width(250.dp),
+            onClick = onCancel
+        ) {
+            Text(text = stringResource(id = R.string.go_back))
         }
     }
 }
