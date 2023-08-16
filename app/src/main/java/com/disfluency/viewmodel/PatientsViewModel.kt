@@ -4,13 +4,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.disfluency.api.dto.PatientDTO
 import com.disfluency.api.error.PatientCreationException
 import com.disfluency.api.error.PatientNotFoundException
-import com.disfluency.components.success.ConfirmationState
 import com.disfluency.data.PatientRepository
 import com.disfluency.model.Patient
-import kotlinx.coroutines.delay
+import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.launch
 
 class PatientsViewModel : ViewModel(){

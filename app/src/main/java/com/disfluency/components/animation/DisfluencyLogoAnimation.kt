@@ -15,14 +15,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.disfluency.R
+import com.disfluency.viewmodel.LoggedUserViewModel
+import com.disfluency.viewmodel.states.LoginState
 import kotlinx.coroutines.delay
 
 private const val ANIMATION_LENGTH = 800L
 private const val ANIMATION_CYCLE_COUNT = 4
 
 @Composable
-fun DisfluencyAnimatedLogoRise(animationState: MutableState<Boolean>, riseOffset: Dp){
-    val offset = animateDpAsState(targetValue = if (animationState.value) riseOffset else 0.dp,
+fun DisfluencyAnimatedLogoRise(viewModel: LoggedUserViewModel, riseOffset: Dp){
+    val riseAnimationState = remember(viewModel.loginState, viewModel.firstLoadDone.value) {
+        mutableStateOf(viewModel.loginState < LoginState.AUTHENTICATED && viewModel.firstLoadDone.value)
+    }
+
+    val offset = animateDpAsState(targetValue = if (riseAnimationState.value) riseOffset else 0.dp,
         animationSpec = tween(durationMillis = 1000)
     )
 
@@ -33,31 +39,39 @@ fun DisfluencyAnimatedLogoRise(animationState: MutableState<Boolean>, riseOffset
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        DisfluencyAnimatedLogo(animationState)
+        DisfluencyAnimatedLogo(viewModel)
+    }
+}
+
+@Composable
+private fun DisfluencyAnimatedLogo(viewModel: LoggedUserViewModel){
+    var atEnd by remember { mutableStateOf(viewModel.firstLoadDone.value) }
+
+    DisfluencyLogo(atEnd)
+
+    LaunchedEffect(Unit){
+        if (!viewModel.firstLoadDone.value){
+
+            var i = 0
+            while (i <= ANIMATION_CYCLE_COUNT || viewModel.loginState == LoginState.SUBMITTED){
+                delay(ANIMATION_LENGTH)
+                atEnd = !atEnd
+                i++
+            }
+
+            viewModel.firstLoadDone.value = true
+        }
     }
 }
 
 @OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
-fun DisfluencyAnimatedLogo(animationState: MutableState<Boolean>){
-
+fun DisfluencyLogo(atEnd: Boolean = true){
     val image = AnimatedImageVector.animatedVectorResource(R.drawable.disfluency_logo_animation)
-    var atEnd by remember { mutableStateOf(animationState.value) }
 
     Image(
         painter = rememberAnimatedVectorPainter(animatedImageVector = image, atEnd = atEnd),
         contentDescription = stringResource(R.string.app_name),
         modifier = Modifier.size(170.dp, 170.dp)
     )
-
-    LaunchedEffect(Unit){
-        if (!animationState.value){
-            for (i in 0..ANIMATION_CYCLE_COUNT){
-                delay(ANIMATION_LENGTH)
-                atEnd = !atEnd
-            }
-
-            animationState.value = true
-        }
-    }
 }

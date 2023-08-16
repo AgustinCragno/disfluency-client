@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
+import com.disfluency.api.DisfluencyAPI
+import com.disfluency.api.session.SessionManager
 import com.disfluency.navigation.AppNavigation
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.PropertiesReader
@@ -15,6 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
+            SessionManager.initialize(applicationContext)
             PropertiesReader.initialize(applicationContext)
             AvatarManager.initialize(applicationContext)
         }

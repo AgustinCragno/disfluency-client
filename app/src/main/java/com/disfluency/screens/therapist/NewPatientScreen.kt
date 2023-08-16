@@ -21,6 +21,11 @@ import androidx.navigation.NavController
 import com.disfluency.R
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.inputs.*
+import com.disfluency.components.inputs.avatar.AvatarPicker
+import com.disfluency.components.inputs.date.DateInput
+import com.disfluency.components.inputs.date.WeeklyTimePicker
+import com.disfluency.components.inputs.date.WeeklyTurnPicker
+import com.disfluency.components.inputs.text.*
 import com.disfluency.components.stepper.PageStepper
 import com.disfluency.components.stepper.StepScreen
 import com.disfluency.model.Patient

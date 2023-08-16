@@ -1,4 +1,4 @@
-package com.disfluency.components.inputs
+package com.disfluency.components.inputs.date
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape

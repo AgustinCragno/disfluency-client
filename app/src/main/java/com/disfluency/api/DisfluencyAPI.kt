@@ -1,9 +1,11 @@
 package com.disfluency.api
 
+import com.disfluency.api.interceptor.AuthInterceptor
 import com.disfluency.api.service.ExerciseService
 import com.disfluency.api.service.PatientService
 import com.disfluency.api.service.UserService
 import com.disfluency.utilities.PropertiesReader
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 
@@ -15,6 +17,13 @@ object DisfluencyAPI {
         Retrofit.Builder()
             .baseUrl("http://$host:$port/")
             .addConverterFactory(JacksonConverterFactory.create())
+            .client(okhttpClient())
+            .build()
+    }
+
+    private fun okhttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor())
             .build()
     }
 

@@ -8,7 +8,12 @@ sealed class Route(val path: String, private vararg val params: String, val titl
         return args.foldIndexed(path) { index, argsPath, arg -> argsPath.replace("{${params[index]}}", arg) }
     }
 
+    object Launch: Route("launch", title = R.string.app_name)
     object Login: Route("login", title = R.string.login)
+    object SignUpLobby: Route("signup", title = R.string.signup)
+    object SignUpPatient: Route("signup/patient", title = R.string.signup)
+    object SignUpTherapist: Route("signup/therapist", title = R.string.signup)
+    object ConfirmationNewUser: Route("signup/confirmation", title = -1)
 
     object Patient {
         object Home: Route("home-patient", title = R.string.home)
@@ -41,11 +46,13 @@ fun getTitleByRoute(path: String): Int{
     return ALL_ROUTES.first { it.path == path }.title
 }
 
-val NO_BOTTOM_BAR_ROUTES = listOf<Route>(
-    Route.Therapist.ConfirmationNewPatient
+val NO_BOTTOM_BAR_ROUTES = listOf(
+    Route.Therapist.ConfirmationNewPatient,
+    Route.ConfirmationNewUser
 ).map { it.path }
 
 val NO_TOP_BAR_ROUTES = listOf(
     Route.Therapist.NewPatient,
-    Route.Therapist.ConfirmationNewPatient
+    Route.Therapist.ConfirmationNewPatient,
+    Route.ConfirmationNewUser
 ).map { it.path }
