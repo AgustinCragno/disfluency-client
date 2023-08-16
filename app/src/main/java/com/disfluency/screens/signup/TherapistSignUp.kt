@@ -1,4 +1,4 @@
-package com.disfluency.screens.login
+package com.disfluency.screens.signup
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
@@ -24,6 +24,7 @@ import com.disfluency.R
 import com.disfluency.components.dialogs.TermsAndConditionsDialog
 import com.disfluency.components.inputs.avatar.AvatarPicker
 import com.disfluency.components.inputs.text.*
+import com.disfluency.components.text.TermsAndConditions
 import com.disfluency.navigation.routing.Route
 import com.disfluency.viewmodel.SignUpViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
@@ -120,37 +121,6 @@ private fun SignUpForm(
         }
 
         TermsAndConditions()
-    }
-}
-
-@Composable
-private fun TermsAndConditions(){
-    var openDialog by remember { mutableStateOf(false) }
-
-    val tnc = " " + stringResource(R.string.terms_and_conditions_2)
-    val annotatedString = buildAnnotatedString {
-        append(stringResource(R.string.terms_and_conditions_1))
-        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary) ) {
-            pushStringAnnotation(tag = tnc, annotation = tnc)
-            append(tnc)
-        }
-    }
-
-    ClickableText(
-        modifier = Modifier
-            .width(250.dp),
-        text = annotatedString,
-        onClick = { offset ->
-            annotatedString.getStringAnnotations(offset, offset)
-                .firstOrNull()?.let { _ -> openDialog = true }
-        },
-        style = TextStyle(color = Color.Gray, textAlign = TextAlign.Center)
-    )
-
-    if (openDialog){
-        TermsAndConditionsDialog {
-            openDialog = false
-        }
     }
 }
 

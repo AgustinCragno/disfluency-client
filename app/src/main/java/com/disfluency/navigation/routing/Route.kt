@@ -14,6 +14,7 @@ sealed class Route(val path: String, private vararg val params: String, val titl
     object SignUpPatient: Route("signup/patient", title = R.string.signup)
     object SignUpTherapist: Route("signup/therapist", title = R.string.signup)
     object ConfirmationNewUser: Route("signup/confirmation", title = -1)
+    object InviteConfirmationPatient: Route("signup/invite-confirmation/{token}", "token", title = R.string.signup)
 
     object Patient {
         object Home: Route("home-patient", title = R.string.home)

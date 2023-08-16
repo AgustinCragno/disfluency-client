@@ -7,12 +7,17 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.navDeepLink
 import com.disfluency.model.Patient
 import com.disfluency.model.Therapist
 import com.disfluency.navigation.graph.PatientNavigationGraph
 import com.disfluency.navigation.graph.TherapistNavigationGraph
 import com.disfluency.navigation.routing.Route
 import com.disfluency.screens.login.*
+import com.disfluency.screens.signup.PatientSignUpScreen
+import com.disfluency.screens.signup.SignUpLobbyScreen
+import com.disfluency.screens.signup.SignUpPatientOnBoardingScreen
+import com.disfluency.screens.signup.TherapistSignUpScreen
 import com.disfluency.screens.therapist.success.NewTherapistConfirmationScreen
 import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.SignUpViewModel
@@ -59,6 +64,16 @@ fun AppNavigation(){
         }
         composable(Route.ConfirmationNewUser.path){
             NewTherapistConfirmationScreen(navController, signUpViewModel)
+        }
+        composable(
+            route = Route.InviteConfirmationPatient.path,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "https://disfluency.com/sign-up-confirmation/{token}"
+            }),
+        ) { backStackEntry ->
+            backStackEntry.arguments?.getString("token")?.let {
+                PatientSignUpScreen(token = it, navController)
+            }
         }
         composable(Route.Patient.Home.path){
             PatientNavigationGraph(patient = userViewModel.getLoggedUser() as Patient)
