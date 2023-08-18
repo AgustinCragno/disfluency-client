@@ -13,8 +13,10 @@ sealed class Route(val path: String, private vararg val params: String, val titl
     object SignUpLobby: Route("signup", title = R.string.signup)
     object SignUpPatient: Route("signup/patient", title = R.string.signup)
     object SignUpTherapist: Route("signup/therapist", title = R.string.signup)
-    object ConfirmationNewUser: Route("signup/confirmation", title = -1)
+    object ConfirmationNewUser: Route("signup/confirmation/therapist", title = -1)
     object InviteConfirmationPatient: Route("signup/invite-confirmation/{token}", "token", title = R.string.signup)
+    object ConfirmationPatient: Route("signup/confirmation/patient", title = -1)
+
 
     object Patient {
         object Home: Route("home-patient", title = R.string.home)
@@ -49,11 +51,13 @@ fun getTitleByRoute(path: String): Int{
 
 val NO_BOTTOM_BAR_ROUTES = listOf(
     Route.Therapist.ConfirmationNewPatient,
-    Route.ConfirmationNewUser
+    Route.ConfirmationNewUser,
+    Route.ConfirmationPatient
 ).map { it.path }
 
 val NO_TOP_BAR_ROUTES = listOf(
     Route.Therapist.NewPatient,
     Route.Therapist.ConfirmationNewPatient,
-    Route.ConfirmationNewUser
+    Route.ConfirmationNewUser,
+    Route.ConfirmationPatient
 ).map { it.path }

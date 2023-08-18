@@ -19,7 +19,9 @@ import com.disfluency.screens.signup.SignUpLobbyScreen
 import com.disfluency.screens.signup.SignUpPatientOnBoardingScreen
 import com.disfluency.screens.signup.TherapistSignUpScreen
 import com.disfluency.screens.therapist.success.NewTherapistConfirmationScreen
+import com.disfluency.screens.therapist.success.PatientSignUpConfirmationScreen
 import com.disfluency.viewmodel.LoggedUserViewModel
+import com.disfluency.viewmodel.PatientSignUpViewModel
 import com.disfluency.viewmodel.SignUpViewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -31,6 +33,7 @@ fun AppNavigation(){
     val navController = rememberAnimatedNavController()
     val userViewModel: LoggedUserViewModel = viewModel()
     val signUpViewModel = SignUpViewModel(userViewModel)
+    val patientSignUpViewModel: PatientSignUpViewModel = viewModel()
 
     AnimatedNavHost(
         navController = navController,
@@ -72,8 +75,11 @@ fun AppNavigation(){
             }),
         ) { backStackEntry ->
             backStackEntry.arguments?.getString("token")?.let {
-                PatientSignUpScreen(token = it, navController)
+                PatientSignUpScreen(token = it, navController, patientSignUpViewModel)
             }
+        }
+        composable(Route.ConfirmationPatient.path){
+            PatientSignUpConfirmationScreen(navController, patientSignUpViewModel)
         }
         composable(Route.Patient.Home.path){
             PatientNavigationGraph(patient = userViewModel.getLoggedUser() as Patient)

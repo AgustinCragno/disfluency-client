@@ -22,23 +22,31 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.R
+import com.disfluency.api.session.SessionManager
 import com.disfluency.components.animation.DisfluencyLogo
+import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.components.inputs.text.EqualToValidation
 import com.disfluency.components.inputs.text.PasswordInput
 import com.disfluency.components.inputs.text.PasswordValidation
 import com.disfluency.components.text.TermsAndConditions
+import com.disfluency.navigation.routing.Route
 import com.disfluency.ui.theme.DisfluencyTheme
+import com.disfluency.utilities.PropertiesReader
 import com.disfluency.utilities.avatar.AvatarManager
 import com.disfluency.viewmodel.PatientSignUpViewModel
+import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.delay
 
 @Preview
 @Composable
 fun SignUpPreview() {
+    SessionManager.initialize(LocalContext.current)
+    PropertiesReader.initialize(LocalContext.current)
     AvatarManager.initialize(LocalContext.current)
 
     DisfluencyTheme() {
-        PatientSignUpScreen(token = "", navController = rememberNavController())
+        PatientSignUpScreen(token = "64dfc4f39d2eae5ced38e660", navController = rememberNavController(), viewModel())
+//        PatientSignUpScreen(token = "64d2cc7dc2729f363c2d4ca6", navController = rememberNavController())
     }
 }
 
@@ -46,51 +54,71 @@ fun SignUpPreview() {
 fun PatientSignUpScreen(
     token: String,
     navController: NavHostController,
-    viewModel: PatientSignUpViewModel = viewModel()
+    viewModel: PatientSignUpViewModel
 ) {
     var signUpStep by remember {
         mutableStateOf(1)
     }
 
     LaunchedEffect(Unit){
-        delay(2000)
         viewModel.retrieveUser(token)
     }
 
     SignUpLobbyScaffold(title = R.string.signup, navController = navController) { paddingValues ->
 
-            AnimatedVisibility(
-                visible = viewModel.user.value == null,
-                exit = fadeOut(tween(300))
+        AnimatedVisibility(
+            visible = viewModel.retrievalState.value == ConfirmationState.LOADING,
+            exit = fadeOut(tween(300))
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = paddingValues.calculateTopPadding()),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+                CircularProgressIndicator()
             }
+        }
 
-            AnimatedVisibility(
-                visible = viewModel.user.value != null,
-                enter = fadeIn(tween(300, 300))
+        AnimatedVisibility(
+            visible = viewModel.retrievalState.value == ConfirmationState.SUCCESS,
+            enter = fadeIn(tween(300, 300))
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = paddingValues.calculateTopPadding()),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    when(signUpStep){
-                        1 -> WelcomePage(viewModel) { signUpStep++ }
-                        2 -> PasswordFormPage(viewModel)
-                    }
+                when(signUpStep){
+                    1 -> WelcomePage(viewModel) { signUpStep++ }
+                    2 -> PasswordFormPage(viewModel)
                 }
             }
+        }
+
+        AnimatedVisibility(
+            visible = viewModel.retrievalState.value == ConfirmationState.ERROR,
+            enter = fadeIn(tween(300, 300))
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                ExpiredInviteErrorPage()
+            }
+        }
+    }
+
+    if (viewModel.signupState.value == ConfirmationState.LOADING){
+        LaunchedEffect(Unit){
+            navController.navigate(Route.ConfirmationPatient.path)
+        }
     }
 }
 
@@ -216,4 +244,9 @@ private fun PasswordFormPage(viewModel: PatientSignUpViewModel){
     }
 
     TermsAndConditions()
+}
+
+@Composable
+private fun ExpiredInviteErrorPage(){
+    ImageMessagePage(imageResource = R.drawable.invitation, text = stringResource(R.string.expired_invitation))
 }

@@ -135,6 +135,7 @@
     <string name="invitation_message_1">Usted ha sido invitado a formar parte de Disfluency como paciente a:</string>
     <string name="invitation_message_2">para completar su registro elija su contraseña y comience a usar Disfluency!</string>
     <string name="complete_password">Complete una contraseña para su usuario y comience a usar Disfluency</string>
+    <string name="expired_invitation">La invitacion recibida caducó o ya fue confirmada</string>
 
 
 </resources>
