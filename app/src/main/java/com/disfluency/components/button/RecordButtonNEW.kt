@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
@@ -173,7 +172,7 @@ private fun MicButton(
     )
 
     val animateSize = animateFloatAsState(
-        targetValue = if (isPressed) 1.35f else 1.05f
+        targetValue = if (isPressed) 1.5f else 1.05f
     )
 
     IconButton(

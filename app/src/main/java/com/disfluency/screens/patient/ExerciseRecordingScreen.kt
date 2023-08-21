@@ -1,206 +1,216 @@
 package com.disfluency.screens.patient
 
-import android.annotation.SuppressLint
-import androidx.compose.animation.core.animateFloatAsState
+import android.util.Log
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
-import com.disfluency.R
+import androidx.navigation.NavController
+import com.disfluency.audio.record.DisfluencyAudioRecorder
+import com.disfluency.components.audio.AudioMediaType
+import com.disfluency.components.audio.AudioPlayer
 import com.disfluency.components.audio.AudioLiveWaveform
-import com.disfluency.components.button.RecordButton
-import com.disfluency.screens.login.SignUpLobbyScaffold
-import com.disfluency.ui.theme.DisfluencyTheme
-import com.disfluency.viewmodel.RecordScreenViewModel
-import kotlinx.coroutines.coroutineScope
+import com.disfluency.components.button.RecordAudioButton
+import com.disfluency.data.ExerciseRepository
+import com.disfluency.model.Exercise
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.File
 
-const val BOTTOM_SHEET_PEEK_HEIGHT = 80
-
-@SuppressLint("UnrememberedMutableState")
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
-@Composable
-fun RecordExerciseScreen(){
-    val isMenuExtended = remember { mutableStateOf(false) }
-
-    val scaffoldState = rememberBottomSheetScaffoldState()
-
-    var animateButtonScale: State<Float> = derivedStateOf { 1f }
-    var animateTitlePadding: State<Float> = derivedStateOf { 46f }
-
-    DisfluencyTheme() {
-        SignUpLobbyScaffold(title = R.string.practice, navController = rememberNavController()) { paddingValues ->
-            Box(
-                Modifier.fillMaxSize()
-            ) {
-                BottomSheetScaffold(
-                    sheetContent = {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(500.dp)
-                                .padding(horizontal = 32.dp)
-                        ){
-                            ExerciseInstructionsPanel(animatePadding = animateTitlePadding)
-                        }
-                    },
-                    sheetContainerColor = MaterialTheme.colorScheme.secondary,
-                    containerColor = Color.White,
-                    sheetPeekHeight = BOTTOM_SHEET_PEEK_HEIGHT.dp,
-                    sheetDragHandle = {},
-                    scaffoldState = scaffoldState,
-                    sheetSwipeEnabled = !isMenuExtended.value
-                ) { bottomSheetPaddingValues ->
-
-                    ExercisePhrasePanel(
-                        modifier = Modifier
-                            .padding(bottomSheetPaddingValues)
-                            .padding(paddingValues)
-                    )
-                }
-                RecordButton(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = (BOTTOM_SHEET_PEEK_HEIGHT.dp + 16.dp) / 2)
-                        .scale(animateButtonScale.value),
-                    isMenuExtended = isMenuExtended
-                )
-            }
-
-
-        }
-    }
-
-    val initialMeasure: MutableState<Float?> = remember { mutableStateOf(null) }
-    LaunchedEffect(Unit){
-        initialMeasure.value = scaffoldState.bottomSheetState.requireOffset() - 1f
-    }
-
-    initialMeasure.value?.let {
-        animateButtonScale = animateFloatAsState(
-            targetValue = if (scaffoldState.bottomSheetState.requireOffset() >= it)
-                1f else 0f
-        )
-
-        animateTitlePadding = animateFloatAsState(
-            targetValue = if (scaffoldState.bottomSheetState.requireOffset() >= it * 0.7f)
-                46f else 16f
-        )
-    }
-}
+const val LOCAL_RECORD_FILE = "disfluency_exercise_recording.mp3"
 
 @Composable
-private fun ExerciseInstructionsPanel(animatePadding: State<Float>){
-    Column(
-        modifier = Modifier
-            .padding(top = animatePadding.value.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Fonacion Continuada",
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-        )
+fun RecordExercise(id: String, onSend: (File) -> Unit, navController: NavController){
+//    val exercise = remember { mutableStateOf<Exercise?>(null) }
+//
+//    LaunchedEffect(Unit) {
+//        val anExercise = withContext(Dispatchers.IO) { ExerciseRepository.getExerciseById(id) }
+//        Log.i("HTTP", anExercise.toString())
+//        exercise.value = anExercise
+//    }
 
-        Divider(
+    val ex = Exercise("",
+        "Velocidad cómoda y fluida",
+        "La usabilidad es la capacidad del producto software para ser entendido, aprendido, usado y resultar atractivo para el usuario, cuando se usa bajo determinadas condiciones",
+        "La usabilidad es la capacidad del producto software para ser entendido, aprendido, usado y resultar atractivo para el usuario, cuando se usa bajo determinadas condiciones",
+        "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3"
+    )
+
+    val exercise = remember { mutableStateOf<Exercise?>(ex) }
+
+    val audioRecorder = DisfluencyAudioRecorder(LocalContext.current)
+
+    var recordingDone by remember { mutableStateOf(false) }
+    val changeRecordingState = { recordingDone = !recordingDone }
+
+//    var openDialog by remember { mutableStateOf(false) }
+//    var openInfoDialog by remember { mutableStateOf(false) }
+
+//    BackHandler(enabled = recordingDone) {
+//        openDialog = true
+//    }
+
+    exercise.value?.let {
+//        if (openDialog){
+//            ExitDialog(
+//                title = "¿Esta seguro que desea salir?",
+//                content = "Se perdera la grabacion realizada. Antes de salir deberia confirmar la resolucion del ejercicio o descartarla.",
+//                cancel = { openDialog = false },
+//                exit = {
+//                    openDialog = false
+//                    recordingDone = false
+//                    navController.popBackStack()
+//                }
+//            )
+//        }
+//
+//        if (openInfoDialog){
+//            ExerciseInfoDialog(
+//                exercise = it, cancel = { openInfoDialog = false }
+//            )
+//        }
+
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            thickness = 3.dp,
-            color = Color.Black.copy(alpha = 0.3f)
-        )
-
-        Text(
-            text = "Mantener la fonacion a lo largo de la palabra y entre palabra y palabra. Mantener la vibracion de las cuerdas vocales a lo largo de la palabra y entre palabras sin frenar, y sostener durante toda una frase",
-            color = Color.White,
-            fontSize = 18.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-        )
-
-        AudioPlayerPanel()
-    }
-}
-
-@Composable
-private fun AudioPlayerPanel(viewModel: RecordScreenViewModel = viewModel()){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        AudioLiveWaveform(amplitudes = viewModel.audioAmplitudes, maxHeight = 96.dp)
-        Row(
-            Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .fillMaxSize()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "00:00",
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.LightGray
-            )
+            ExercisePhraseDetail(exercise = it, onInfoButtonClick = {
+//                openInfoDialog = true
+            })
 
-            Text(
-                text = "00:28",
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.LightGray,
-                modifier = Modifier.padding(end = 8.dp)
-            )
+            RecordingVisualizer(audioRecorder = audioRecorder, hasRecorded = recordingDone)
+
+            RecordButton(audioRecorder = audioRecorder, changeRecordingState = changeRecordingState, onSend = onSend)
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(8.dp))
+@Composable
+fun ExercisePhraseDetail(exercise: Exercise, onInfoButtonClick: () -> Unit){
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ExerciseTitleWithInfo(
+            exercise = exercise,
+            onInfoButtonClick = onInfoButtonClick
+        )
+
+        Text(
+            text = "Repita la siguiente frase:",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp, top = 24.dp)
+        )
+
+        Text(
+            text = "\"${exercise.phrase}\"",
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            textAlign = TextAlign.Center,
+            fontStyle = FontStyle.Italic
+        )
+    }
+}
+
+@Composable
+private fun ExerciseTitleWithInfo(exercise: Exercise, onInfoButtonClick: () -> Unit){
+    val modifier = Modifier
+        .size(26.dp)
+        .padding(horizontal = 2.dp)
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(modifier = modifier)
+
+        Text(text = exercise.title, style = MaterialTheme.typography.headlineSmall)
 
         IconButton(
-            onClick = {  },
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            ),
-            modifier = Modifier.size(56.dp)
+            modifier = modifier.offset(y = 2.dp),
+            onClick = onInfoButtonClick
         ) {
-            Icon(
-                imageVector = Icons.Filled.PlayArrow,
-                contentDescription = null,
-                tint = Color.White
-            )
+            Icon(imageVector = Icons.Filled.Info, contentDescription = "Info", tint = MaterialTheme.colorScheme.primary)
         }
-
-        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
 @Composable
-private fun ExercisePhrasePanel(modifier: Modifier){
-    Column(
-        modifier = modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+fun RecordingVisualizer(audioRecorder: DisfluencyAudioRecorder, hasRecorded: Boolean){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(160.dp),
+        contentAlignment = Alignment.Center
+    ){
+        AnimatedVisibility(
+            visible = hasRecorded,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            AudioPlayer(url = LOCAL_RECORD_FILE, type = AudioMediaType.FILE)
+        }
+
+        AnimatedVisibility(
+            visible = !hasRecorded,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            AudioLiveWaveform(amplitudes = audioRecorder.audioAmplitudes, maxHeight = 160.dp)
+        }
+    }
+}
+
+@Composable
+fun RecordButton(audioRecorder: DisfluencyAudioRecorder, changeRecordingState: () -> Unit, onSend: (File) -> Unit){
+    val context = LocalContext.current
+
+    var audioFile: File? = null
+
+    Row(
+        modifier = Modifier
+            .wrapContentHeight()
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = "La portabilidad es la capacidad del producto o componente de ser transferido de forma efectiva y eficiente de un entorno hardware, software, operacional o de utilización a otro",
-            fontWeight = FontWeight.Bold,
-            fontSize = 15.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
+        RecordAudioButton(
+            onClick = {
+                File(context.cacheDir, LOCAL_RECORD_FILE).also {
+                    audioRecorder.start(it)
+                    audioFile = it
+                }
+            },
+            onRelease = {
+                changeRecordingState()
+                audioRecorder.stop()
+            },
+            onSend = {
+                File(context.cacheDir, LOCAL_RECORD_FILE).let(onSend)
+            },
+            onCancel = {
+                changeRecordingState()
+                audioRecorder.audioAmplitudes.clear()
+                audioFile?.apply { delete() }
+                audioFile = null
+            }
         )
     }
 }

@@ -13,6 +13,7 @@ import com.disfluency.navigation.structure.AppScaffold
 import com.disfluency.screens.patient.ExerciseAssignmentDetailScreen
 import com.disfluency.screens.patient.HomePatientScreen
 import com.disfluency.screens.patient.MyExercisesScreen
+import com.disfluency.screens.patient.RecordExercise
 import com.disfluency.viewmodel.ExercisesViewModel
 
 @Composable
@@ -36,7 +37,13 @@ fun PatientNavigationGraph(patient: Patient){
             composable(Route.Patient.ExercisePractice.path){ backStackEntry ->
                 backStackEntry.arguments?.getString("id")?.let {
                     //TODO: temp
-                    ImageMessagePage(imageResource = R.drawable.speech_bubble, text = "Proximamente")
+//                    ImageMessagePage(imageResource = R.drawable.speech_bubble, text = "Proximamente")
+
+                    RecordExercise(
+                        id = "",
+                        onSend = {},
+                        navController = navHostController
+                    )
                 }
             }
         }
