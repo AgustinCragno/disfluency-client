@@ -18,7 +18,7 @@ const val MAX_SPIKES = 30
 
 @Composable
 fun AudioLiveWaveform(amplitudes: MutableList<Float>, maxSpikes: Int = MAX_SPIKES, maxHeight: Dp){
-    val color = MaterialTheme.colorScheme.secondary
+    val color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
 
     //TODO: ver implementacion con Visualizer
     Box(modifier = Modifier
