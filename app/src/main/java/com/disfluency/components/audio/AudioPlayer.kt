@@ -16,12 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import com.disfluency.audio.playback.DisfluencyAudioFilePlayer
 import com.disfluency.audio.playback.DisfluencyAudioPlayer
 import com.disfluency.audio.playback.DisfluencyAudioUrlPlayer
+import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatMillisecondsAsMinuteAndSeconds
 
 enum class AudioMediaType(val getPlayer: (Context) -> DisfluencyAudioPlayer){
@@ -115,6 +117,21 @@ fun AudioPlayer(url: String, audioPlayer: DisfluencyAudioPlayer){
                 )
             }
             
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AudioPlayerPreview(){
+    DisfluencyTheme() {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            val url = "https://pf5302.s3.us-east-2.amazonaws.com/audios/toquesligeros.mp3"
+            AudioPlayer(url = url, type = AudioMediaType.URL)
         }
     }
 }

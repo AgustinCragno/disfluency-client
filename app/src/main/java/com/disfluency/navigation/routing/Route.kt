@@ -20,6 +20,7 @@ sealed class Route(val path: String, private vararg val params: String, val titl
         object MyExercises: Route("exercise-assignments", title = R.string.my_exercises)
         object ExerciseAssignmentDetail: Route("exercise-assignments/{id}", "id", title = R.string.assigned_exercise)
         object ExercisePractice: Route("exercise-assignments/{id}/practice", "id", title = R.string.practice)
+        object RecordConfirmation: Route("exercise-assignments/record-confirmation", title = -1)
     }
 
     object Therapist {
@@ -48,11 +49,13 @@ fun getTitleByRoute(path: String): Int{
 
 val NO_BOTTOM_BAR_ROUTES = listOf(
     Route.Therapist.ConfirmationNewPatient,
-    Route.ConfirmationNewUser
+    Route.ConfirmationNewUser,
+    Route.Patient.RecordConfirmation
 ).map { it.path }
 
 val NO_TOP_BAR_ROUTES = listOf(
     Route.Therapist.NewPatient,
     Route.Therapist.ConfirmationNewPatient,
-    Route.ConfirmationNewUser
+    Route.ConfirmationNewUser,
+    Route.Patient.RecordConfirmation
 ).map { it.path }

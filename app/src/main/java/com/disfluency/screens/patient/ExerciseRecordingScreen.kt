@@ -8,10 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +24,9 @@ import com.disfluency.components.audio.AudioLiveWaveform
 import com.disfluency.components.button.RecordAudioButton
 import com.disfluency.data.ExerciseRepository
 import com.disfluency.model.Exercise
+import com.disfluency.navigation.routing.Route
+import com.disfluency.viewmodel.RecordScreenViewModel
+import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -34,7 +34,7 @@ import java.io.File
 const val LOCAL_RECORD_FILE = "disfluency_exercise_recording.mp3"
 
 @Composable
-fun RecordExercise(id: String, onSend: (File) -> Unit, navController: NavController){
+fun RecordExercise(id: String, onSend: (File) -> Unit, navController: NavController, viewModel: RecordScreenViewModel){
 //    val exercise = remember { mutableStateOf<Exercise?>(null) }
 //
 //    LaunchedEffect(Unit) {
@@ -64,7 +64,7 @@ fun RecordExercise(id: String, onSend: (File) -> Unit, navController: NavControl
 //        openDialog = true
 //    }
 
-    exercise.value?.let {
+        exercise.value?.let {
 //        if (openDialog){
 //            ExitDialog(
 //                title = "¿Esta seguro que desea salir?",
@@ -84,20 +84,32 @@ fun RecordExercise(id: String, onSend: (File) -> Unit, navController: NavControl
 //            )
 //        }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            ExercisePhraseDetail(exercise = it, onInfoButtonClick = {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                ExercisePhraseDetail(exercise = it, onInfoButtonClick = {
 //                openInfoDialog = true
-            })
+                })
 
-            RecordingVisualizer(audioRecorder = audioRecorder, hasRecorded = recordingDone)
+                RecordingVisualizer(audioRecorder = audioRecorder, hasRecorded = recordingDone)
 
-            RecordButton(audioRecorder = audioRecorder, changeRecordingState = changeRecordingState, onSend = onSend)
+                RecordButton(
+                    audioRecorder = audioRecorder,
+                    changeRecordingState = changeRecordingState,
+                    onSend = onSend
+                )
+            }
+        }
+
+
+    if (viewModel.uploadConfirmationState.value == ConfirmationState.LOADING) {
+        LaunchedEffect(Unit){
+            navController.popBackStack()
+            navController.navigate(Route.Patient.RecordConfirmation.path)
         }
     }
 }

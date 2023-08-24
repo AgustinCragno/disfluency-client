@@ -14,11 +14,17 @@ import com.disfluency.screens.patient.ExerciseAssignmentDetailScreen
 import com.disfluency.screens.patient.HomePatientScreen
 import com.disfluency.screens.patient.MyExercisesScreen
 import com.disfluency.screens.patient.RecordExercise
+import com.disfluency.screens.patient.success.RecordingConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
+import com.disfluency.viewmodel.RecordScreenViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun PatientNavigationGraph(patient: Patient){
     val exercisesViewModel: ExercisesViewModel = viewModel()
+    val recordViewModel: RecordScreenViewModel = viewModel()
 
     AppScaffold(bottomNavigationItems = BottomNavigationItem.Patient.items()) { navHostController ->
 
@@ -40,11 +46,17 @@ fun PatientNavigationGraph(patient: Patient){
 //                    ImageMessagePage(imageResource = R.drawable.speech_bubble, text = "Proximamente")
 
                     RecordExercise(
-                        id = "",
-                        onSend = {},
-                        navController = navHostController
+                        id = "64d2cc7dc2729f363c2d4c97",
+                        onSend = {
+                            recordViewModel.uploadRecording("64d2cc7dc2729f363c2d4c97", it)
+                        },
+                        navController = navHostController,
+                        viewModel = recordViewModel
                     )
                 }
+            }
+            composable(Route.Patient.RecordConfirmation.path){
+                RecordingConfirmationScreen(navController = navHostController, viewModel = recordViewModel)
             }
         }
     }
