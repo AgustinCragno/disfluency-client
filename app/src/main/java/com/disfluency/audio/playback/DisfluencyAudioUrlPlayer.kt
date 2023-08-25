@@ -8,4 +8,8 @@ class DisfluencyAudioUrlPlayer(context: Context) : DisfluencyAudioPlayer(context
     override fun loadUri(media: String): Uri {
         return Uri.parse(media)
     }
+
+    override fun loadPath(media: String): String {
+        return media
+    }
 }

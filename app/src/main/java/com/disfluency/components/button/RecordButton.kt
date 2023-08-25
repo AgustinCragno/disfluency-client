@@ -19,10 +19,12 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.disfluency.ui.theme.DisfluencyTheme
+import com.disfluency.viewmodel.RecordAudioViewModel
 
 /**
  * Design inspired from https://github.com/jurajkusnier/fluid-bottom-navigation
@@ -34,13 +36,24 @@ private fun FloatingButtonGroupPreview2(){
     val isMenuExtended = remember { mutableStateOf(false) }
 
     DisfluencyTheme() {
-        RecordButton(modifier = Modifier, isMenuExtended = isMenuExtended)
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            RecordButton(modifier = Modifier, isMenuExtended = isMenuExtended, viewModel = RecordAudioViewModel(LocalContext.current))
+        }
     }
 }
 
 @Composable
-fun RecordButton(modifier: Modifier, isMenuExtended: MutableState<Boolean>){
-    val fabAnimationProgress by animateFloatAsState(
+fun RecordButton(
+    modifier: Modifier,
+    isMenuExtended: MutableState<Boolean>,
+    viewModel: RecordAudioViewModel,
+    onPress: () -> Unit = {},
+    onRelease: () -> Unit = {},
+    onSend: () -> Unit = {},
+    onDelete: () -> Unit = {},
+    onPlay: () -> Unit = {}
+){
+    val animationProgress by animateFloatAsState(
         targetValue = if (isMenuExtended.value) 1f else 0f,
         animationSpec = tween(
             durationMillis = 550,
@@ -48,19 +61,8 @@ fun RecordButton(modifier: Modifier, isMenuExtended: MutableState<Boolean>){
         )
     )
 
-    FabGroup(
-        modifier = modifier,
-        animationProgress = fabAnimationProgress,
-        isMenuExtended = isMenuExtended
-    )
-}
+    val startedRecording = remember { mutableStateOf(false) }
 
-@Composable
-private fun FabGroup(
-    modifier: Modifier,
-    animationProgress: Float = 0f,
-    isMenuExtended: MutableState<Boolean>
-) {
     Box(
         modifier
             .fillMaxWidth(),
@@ -79,13 +81,14 @@ private fun FabGroup(
             opacity = LinearEasing.transform(0.2f, 0.7f, animationProgress),
             backgroundColor = MaterialTheme.colorScheme.primary,
             onClick = {
-                print("Delete Action")
                 isMenuExtended.value = false
+                startedRecording.value = false
+                onDelete()
             }
         )
 
         AnimatedFab(
-            icon = Icons.Default.PlayArrow,
+            icon = if (viewModel.audioPlayer.isPlaying()) Icons.Default.Pause else Icons.Default.PlayArrow,
             modifier = Modifier.padding(
                 PaddingValues(
                     bottom = 88.dp,
@@ -93,9 +96,8 @@ private fun FabGroup(
             ),
             opacity = LinearEasing.transform(0.3f, 0.8f, animationProgress),
             backgroundColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            onClick = {
-                print("Play Action")
-            }
+            enabled = viewModel.isPlaybackReady(),
+            onClick = onPlay
         )
 
         AnimatedFab(
@@ -109,19 +111,21 @@ private fun FabGroup(
             opacity = LinearEasing.transform(0.4f, 0.9f, animationProgress),
             backgroundColor = MaterialTheme.colorScheme.onSecondaryContainer,
             onClick = {
-                print("Send Action")
                 isMenuExtended.value = false
+                onSend()
             }
         )
 
         MicButton(
             animationProgress = animationProgress,
             isMenuExtended = isMenuExtended,
-            onPress = { print("Record Action") },
-            onRelease = { print("Finished Recording") }
+            startedRecording = startedRecording,
+            onPress = onPress,
+            onRelease = onRelease
         )
     }
 }
+
 
 @Composable
 private fun AnimatedFab(
@@ -129,17 +133,23 @@ private fun AnimatedFab(
     icon: ImageVector? = null,
     opacity: Float = 1f,
     backgroundColor: Color = MaterialTheme.colorScheme.secondary,
+    enabled: Boolean = true,
     onClick: () -> Unit = {}
 ) {
-    FloatingActionButton(
+    IconButton(
         onClick = onClick,
-        elevation = FloatingActionButtonDefaults.elevation(0.dp, 0.dp, 0.dp, 0.dp),
-        containerColor = backgroundColor,
-        shape = CircleShape,
-        modifier = modifier.scale(1.05f)
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = backgroundColor,
+            disabledContainerColor = backgroundColor.copy(alpha = 0.5f)
+        ),
+        modifier = modifier
+            .size(56.dp)
+            .scale(1.05f),
+        enabled = enabled
     ) {
         icon?.let {
             Icon(
+                modifier = Modifier.scale(1.05f),
                 imageVector = it,
                 contentDescription = null,
                 tint = Color.White.copy(alpha = opacity)
@@ -152,14 +162,12 @@ private fun AnimatedFab(
 private fun MicButton(
     animationProgress: Float = 0f,
     isMenuExtended: MutableState<Boolean>,
+    startedRecording: MutableState<Boolean>,
     onPress: () -> Unit,
     onRelease: () -> Unit
 ){
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    var startedRecording by remember { mutableStateOf(false) }
-
-    val hasRecorded = (!isPressed && startedRecording)
 
     val animatedButtonColor = animateColorAsState(
         targetValue = if (isPressed) MaterialTheme.colorScheme.secondaryContainer
@@ -203,9 +211,9 @@ private fun MicButton(
 
         if (isPressed) {
 
-            if (!startedRecording){
+            if (!startedRecording.value){
                 onPress()
-                startedRecording = true
+                startedRecording.value = true
             }
 
             //Use if + DisposableEffect to wait for the press action is completed

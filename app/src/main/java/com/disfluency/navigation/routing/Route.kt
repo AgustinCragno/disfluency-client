@@ -50,6 +50,7 @@ fun getTitleByRoute(path: String): Int{
 val NO_BOTTOM_BAR_ROUTES = listOf(
     Route.Therapist.ConfirmationNewPatient,
     Route.ConfirmationNewUser,
+    Route.Patient.ExercisePractice,
     Route.Patient.RecordConfirmation
 ).map { it.path }
 
@@ -57,5 +58,6 @@ val NO_TOP_BAR_ROUTES = listOf(
     Route.Therapist.NewPatient,
     Route.Therapist.ConfirmationNewPatient,
     Route.ConfirmationNewUser,
+    Route.Patient.ExercisePractice,
     Route.Patient.RecordConfirmation
 ).map { it.path }

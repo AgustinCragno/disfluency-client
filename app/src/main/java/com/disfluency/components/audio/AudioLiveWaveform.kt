@@ -2,47 +2,71 @@ package com.disfluency.components.audio
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.center
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.disfluency.audio.record.MAX_AMPLITUDE_VALUE
 
 
-const val MAX_SPIKES = 30
+const val MAX_SPIKES = 37
+
+//TODO: tratar de calcular de donde sale el 250
+private const val MIN_AMPLITUDE_THRESHOLD = 250
 
 @Composable
-fun AudioLiveWaveform(amplitudes: MutableList<Float>, maxSpikes: Int = MAX_SPIKES, maxHeight: Dp){
-    val color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+fun AudioLiveWaveform(
+    amplitudes: List<Float>,
+    maxSpikes: Int = MAX_SPIKES,
+    spikeWidth: Dp = WAVEFORM_SPIKE_WIDTH.dp,
+    spikeRadius: Dp = WAVEFORM_SPIKE_RADIUS.dp,
+    spikePadding: Dp = WAVEFORM_SPIKE_PADDING.dp,
+    spikeHeight: Dp = WAVEFORM_SPIKE_HEIGHT.dp,
+    color: Color = MaterialTheme.colorScheme.primary
+){
 
-    //TODO: ver implementacion con Visualizer
     Box(modifier = Modifier
         .fillMaxWidth()
-        .padding(24.dp)
+        .height(spikeHeight)
         .drawBehind {
             try {
                 val iterate = amplitudes.toList().takeLast(maxSpikes).listIterator()
                 while (iterate.hasNext()){
                     val index = iterate.nextIndex()
-                    val amp = iterate.next()
+                    val amplitude = iterate.next()
 
-                    val x = index * (size.width / maxSpikes)
-                    val length = maxHeight.value * amp
+                    val x = index * (spikeWidth.toPx() + spikePadding.toPx())
+
+                    val length = (
+                            if (amplitude <= MIN_AMPLITUDE_THRESHOLD) WAVEFORM_SPIKE_MIN_DRAWABLE_HEIGHT
+                        else (spikeHeight.value * (amplitude / MAX_AMPLITUDE_VALUE)).coerceAtMost(spikeHeight.value)
+                    ).dp.toPx()
+
                     val y = size.center.y - length/2
 
-                    if (amp > 0)
-                        drawLine(
-                            color = color,
-                            start = Offset(x = x, y = y),
-                            end = Offset(x = x, y = y + length),
-                            strokeWidth = 15f,
-                            cap = StrokeCap.Round
-                        )
+                    drawRoundRect(
+                        brush = SolidColor(color),
+                        topLeft = Offset(
+                            x = x,
+                            y = y
+                        ),
+                        size = Size(
+                            width = spikeWidth.toPx(),
+                            height = length
+                        ),
+                        cornerRadius = CornerRadius(spikeRadius.toPx(), spikeRadius.toPx()),
+                        style = Fill
+                    )
                 }
             } catch (_: Exception) {
             }

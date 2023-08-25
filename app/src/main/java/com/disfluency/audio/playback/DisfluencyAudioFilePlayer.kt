@@ -10,4 +10,8 @@ class DisfluencyAudioFilePlayer(private val context: Context) : DisfluencyAudioP
     override fun loadUri(media: String): Uri {
         return File(context.cacheDir, media).toUri()
     }
+
+    override fun loadPath(media: String): String {
+        return File(context.cacheDir, media).path
+    }
 }

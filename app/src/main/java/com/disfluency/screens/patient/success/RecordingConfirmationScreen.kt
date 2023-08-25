@@ -17,17 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.disfluency.components.success.ConfirmationScreen
 import com.disfluency.navigation.routing.Route
-import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.ui.theme.Green40
-import com.disfluency.viewmodel.PatientsViewModel
-import com.disfluency.viewmodel.RecordScreenViewModel
+import com.disfluency.viewmodel.RecordExerciseViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.delay
 
@@ -35,7 +30,7 @@ const val ON_SUCCESS_ANIMATION_TIME = 300
 
 
 @Composable
-fun RecordingConfirmationScreen(navController: NavHostController, viewModel: RecordScreenViewModel){
+fun RecordingConfirmationScreen(navController: NavHostController, viewModel: RecordExerciseViewModel){
     ConfirmationScreen(
         loadingState = viewModel.uploadConfirmationState,
         loadingContent = { LoadingState() },
