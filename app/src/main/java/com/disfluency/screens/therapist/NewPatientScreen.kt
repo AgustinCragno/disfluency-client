@@ -220,8 +220,7 @@ private fun ConfirmationScreen(avatar: Int, name: String, lastName: String, id: 
                 val age = Period.between(dateOfBirth, LocalDate.now()).years
                 IconLabeled(
                     icon = Icons.Outlined.AutoAwesome,
-                    label = "$age años",
-                    content = "Edad"
+                    label = "$age años"
                 )
 
                 Spacer(modifier = Modifier.width(16.dp))
@@ -229,8 +228,7 @@ private fun ConfirmationScreen(avatar: Int, name: String, lastName: String, id: 
                 val date = formatLocalDate(dateOfBirth)
                 IconLabeled(
                     icon = Icons.Outlined.Cake,
-                    label = "nacido un $date",
-                    content = "Fecha de Nacimiento"
+                    label = "nacido un $date"
                 )
             }
         }
@@ -249,8 +247,7 @@ private fun ConfirmationScreen(avatar: Int, name: String, lastName: String, id: 
             ) {
                 IconLabeled(
                     icon = Icons.Outlined.ForwardToInbox,
-                    label = email,
-                    content = "Email"
+                    label = email
                 )
             }
         }
@@ -269,16 +266,14 @@ private fun ConfirmationScreen(avatar: Int, name: String, lastName: String, id: 
             ) {
                 IconLabeled(
                     icon = Icons.Outlined.CalendarMonth,
-                    label = formatWeeklyTurn(weeklyTurn),
-                    content = "Turn"
+                    label = formatWeeklyTurn(weeklyTurn)
                 )
 
                 Spacer(modifier = Modifier.width(16.dp))
 
                 IconLabeled(
                     icon = Icons.Outlined.AccessTime,
-                    label = weeklyHour.format(DateTimeFormatter.ofPattern(stringResource(R.string.time_format))),
-                    content = "Time"
+                    label = weeklyHour.format(DateTimeFormatter.ofPattern(stringResource(R.string.time_format)))
                 )
             }
         }

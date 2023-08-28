@@ -128,7 +128,6 @@ private fun RecordExercise(
     recordViewModel: RecordExerciseViewModel
 ){
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
     val isMenuExtended = remember { mutableStateOf(false) }
 
     val scaffoldState = rememberBottomSheetScaffoldState()

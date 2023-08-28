@@ -50,55 +50,38 @@ fun AudioPlayer(
         }
     }
 
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .clip(RoundedCornerShape(10.dp)),
-        color = MaterialTheme.colorScheme.secondary
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+        ){
+            AudioWaveformCustom(
+                modifier = Modifier.fillMaxSize(),
+                amplitudes = audioPlayer.amplitudes(),
+                spikeHeight = 80.dp,
+                progress = audioPlayer.position() / audioPlayer.duration(),
+                onProgressChange = { progressChange ->
+                    audioPlayer.seekTo(audioPlayer.duration() * progressChange)
+                }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp)
-            ){
-                AudioWaveformCustom(
-                    modifier = Modifier.fillMaxSize(),
-                    amplitudes = audioPlayer.amplitudes(),
-                    spikeHeight = 80.dp,
-                    progress = audioPlayer.position() / audioPlayer.duration(),
-                    onProgressChange = { progressChange ->
-                        audioPlayer.seekTo(audioPlayer.duration() * progressChange)
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.position().toLong()),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.LightGray
-                )
-
-                Text(
-                    text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.duration().toLong()),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.LightGray,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.position().toLong()),
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.LightGray
+            )
 
             Button(
                 modifier = Modifier.size(40.dp),
@@ -118,8 +101,16 @@ fun AudioPlayer(
                 else
                     Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = "Play")
             }
+
+            Text(
+                text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.duration().toLong()),
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.LightGray,
+                modifier = Modifier.padding(end = 8.dp)
+            )
         }
     }
+
 }
 
 @Preview(showBackground = true)

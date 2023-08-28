@@ -1,78 +1,77 @@
 package com.disfluency.screens.therapist
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.disfluency.R
 import com.disfluency.components.audio.AudioMediaType
 import com.disfluency.components.audio.AudioPlayer
+import com.disfluency.components.tab.CustomTab
 import com.disfluency.model.Exercise
 
 @Composable
 fun ExerciseDetailScreen(exercise: Exercise){
-    Column(
+    var tabIndex by remember { mutableStateOf(0) }
+
+    val tabs = listOf("Home", "About", "Settings")
+    
+    Card(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
+            .fillMaxWidth()
+            .padding(16.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween
+        ){
             Text(
                 text = exercise.title,
-                style = MaterialTheme.typography.headlineSmall
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
+            )
+
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                thickness = 3.dp,
+                color = Color.Black.copy(alpha = 0.3f)
             )
 
             Text(
                 text = exercise.instruction,
-                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White,
+                fontSize = 16.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(8.dp),
-            )
-
-            exercise.phrase?.let{
-                Text(
-                    text = stringResource(R.string.repeat_the_following_phrase),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 4.dp, top = 24.dp)
-                )
-
-                Text(
-                    text = "\"${it}\"",
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    textAlign = TextAlign.Center,
-                    fontStyle = FontStyle.Italic
-                )
-            }
-        }
-
-        ExampleRecording(sampleAudioUrl = exercise.sampleRecordingUrl, subtitle = stringResource(R.string.example_generated_by_professional))
-    }
-}
-
-@Composable
-fun ExampleRecording(sampleAudioUrl: String, subtitle: String? = null){
-    Column(modifier = Modifier.padding(top = 16.dp)) {
-        subtitle?.let {
-            Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                text = it,
-                style = MaterialTheme.typography.labelMedium
+                    .padding(horizontal = 32.dp)
+            )
+
+            AudioPlayer(
+                url = exercise.sampleRecordingUrl,
+                type = AudioMediaType.URL,
+                modifier = Modifier.padding(16.dp)
             )
         }
-
-        AudioPlayer(url = sampleAudioUrl, type = AudioMediaType.URL)
     }
 }

@@ -133,6 +133,7 @@
     <string name="almost_there">¡Ya casi estamos!</string>
     <string name="complete_info_to_enter_disfluency">Complete su nombre, apellido y elija un avatar para su usuario. Una vez completados ya podra ingresar a Disfluency</string>
     <string name="audio_upload_notification_content">Guardando grabacion...</string>
+    <string name="you_havent_practiced_this_exercise">No ha practicado este ejercicio</string>
 
 
 </resources>

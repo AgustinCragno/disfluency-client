@@ -1,6 +1,5 @@
 package com.disfluency.screens.therapist
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -31,13 +30,10 @@ import androidx.navigation.NavController
 import com.disfluency.R
 import com.disfluency.components.grid.span.TwoColumnGridItemSpan
 import com.disfluency.components.icon.IconLabeled
-import com.disfluency.data.PatientRepository
 import com.disfluency.model.Patient
 import com.disfluency.navigation.routing.Route
 import com.disfluency.utilities.format.formatWeeklyTurn
 import com.disfluency.viewmodel.PatientsViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -101,8 +97,7 @@ fun PatientInfoCard(patient: Patient){
                 FlowRow {
                     IconLabeled(
                         icon = Icons.Outlined.CalendarMonth,
-                        label = formatWeeklyTurn(patient.weeklyTurn),
-                        content = "Turn"
+                        label = formatWeeklyTurn(patient.weeklyTurn)
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -111,8 +106,7 @@ fun PatientInfoCard(patient: Patient){
                         icon = Icons.Outlined.AccessTime,
                         label = patient.weeklyHour.format(
                             DateTimeFormatter.ofPattern(stringResource(
-                            R.string.time_format))),
-                        content = "Time"
+                            R.string.time_format)))
                     )
                 }
             }
