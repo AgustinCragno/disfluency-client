@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,7 +29,7 @@ import com.disfluency.components.button.RecordButton
 import com.disfluency.model.Exercise
 import com.disfluency.model.ExerciseAssignment
 import com.disfluency.navigation.routing.Route
-import com.disfluency.screens.login.SignUpLobbyScaffold
+import com.disfluency.screens.login.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.RecordExerciseViewModel
@@ -46,7 +47,7 @@ private const val BOTTOM_SHEET_REQUIRED_HEIGHT = 200
 @Composable
 fun RecordExercisePreview(){
     val exercisesViewModel = ExercisesViewModel()
-    val recordViewModel = RecordExerciseViewModel(LocalContext.current)
+    val recordViewModel = RecordExerciseViewModel(LocalContext.current, LocalLifecycleOwner.current)
     
     val navHostController = rememberNavController()
 
@@ -103,6 +104,7 @@ fun RecordExerciseScreen(
 
     assignment.value?.let {
         RecordExercise(
+            assignmentId = it.id,
             exercise = it.exercise,
             navController = navController,
             recordViewModel = recordViewModel
@@ -120,11 +122,13 @@ fun RecordExerciseScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RecordExercise(
+    assignmentId: String,
     exercise: Exercise,
     navController: NavHostController,
     recordViewModel: RecordExerciseViewModel
 ){
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val isMenuExtended = remember { mutableStateOf(false) }
 
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -134,7 +138,7 @@ private fun RecordExercise(
         derivedStateOf { BOTTOM_SHEET_TITLE_PADDING_OPEN }
     }
 
-    SignUpLobbyScaffold(title = R.string.practice, navController = navController) { paddingValues ->
+    BackNavigationScaffold(title = R.string.practice, navController = navController) { paddingValues ->
         Box(
             Modifier.fillMaxSize()
         ) {
@@ -185,7 +189,9 @@ private fun RecordExercise(
                 onDelete = {
                     recordViewModel.delete()
                 },
-                onSend = {/*TODO*/},
+                onSend = {
+                    recordViewModel.uploadRecording(assignmentId)
+                },
                 onPlay = {
                     recordViewModel.play()
                 }

@@ -37,7 +37,11 @@ fun TherapistSignUpScreen(
         mutableStateOf(1)
     }
 
-    SignUpLobbyScaffold(title = R.string.signup, navController = navController) { paddingValues ->
+    BackNavigationScaffold(
+        title = R.string.signup,
+        navController = navController,
+        onBackNavigation = { navController.navigate(Route.Launch.path) }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()

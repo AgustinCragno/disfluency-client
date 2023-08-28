@@ -2,6 +2,8 @@ package com.disfluency.navigation.graph
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,7 +19,7 @@ import com.disfluency.viewmodel.RecordExerciseViewModel
 @Composable
 fun PatientNavigationGraph(patient: Patient){
     val exercisesViewModel: ExercisesViewModel = viewModel()
-    val recordViewModel = RecordExerciseViewModel(LocalContext.current)
+    val recordViewModel = RecordExerciseViewModel(LocalContext.current, LocalLifecycleOwner.current)
 
     AppScaffold(bottomNavigationItems = BottomNavigationItem.Patient.items()) { navHostController ->
 

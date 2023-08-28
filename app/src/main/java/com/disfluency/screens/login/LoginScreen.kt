@@ -35,7 +35,7 @@ fun LoginScreen(
     navController: NavHostController,
     viewModel: LoggedUserViewModel = viewModel()
 ){
-    SignUpLobbyScaffold(title = R.string.login, navController = navController) {
+    BackNavigationScaffold(title = R.string.login, navController = navController, onBackNavigation = { navController.navigate(Route.Launch.path) }) {
         Box(modifier = Modifier.fillMaxSize()){
             Column(
                 Modifier
