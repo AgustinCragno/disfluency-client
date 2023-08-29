@@ -16,14 +16,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.R
+import com.disfluency.audio.playback.DisfluencyAudioUrlPlayer
 import com.disfluency.components.audio.AudioMediaType
 import com.disfluency.components.audio.AudioPlayer
 import com.disfluency.components.icon.IconLabeled
@@ -58,19 +61,19 @@ private fun AssignmentDetailPreview(){
     val practice1 = ExercisePractice(
         "1",
         LocalDate.now(),
-        "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3"
+        "https://pf5302.s3.us-east-2.amazonaws.com/audios/iniciosuave.mp3"
     )
 
     val practice2 = ExercisePractice(
         "1",
         LocalDate.now(),
-        "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3"
+        "https://pf5302.s3.us-east-2.amazonaws.com/audios/toquesligeros.mp3"
     )
 
     val practice3 = ExercisePractice(
         "1",
         LocalDate.now(),
-        "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3"
+        "https://pf5302.s3.us-east-2.amazonaws.com/audios/fonacion.mp3"
     )
 
     val assignment = ExerciseAssignment(
@@ -111,7 +114,13 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
         assignment.value?.let {
             ExerciseDetailScreen(exercise = it.exercise)
 
-            ExercisePracticeList(assignment = it)
+            ExercisePracticeList(
+                assignment = it,
+                title = "Mis resoluciones",
+                emptyListContent = { NoPracticesMessage() }
+            )
+
+            Spacer(modifier = Modifier.height(64.dp))
         }
     }
 
@@ -119,11 +128,15 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
 }
 
 @Composable
-private fun ExercisePracticeList(assignment: ExerciseAssignment){
+fun ExercisePracticeList(
+    assignment: ExerciseAssignment,
+    title: String,
+    emptyListContent: @Composable () -> Unit
+){
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 8.dp),
         colors = CardDefaults.cardColors(Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
@@ -131,7 +144,7 @@ private fun ExercisePracticeList(assignment: ExerciseAssignment){
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = "Mis resoluciones",
+                text = title,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
@@ -153,20 +166,32 @@ private fun ExercisePracticeList(assignment: ExerciseAssignment){
                     ExercisePracticeItem(practice = practice, index = index)
                 }
             } else{
-                //TODO: mostrar algun texto que diga que no hay resoluciones
-                NoPracticesMessage()
+                emptyListContent()
             }
         }
     }
-
-    Spacer(modifier = Modifier.height(64.dp))
 }
 
 @Composable
-private fun ExercisePracticeItem(practice: ExercisePractice, index: Int){
+fun ExercisePracticeItem(practice: ExercisePractice, index: Int){
     var expanded by remember {
         mutableStateOf(false)
     }
+
+    //TODO: el problema con esto es que Amplituda choca cuando va a buscarlo al mismo tiempo,
+    // de ultima por el momento lo podemos dejar como antes y despues lo vemos.
+    //
+//    val audioPlayer = DisfluencyAudioUrlPlayer(LocalContext.current)
+//
+//    LaunchedEffect(Unit){
+//        audioPlayer.load(practice.recordingUrl)
+//    }
+//
+//    DisposableEffect(Lifecycle.Event.ON_STOP) {
+//        onDispose {
+//            audioPlayer.release()
+//        }
+//    }
 
     Box(
         modifier = Modifier
@@ -211,7 +236,8 @@ private fun ExercisePracticeItem(practice: ExercisePractice, index: Int){
             if (expanded){
                 Spacer(modifier = Modifier.height(16.dp))
 
-                AudioPlayer(url = practice.recordingUrl, type = AudioMediaType.URL)
+//                AudioPlayer(audioPlayer = audioPlayer)
+                AudioPlayer(url = practice.recordingUrl, AudioMediaType.URL)
 
                 Spacer(modifier = Modifier.height(8.dp))
             }
@@ -221,7 +247,11 @@ private fun ExercisePracticeItem(practice: ExercisePractice, index: Int){
 
 @Composable
 private fun NoPracticesMessage(){
-    ImageMessagePage(imageResource = R.drawable.record_action, text = stringResource(R.string.you_havent_practiced_this_exercise))
+    ImageMessagePage(
+        imageResource = R.drawable.record_action,
+        imageSize = 80.dp,
+        text = stringResource(R.string.you_havent_practiced_this_exercise)
+    )
 }
 
 @Composable

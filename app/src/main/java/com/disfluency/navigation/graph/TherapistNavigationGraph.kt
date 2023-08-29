@@ -46,7 +46,10 @@ fun TherapistNavigationGraph(therapist: Therapist){
             }
             composable(Route.Therapist.ExerciseAssignmentDetail.path, listOf(navArgument("id"){})){ backStackEntry ->
                 backStackEntry.arguments?.getString("id")?.let {
-                    ExerciseAssignmentDetailScreen(assignmentId = it, navController = navHostController, viewModel = exercisesViewModel)
+                    ExerciseAssignmentDetailScreen(
+                        assignmentId = it,
+                        viewModel = exercisesViewModel
+                    )
                 }
             }
             composable(Route.Therapist.PatientForms.path, listOf(navArgument("id"){})){ backStackEntry ->

@@ -50,6 +50,11 @@ fun AudioPlayer(
         }
     }
 
+    AudioPlayer(audioPlayer = audioPlayer, modifier = modifier)
+}
+
+@Composable
+fun AudioPlayer(audioPlayer: DisfluencyAudioPlayer, modifier: Modifier = Modifier){
     Column(
         modifier = modifier
             .fillMaxWidth(),
@@ -110,8 +115,8 @@ fun AudioPlayer(
             )
         }
     }
-
 }
+
 
 @Preview(showBackground = true)
 @Composable

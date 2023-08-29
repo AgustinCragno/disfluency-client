@@ -251,7 +251,7 @@ private fun ExerciseInstructionsPanel(
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 32.dp)
+                .padding(horizontal = 16.dp)
         )
 
         AudioPlayerPanel(exercise)

@@ -43,6 +43,7 @@ fun NewTherapistConfirmationScreen(navController: NavHostController, viewModel: 
             delay(2000)
             viewModel.signupState.value = ConfirmationState.DONE
 
+            //TODO: redirigir al inicio de nuevo en caso de que sea error
             navController.navigate(Route.Therapist.Home.path){
                 popUpTo(navController.graph.id){
                     inclusive = true
