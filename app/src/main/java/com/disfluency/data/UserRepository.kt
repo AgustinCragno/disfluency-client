@@ -2,14 +2,10 @@ package com.disfluency.data
 
 import android.util.Log
 import com.disfluency.api.DisfluencyAPI
-import com.disfluency.api.dto.NewTherapistDTO
-import com.disfluency.api.dto.NewTherapistUserDTO
-import com.disfluency.api.dto.RefreshTokenDTO
-import com.disfluency.api.dto.UserDTO
-import com.disfluency.api.error.ExpiredTokenException
-import com.disfluency.api.error.TherapistCreationException
-import com.disfluency.api.error.UserNotFoundException
+import com.disfluency.api.dto.*
+import com.disfluency.api.error.*
 import com.disfluency.api.session.SessionManager
+import com.disfluency.model.Patient
 import com.disfluency.model.Therapist
 import com.disfluency.model.UserRole
 import retrofit2.HttpException
@@ -62,5 +58,29 @@ class UserRepository {
 
     suspend fun logout(){
         //TODO: implementation
+    }
+
+    suspend fun getPendingPatient(id: String): Patient {
+        Log.i("signup", "Retrieving pending patient of id: $id")
+        try {
+            val pendingPatientDTO = DisfluencyAPI.userService.pendingPatientById(id)
+            Log.i("signup", "Successfully retrieved pending patient info")
+            return pendingPatientDTO.asPatient(id)
+        } catch (e: HttpException){
+            Log.i("signup", "Could not retrieve patient, error: $e")
+            throw PatientNotFoundException(id)
+        }
+    }
+
+    suspend fun confirmPatient(id: String, password: String) {
+        Log.i("signup", "Sending pending patient confirmation of id: $id")
+        try {
+            val confirmationDTO = PatientConfirmationDTO(password)
+            DisfluencyAPI.userService.confirmPendingPatient(id, confirmationDTO)
+            Log.i("signup", "Successfully confirmed pending patient")
+        } catch (e: HttpException){
+            Log.i("signup", "Could not confirm patient, error: $e")
+            throw PatientConfirmationException(id)
+        }
     }
 }

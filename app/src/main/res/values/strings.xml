@@ -58,7 +58,7 @@
     <string name="signup_message">Facilite el tratamiento de la disfluencia. Registrese en Disfluency ya! Solo toma 5 minutos</string>
     <string name="skip">Saltar</string>
     <string name="next">Siguiente</string>
-    <string name="welcome">Bienvenido!</string>
+    <string name="welcome">¡Bienvenido!</string>
     <string name="onboarding_introduction_1">Disfluency ofrece acceso gratis a los usuarios paciente, sin embargo el medio para registrarse en la aplicacion difiere levemente para este tipo de usuarios</string>
     <string name="onboarding_introduction_2">A continuacion, un diagrama de como puede acceder a Disfluency</string>
     <string name="our_vision">Nuestra vision</string>
@@ -132,6 +132,10 @@
     </string>
     <string name="almost_there">¡Ya casi estamos!</string>
     <string name="complete_info_to_enter_disfluency">Complete su nombre, apellido y elija un avatar para su usuario. Una vez completados ya podra ingresar a Disfluency</string>
+    <string name="invitation_message_1">Usted ha sido invitado a formar parte de Disfluency como paciente a:</string>
+    <string name="invitation_message_2">para completar su registro elija su contraseña y comience a usar Disfluency!</string>
+    <string name="complete_password">Complete una contraseña para su usuario y comience a usar Disfluency</string>
+    <string name="expired_invitation">La invitacion recibida caducó o ya fue confirmada</string>
 
 
 </resources>

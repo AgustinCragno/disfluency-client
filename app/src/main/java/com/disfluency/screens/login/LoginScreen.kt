@@ -26,6 +26,7 @@ import com.disfluency.components.inputs.text.PasswordInput
 import com.disfluency.model.Patient
 import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
+import com.disfluency.screens.signup.SignUpLobbyScaffold
 import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.states.LoginState
 import kotlinx.coroutines.delay
