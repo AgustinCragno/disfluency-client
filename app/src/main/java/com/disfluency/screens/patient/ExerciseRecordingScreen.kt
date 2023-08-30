@@ -29,7 +29,7 @@ import com.disfluency.components.button.RecordButton
 import com.disfluency.model.Exercise
 import com.disfluency.model.ExerciseAssignment
 import com.disfluency.navigation.routing.Route
-import com.disfluency.screens.login.BackNavigationScaffold
+import com.disfluency.screens.signup.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.RecordExerciseViewModel

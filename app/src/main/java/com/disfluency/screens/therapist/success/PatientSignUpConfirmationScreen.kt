@@ -17,21 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.disfluency.components.icon.IconMessage
 import com.disfluency.components.success.ConfirmationScreen
-import com.disfluency.model.Patient
-import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.ui.theme.Green40
-import com.disfluency.viewmodel.SignUpViewModel
+import com.disfluency.viewmodel.PatientSignUpViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.delay
 
-
 @Composable
-fun NewTherapistConfirmationScreen(navController: NavHostController, viewModel: SignUpViewModel){
+fun PatientSignUpConfirmationScreen(
+    navController: NavHostController,
+    viewModel: PatientSignUpViewModel
+){
     ConfirmationScreen(
         loadingState = viewModel.signupState,
         loadingContent = { LoadingState() },
@@ -44,8 +46,7 @@ fun NewTherapistConfirmationScreen(navController: NavHostController, viewModel: 
             delay(2000)
             viewModel.signupState.value = ConfirmationState.DONE
 
-            //TODO: redirigir al inicio de nuevo en caso de que sea error
-            navController.navigate(Route.Therapist.Home.path){
+            navController.navigate(Route.Login.path){
                 popUpTo(navController.graph.id){
                     inclusive = true
                 }
@@ -66,10 +67,12 @@ private fun LoadingState(){
             color = Color.White
         )
         Text(
-            text = "Espere un momento mientras se da de alta al usuario",
+            text = "Espere un momento mientras se da confirma el usuario",
             color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp),
+            textAlign = TextAlign.Center
         )
     }
 }
@@ -80,7 +83,7 @@ private fun SuccessState(){
     IconMessage(
         imageVector = Icons.Filled.Done,
         color = Green40,
-        message = "Se creo el usuario correctamente"
+        message = "Se confirmó el usuario correctamente, sera redirigido al inicio para iniciar sesion"
     )
 }
 

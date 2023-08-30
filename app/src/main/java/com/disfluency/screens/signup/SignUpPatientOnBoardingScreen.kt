@@ -1,4 +1,4 @@
-package com.disfluency.screens.login
+package com.disfluency.screens.signup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

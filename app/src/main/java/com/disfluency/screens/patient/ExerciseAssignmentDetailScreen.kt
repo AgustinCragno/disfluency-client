@@ -19,17 +19,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.R
-import com.disfluency.audio.playback.DisfluencyAudioUrlPlayer
 import com.disfluency.components.audio.AudioMediaType
 import com.disfluency.components.audio.AudioPlayer
 import com.disfluency.components.icon.IconLabeled
@@ -38,7 +35,7 @@ import com.disfluency.model.Exercise
 import com.disfluency.model.ExerciseAssignment
 import com.disfluency.model.ExercisePractice
 import com.disfluency.navigation.routing.Route
-import com.disfluency.screens.login.BackNavigationScaffold
+import com.disfluency.screens.signup.BackNavigationScaffold
 import com.disfluency.screens.therapist.ExerciseDetailScreen
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDateAsWords

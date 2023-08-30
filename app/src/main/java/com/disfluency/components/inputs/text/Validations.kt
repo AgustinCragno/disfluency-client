@@ -28,7 +28,7 @@ class DigitsOnlyValidation: InputValidation {
 class PasswordValidation: InputValidation {
     override fun validate(input: String): Boolean {
         //TODO: implementar una vez que se defina el formato de la password
-        return true
+        return input.isNotBlank()
     }
 }
 
