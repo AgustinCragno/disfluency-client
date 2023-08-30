@@ -1,8 +1,11 @@
 package com.disfluency.screens.patient
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -39,8 +42,10 @@ import com.disfluency.screens.login.BackNavigationScaffold
 import com.disfluency.screens.therapist.ExerciseDetailScreen
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDateAsWords
+import com.disfluency.utilities.format.formatLocalTime
 import com.disfluency.viewmodel.ExercisesViewModel
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Preview
 @Composable
@@ -60,19 +65,19 @@ private fun AssignmentDetailPreview(){
 
     val practice1 = ExercisePractice(
         "1",
-        LocalDate.now(),
+        LocalDateTime.now(),
         "https://pf5302.s3.us-east-2.amazonaws.com/audios/iniciosuave.mp3"
     )
 
     val practice2 = ExercisePractice(
         "1",
-        LocalDate.now(),
+        LocalDateTime.now(),
         "https://pf5302.s3.us-east-2.amazonaws.com/audios/toquesligeros.mp3"
     )
 
     val practice3 = ExercisePractice(
         "1",
-        LocalDate.now(),
+        LocalDateTime.now(),
         "https://pf5302.s3.us-east-2.amazonaws.com/audios/fonacion.mp3"
     )
 
@@ -87,6 +92,7 @@ private fun AssignmentDetailPreview(){
     exercisesViewModel.assignments.value = listOf(assignment)
 
     DisfluencyTheme() {
+        //TODO: cambiar el scaffold en casi todas las pantallas
         BackNavigationScaffold(title = R.string.exercises, navController = navHostController) { paddingValues ->
             Box(modifier = Modifier
                 .fillMaxSize()
@@ -218,28 +224,31 @@ fun ExercisePracticeItem(practice: ExercisePractice, index: Int){
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                //TODO: podriamos cambiar el modelo para que guarde LocalDateTime, asi queda el horario y se puede
-                // diferenciar varias resoluciones del mismo dia
                 Text(
-                    text = formatLocalDateAsWords(practice.date, stringResource(id = R.string.locale))
+                    text = formatLocalDateAsWords(practice.date.toLocalDate(), stringResource(id = R.string.locale))
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 IconLabeled(
                     icon = Icons.Outlined.AccessTime,
-                    label = "17:53",
+                    label = formatLocalTime(practice.date.toLocalTime()),
                     labelColor = Color.Gray
                 )
             }
 
-            if (expanded){
-                Spacer(modifier = Modifier.height(16.dp))
+            AnimatedVisibility(
+                visible = expanded,
+                exit = fadeOut(tween(200)) + shrinkVertically(tween(400))
+            ) {
+                Column() {
+                    Spacer(modifier = Modifier.height(16.dp))
 
 //                AudioPlayer(audioPlayer = audioPlayer)
-                AudioPlayer(url = practice.recordingUrl, AudioMediaType.URL)
+                    AudioPlayer(url = practice.recordingUrl, AudioMediaType.URL)
 
-                Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }
