@@ -1,4 +1,4 @@
-package com.disfluency.screens.therapist.success
+package com.disfluency.screens.patient.success
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,37 +19,31 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.disfluency.components.icon.IconMessage
 import com.disfluency.components.success.ConfirmationScreen
-import com.disfluency.model.Patient
-import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.ui.theme.Green40
-import com.disfluency.viewmodel.SignUpViewModel
+import com.disfluency.viewmodel.RecordExerciseViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.delay
 
+const val ON_SUCCESS_ANIMATION_TIME = 300
+
 
 @Composable
-fun NewTherapistConfirmationScreen(navController: NavHostController, viewModel: SignUpViewModel){
+fun RecordingConfirmationScreen(navController: NavHostController, viewModel: RecordExerciseViewModel){
     ConfirmationScreen(
-        loadingState = viewModel.signupState,
+        loadingState = viewModel.uploadConfirmationState,
         loadingContent = { LoadingState() },
         successContent = { SuccessState() },
         errorContent = { ErrorState() }
     )
 
-    if (viewModel.signupState.value > ConfirmationState.LOADING){
+    if (viewModel.uploadConfirmationState.value > ConfirmationState.LOADING){
         LaunchedEffect(Unit){
             delay(2000)
-            viewModel.signupState.value = ConfirmationState.DONE
-
-            //TODO: redirigir al inicio de nuevo en caso de que sea error
-            navController.navigate(Route.Therapist.Home.path){
-                popUpTo(navController.graph.id){
-                    inclusive = true
-                }
-            }
+            viewModel.uploadConfirmationState.value = ConfirmationState.DONE
+            navController.popBackStack()
+            navController.navigate(Route.Patient.Home.path)
         }
     }
 }
@@ -66,7 +60,7 @@ private fun LoadingState(){
             color = Color.White
         )
         Text(
-            text = "Espere un momento mientras se da de alta al usuario",
+            text = "Espere un momento mientras se sube la grabacion",
             color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold
@@ -76,11 +70,10 @@ private fun LoadingState(){
 
 @Composable
 private fun SuccessState(){
-    //TODO: se podria mostrar el avatar y el nombre, que los mpuedo sacar dle viewModel
     IconMessage(
         imageVector = Icons.Filled.Done,
         color = Green40,
-        message = "Se creo el usuario correctamente"
+        message = "Se subio la grabacion correctamente"
     )
 }
 
@@ -89,6 +82,38 @@ private fun ErrorState(){
     IconMessage(
         imageVector = Icons.Filled.Close,
         color = Color.Red,
-        message = "Ocurrio un error al dar de alta al usuario"
+        message = "Ocurrio un error al subir la grabacion"
     )
+}
+
+@Composable
+private fun IconMessage(imageVector: ImageVector, color: Color, message: String){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .padding(16.dp)
+                .background(color, CircleShape)
+        ){
+            Icon(
+                imageVector = imageVector,
+                contentDescription = "Done",
+                tint = Color.White,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            )
+        }
+
+        Text(
+            text = message,
+            color = Color.White,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold
+        )
+    }
 }

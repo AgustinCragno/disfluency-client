@@ -65,8 +65,7 @@ fun PatientListItem(patient: Patient, onClick: () -> Unit = {}, leadingContentPr
                     label = patient.weeklyHour.format(
                         DateTimeFormatter.ofPattern(
                             stringResource(R.string.time_format)
-                        )),
-                    content = "Time"
+                        ))
                 )
             }
         )

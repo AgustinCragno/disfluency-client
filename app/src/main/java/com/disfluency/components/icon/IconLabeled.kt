@@ -11,20 +11,25 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun IconLabeled(icon: ImageVector, label: String, content: String){
+fun IconLabeled(
+    icon: ImageVector,
+    label: String,
+    iconColor: Color = MaterialTheme.colorScheme.primary,
+    labelColor: Color = Color.Black
+){
     Row {
         Icon(
             imageVector = icon,
-            contentDescription = content,
+            contentDescription = null,
             modifier = Modifier.size(20.dp),
-            tint = MaterialTheme.colorScheme.primary
+            tint = iconColor
         )
         Text(
             text = label,
             style = MaterialTheme.typography.labelMedium,
-            color = Color.Black,
+            color = labelColor,
             modifier = Modifier
-                .padding(start = 2.dp)
+                .padding(start = 4.dp)
                 .height(20.dp)
                 .wrapContentHeight()
         )

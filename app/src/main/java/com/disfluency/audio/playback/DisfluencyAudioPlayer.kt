@@ -6,24 +6,31 @@ import android.media.MediaPlayer
 import android.net.Uri
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import linc.com.amplituda.Amplituda
+import linc.com.amplituda.Cache
+import linc.com.amplituda.callback.AmplitudaErrorListener
 import java.io.IOException
 
 abstract class DisfluencyAudioPlayer(private val context: Context) {
 
     private var player: MediaPlayer? = null
 
-    private var position: MutableState<Int> = mutableStateOf(0)
-    private var totalDuration: MutableState<Int> = mutableStateOf(0)
+    private var position: MutableState<Float> = mutableStateOf(0f)
+    private var totalDuration: MutableState<Float> = mutableStateOf(0.1f)
     private var isPlaying: MutableState<Boolean> = mutableStateOf(false)
     private var asyncReady: MutableState<Boolean> = mutableStateOf(false)
+
+    private val audioAmplitudes = mutableStateOf<List<Int>>(listOf())
 
     private var progressTrackerJob: Job? = null
 
     protected abstract fun loadUri(media: String): Uri
+    protected abstract fun loadPath(media: String): String
 
     fun load(media: String){
         MediaPlayer().apply {
@@ -40,8 +47,9 @@ abstract class DisfluencyAudioPlayer(private val context: Context) {
                 prepareAsync()
                 setOnPreparedListener {
                     asyncReady.value = true
-                    totalDuration.value = duration
+                    totalDuration.value = duration.toFloat()
                 }
+                retrieveAudioAmplitudes(loadPath(media), context)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -64,14 +72,14 @@ abstract class DisfluencyAudioPlayer(private val context: Context) {
         progressTrackerJob?.cancel()
         isPlaying.value = false
 
-        seekTo(0)
+        seekTo(0f)
 
         player?.apply {
             pause()
         }
     }
 
-    fun seekTo(millis: Int){
+    fun seekTo(millis: Float){
         if (millis >= totalDuration.value && !isPlaying()){
             return
         }
@@ -80,7 +88,7 @@ abstract class DisfluencyAudioPlayer(private val context: Context) {
             position.value = totalDuration.value
             stop()
         }else {
-            player?.seekTo(millis)
+            player?.seekTo(millis.toInt())
             position.value = millis
         }
     }
@@ -97,18 +105,29 @@ abstract class DisfluencyAudioPlayer(private val context: Context) {
         progressTrackerJob = CoroutineScope(Dispatchers.Default).launch {
 
             while (isPlaying()){
-                position.value = player!!.currentPosition
+                position.value = player!!.currentPosition.toFloat()
 
                 if (position.value >= totalDuration.value) stop()
             }
         }
     }
 
-    fun position(): Int {
+    private fun retrieveAudioAmplitudes(audio: String, context: Context){
+        CoroutineScope(Dispatchers.Default).launch {
+            audioAmplitudes.value = Amplituda(context).processAudio(audio, Cache.withParams(
+                Cache.REUSE))
+                .get(AmplitudaErrorListener {
+                    it.printStackTrace()
+                })
+                .amplitudesAsList()
+        }
+    }
+
+    fun position(): Float {
         return position.value
     }
 
-    fun duration(): Int {
+    fun duration(): Float {
         return totalDuration.value
     }
 
@@ -117,6 +136,10 @@ abstract class DisfluencyAudioPlayer(private val context: Context) {
     }
 
     fun asyncReady(): Boolean {
-        return asyncReady.value
+        return asyncReady.value && amplitudes().isNotEmpty()
+    }
+
+    fun amplitudes(): List<Int> {
+        return audioAmplitudes.value
     }
 }

@@ -10,11 +10,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ImageMessagePage(imageResource: Int, text: String){
+fun ImageMessagePage(
+    imageResource: Int,
+    imageSize: Dp = 120.dp,
+    text: String
+){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -23,7 +28,7 @@ fun ImageMessagePage(imageResource: Int, text: String){
     ){
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                modifier = Modifier.size(120.dp),
+                modifier = Modifier.size(imageSize),
                 painter = painterResource(id = imageResource),
                 contentDescription = "Speech",
                 alpha = 0.4f

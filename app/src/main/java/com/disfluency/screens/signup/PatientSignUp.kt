@@ -64,7 +64,7 @@ fun PatientSignUpScreen(
         viewModel.retrieveUser(token)
     }
 
-    SignUpLobbyScaffold(title = R.string.signup, navController = navController) { paddingValues ->
+    BackNavigationScaffold(title = R.string.signup, navController = navController) { paddingValues ->
 
         AnimatedVisibility(
             visible = viewModel.retrievalState.value == ConfirmationState.LOADING,

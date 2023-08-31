@@ -6,6 +6,7 @@ import com.disfluency.api.service.PatientService
 import com.disfluency.api.service.UserService
 import com.disfluency.utilities.PropertiesReader
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 
@@ -22,8 +23,12 @@ object DisfluencyAPI {
     }
 
     private fun okhttpClient(): OkHttpClient {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
         return OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor())
+            .addInterceptor(httpLoggingInterceptor)
             .build()
     }
 

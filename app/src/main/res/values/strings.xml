@@ -132,6 +132,8 @@
     </string>
     <string name="almost_there">¡Ya casi estamos!</string>
     <string name="complete_info_to_enter_disfluency">Complete su nombre, apellido y elija un avatar para su usuario. Una vez completados ya podra ingresar a Disfluency</string>
+    <string name="audio_upload_notification_content">Guardando grabacion...</string>
+    <string name="you_havent_practiced_this_exercise">No ha practicado este ejercicio</string>
     <string name="invitation_message_1">Usted ha sido invitado a formar parte de Disfluency como paciente a:</string>
     <string name="invitation_message_2">para completar su registro elija su contraseña y comience a usar Disfluency!</string>
     <string name="complete_password">Complete una contraseña para su usuario y comience a usar Disfluency</string>

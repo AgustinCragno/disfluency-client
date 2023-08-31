@@ -36,7 +36,11 @@ import com.disfluency.utilities.random.randomSign
 fun SignUpLobbyScreen(navController: NavHostController) {
     val exitAnimationState = remember { mutableStateOf(false) }
 
-    SignUpLobbyScaffold(title = R.string.signup, navController = navController) { paddingValues ->
+    BackNavigationScaffold(
+        title = R.string.signup,
+        navController = navController,
+        onBackNavigation = { navController.navigate(Route.Launch.path) }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(top = paddingValues.calculateTopPadding())
@@ -90,9 +94,10 @@ fun SignUpLobbyScreen(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpLobbyScaffold(
+fun BackNavigationScaffold(
     title: Int,
     navController: NavHostController,
+    onBackNavigation: () -> Unit = { navController.popBackStack() },
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
@@ -104,7 +109,7 @@ fun SignUpLobbyScaffold(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate(Route.Launch.path) }) {
+                    IconButton(onClick = onBackNavigation) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = "Back"

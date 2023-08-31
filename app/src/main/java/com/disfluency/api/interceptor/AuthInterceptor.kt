@@ -4,13 +4,20 @@ import com.disfluency.api.session.SessionManager
 import okhttp3.Interceptor
 import okhttp3.Response
 
+const val NOT_SEND_AUTH_HEADER = "notSendAuth"
+
 class AuthInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val requestBuilder = chain.request().newBuilder()
+        val request = chain.request()
+        val shouldNotSendAuth = request.headers[NOT_SEND_AUTH_HEADER] == "true"
 
-        SessionManager.getAccessToken()?.let {
-            requestBuilder.addHeader("Authorization", "Bearer $it")
+        val requestBuilder = request.newBuilder().removeHeader(NOT_SEND_AUTH_HEADER)
+
+        if (!shouldNotSendAuth){
+            SessionManager.getAccessToken()?.let {
+                requestBuilder.addHeader("Authorization", "Bearer $it")
+            }
         }
 
         return chain.proceed(requestBuilder.build())
