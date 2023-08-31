@@ -3,14 +3,13 @@ package com.disfluency.navigation.graph
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.disfluency.model.Patient
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.routing.Route
-import com.disfluency.navigation.structure.AppScaffold
+import com.disfluency.navigation.structure.BottomNavigationScaffold
 import com.disfluency.screens.patient.*
 import com.disfluency.screens.patient.success.RecordingConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
@@ -21,7 +20,7 @@ fun PatientNavigationGraph(patient: Patient){
     val exercisesViewModel: ExercisesViewModel = viewModel()
     val recordViewModel = RecordExerciseViewModel(LocalContext.current, LocalLifecycleOwner.current)
 
-    AppScaffold(bottomNavigationItems = BottomNavigationItem.Patient.items()) { navHostController ->
+    BottomNavigationScaffold(bottomNavigationItems = BottomNavigationItem.Patient.items()) { navHostController ->
 
         NavHost(navController = navHostController, startDestination = Route.Patient.Home.path){
             composable(Route.Patient.Home.path){

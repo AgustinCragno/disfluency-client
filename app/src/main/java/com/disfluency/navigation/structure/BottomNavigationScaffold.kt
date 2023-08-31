@@ -19,7 +19,7 @@ import com.disfluency.navigation.routing.getTitleByRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppScaffold(bottomNavigationItems: List<BottomNavigationItem>, content: @Composable (NavHostController)->Unit) {
+fun BottomNavigationScaffold(bottomNavigationItems: List<BottomNavigationItem>, content: @Composable (NavHostController)->Unit) {
     val navController = rememberNavController()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -49,7 +49,7 @@ fun AppScaffold(bottomNavigationItems: List<BottomNavigationItem>, content: @Com
 }
 
 @Composable
-fun BottomNavigation(navController: NavController, items: List<BottomNavigationItem>) {
+private fun BottomNavigation(navController: NavController, items: List<BottomNavigationItem>) {
 
     NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()

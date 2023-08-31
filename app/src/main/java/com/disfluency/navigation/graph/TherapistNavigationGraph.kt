@@ -11,7 +11,7 @@ import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.routing.Route
-import com.disfluency.navigation.structure.AppScaffold
+import com.disfluency.navigation.structure.BottomNavigationScaffold
 import com.disfluency.screens.therapist.*
 import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
@@ -22,7 +22,7 @@ fun TherapistNavigationGraph(therapist: Therapist){
     val patientsViewModel: PatientsViewModel = viewModel()
     val exercisesViewModel: ExercisesViewModel = viewModel()
 
-    AppScaffold(bottomNavigationItems = BottomNavigationItem.Therapist.items()) { navHostController ->
+    BottomNavigationScaffold(bottomNavigationItems = BottomNavigationItem.Therapist.items()) { navHostController ->
 
         NavHost(navController = navHostController, startDestination = Route.Therapist.Home.path){
             composable(Route.Therapist.Home.path){

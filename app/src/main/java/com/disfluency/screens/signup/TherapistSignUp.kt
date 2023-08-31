@@ -26,6 +26,7 @@ import com.disfluency.components.inputs.avatar.AvatarPicker
 import com.disfluency.components.inputs.text.*
 import com.disfluency.components.text.TermsAndConditions
 import com.disfluency.navigation.routing.Route
+import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.viewmodel.SignUpViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 

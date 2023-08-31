@@ -35,7 +35,7 @@ import com.disfluency.model.Exercise
 import com.disfluency.model.ExerciseAssignment
 import com.disfluency.model.ExercisePractice
 import com.disfluency.navigation.routing.Route
-import com.disfluency.screens.signup.BackNavigationScaffold
+import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.therapist.ExerciseDetailScreen
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDateAsWords

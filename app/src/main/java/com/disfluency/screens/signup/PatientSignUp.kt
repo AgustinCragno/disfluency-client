@@ -30,6 +30,7 @@ import com.disfluency.components.inputs.text.PasswordInput
 import com.disfluency.components.inputs.text.PasswordValidation
 import com.disfluency.components.text.TermsAndConditions
 import com.disfluency.navigation.routing.Route
+import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.PropertiesReader
 import com.disfluency.utilities.avatar.AvatarManager
