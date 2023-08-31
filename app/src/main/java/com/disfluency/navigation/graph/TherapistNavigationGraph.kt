@@ -5,6 +5,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.disfluency.R
 import com.disfluency.components.icon.ImageMessagePage
@@ -22,7 +23,9 @@ fun TherapistNavigationGraph(therapist: Therapist){
     val patientsViewModel: PatientsViewModel = viewModel()
     val exercisesViewModel: ExercisesViewModel = viewModel()
 
-    BottomNavigationScaffold(bottomNavigationItems = BottomNavigationItem.Therapist.items()) { navHostController ->
+    val navHostController = rememberNavController()
+
+//    BottomNavigationScaffold(bottomNavigationItems = BottomNavigationItem.Therapist.items()) { navHostController ->
 
         NavHost(navController = navHostController, startDestination = Route.Therapist.Home.path){
             composable(Route.Therapist.Home.path){
@@ -66,5 +69,5 @@ fun TherapistNavigationGraph(therapist: Therapist){
                 NewPatientConfirmationScreen(navController = navHostController, viewModel = patientsViewModel)
             }
         }
-    }
+//    }
 }

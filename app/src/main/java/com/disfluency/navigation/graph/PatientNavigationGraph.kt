@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.disfluency.model.Patient
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.routing.Route
@@ -20,33 +21,35 @@ fun PatientNavigationGraph(patient: Patient){
     val exercisesViewModel: ExercisesViewModel = viewModel()
     val recordViewModel = RecordExerciseViewModel(LocalContext.current, LocalLifecycleOwner.current)
 
-    BottomNavigationScaffold(bottomNavigationItems = BottomNavigationItem.Patient.items()) { navHostController ->
+    val navHostController = rememberNavController()
 
-        NavHost(navController = navHostController, startDestination = Route.Patient.Home.path){
-            composable(Route.Patient.Home.path){
-                HomePatientScreen(patient = patient)
+    NavHost(navController = navHostController, startDestination = Route.Patient.Home.path){
+        composable(Route.Patient.Home.path){
+            HomePatientScreen(patient = patient, navController = navHostController)
+        }
+        composable(Route.Patient.MyExercises.path){
+            MyExercisesScreen(patient = patient, navController = navHostController, viewModel = exercisesViewModel)
+        }
+        composable(Route.Patient.MyForms.path){
+            MyFormsScreen(patient = patient, navController = navHostController)
+        }
+        composable(Route.Patient.ExerciseAssignmentDetail.path){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                ExerciseAssignmentDetailScreen(assignmentId = it, navController = navHostController, viewModel = exercisesViewModel)
             }
-            composable(Route.Patient.MyExercises.path){
-                MyExercisesScreen(patient = patient, navController = navHostController, viewModel = exercisesViewModel)
+        }
+        composable(Route.Patient.ExercisePractice.path){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                RecordExerciseScreen(
+                    assignmentId = it,
+                    navController = navHostController,
+                    exercisesViewModel = exercisesViewModel,
+                    recordViewModel = recordViewModel
+                )
             }
-            composable(Route.Patient.ExerciseAssignmentDetail.path){ backStackEntry ->
-                backStackEntry.arguments?.getString("id")?.let {
-                    ExerciseAssignmentDetailScreen(assignmentId = it, navController = navHostController, viewModel = exercisesViewModel)
-                }
-            }
-            composable(Route.Patient.ExercisePractice.path){ backStackEntry ->
-                backStackEntry.arguments?.getString("id")?.let {
-                    RecordExerciseScreen(
-                        assignmentId = it,
-                        navController = navHostController,
-                        exercisesViewModel = exercisesViewModel,
-                        recordViewModel = recordViewModel
-                    )
-                }
-            }
-            composable(Route.Patient.RecordConfirmation.path){
-                RecordingConfirmationScreen(navController = navHostController, viewModel = recordViewModel)
-            }
+        }
+        composable(Route.Patient.RecordConfirmation.path){
+            RecordingConfirmationScreen(navController = navHostController, viewModel = recordViewModel)
         }
     }
 }

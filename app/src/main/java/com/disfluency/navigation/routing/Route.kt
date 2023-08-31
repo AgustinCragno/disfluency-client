@@ -21,6 +21,7 @@ sealed class Route(val path: String, private vararg val params: String, val titl
     object Patient {
         object Home: Route("home-patient", title = R.string.home)
         object MyExercises: Route("exercise-assignments", title = R.string.my_exercises)
+        object MyForms: Route("forms", title = R.string.my_forms)
         object ExerciseAssignmentDetail: Route("exercise-assignments/{id}", "id", title = R.string.assigned_exercise)
         object ExercisePractice: Route("exercise-assignments/{id}/practice", "id", title = R.string.practice)
         object RecordConfirmation: Route("exercise-assignments/record-confirmation", title = -1)
