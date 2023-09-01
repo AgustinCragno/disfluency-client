@@ -27,33 +27,41 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.grid.span.TwoColumnGridItemSpan
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.model.Patient
 import com.disfluency.navigation.routing.Route
+import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.utilities.format.formatWeeklyTurn
 import com.disfluency.viewmodel.PatientsViewModel
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun PatientDetailScreen(patientId: String, navController: NavController, viewModel: PatientsViewModel){
+fun PatientDetailScreen(patientId: String, navController: NavHostController, viewModel: PatientsViewModel){
     val patient = remember { mutableStateOf<Patient?>(null) }
 
     LaunchedEffect(Unit) {
         patient.value = viewModel.getPatientById(patientId)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        patient.value?.let {
-            PatientInfoCard(patient = it)
-            ButtonPanel(patient = it, navController = navController)
-            ActivitiesOverview(patient = it)
+    BackNavigationScaffold(
+        title = stringResource(R.string.patient),
+        navController = navController
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            patient.value?.let {
+                PatientInfoCard(patient = it)
+                ButtonPanel(patient = it, navController = navController)
+                ActivitiesOverview(patient = it)
+            }
         }
     }
 }

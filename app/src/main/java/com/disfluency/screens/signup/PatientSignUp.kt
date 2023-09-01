@@ -36,7 +36,6 @@ import com.disfluency.utilities.PropertiesReader
 import com.disfluency.utilities.avatar.AvatarManager
 import com.disfluency.viewmodel.PatientSignUpViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
-import kotlinx.coroutines.delay
 
 @Preview
 @Composable
@@ -65,7 +64,7 @@ fun PatientSignUpScreen(
         viewModel.retrieveUser(token)
     }
 
-    BackNavigationScaffold(title = R.string.signup, navController = navController) { paddingValues ->
+    BackNavigationScaffold(title = stringResource(R.string.signup), navController = navController) { paddingValues ->
 
         AnimatedVisibility(
             visible = viewModel.retrievalState.value == ConfirmationState.LOADING,

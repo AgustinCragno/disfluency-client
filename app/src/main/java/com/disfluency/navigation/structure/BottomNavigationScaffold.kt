@@ -1,20 +1,14 @@
 package com.disfluency.navigation.structure
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.disfluency.navigation.routing.BottomNavigationItem
-import com.disfluency.navigation.routing.NO_BOTTOM_BAR_ROUTES
-import com.disfluency.navigation.routing.NO_TOP_BAR_ROUTES
-import com.disfluency.navigation.routing.getTitleByRoute
 
 @Composable
 fun BottomNavigationScaffold(
@@ -22,7 +16,6 @@ fun BottomNavigationScaffold(
     navController: NavHostController,
     content: @Composable (PaddingValues) -> Unit
 ) {
-
     Scaffold(
         bottomBar = {
             BottomNavigation(navController, bottomNavigationItems)
@@ -50,7 +43,7 @@ private fun BottomNavigation(navController: NavController, items: List<BottomNav
                 },
                 label = {
                     //TODO: usar auto-adjustable-size text
-                    Text(text = stringResource(item.route.title))
+                    Text(text = stringResource(item.title))
                 },
                 onClick = {
                     navController.navigate(item.route.path) {

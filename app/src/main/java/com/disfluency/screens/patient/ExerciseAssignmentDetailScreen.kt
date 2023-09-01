@@ -107,7 +107,7 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
     }
 
 
-    BackNavigationScaffold(title = R.string.exercises, navController = navController) { paddingValues ->
+    BackNavigationScaffold(title = stringResource(R.string.exercises), navController = navController) { paddingValues ->
         Box(
             modifier = Modifier
             .fillMaxSize()

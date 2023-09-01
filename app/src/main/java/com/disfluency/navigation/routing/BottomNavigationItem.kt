@@ -19,17 +19,10 @@ sealed class BottomNavigationItem(val route: Route, val icon: ImageVector, val t
     object Therapist {
         object Home : BottomNavigationItem(Route.Therapist.Home, Icons.Outlined.Home, R.string.home)
         object Patients : BottomNavigationItem(Route.Therapist.MyPatients, Icons.Outlined.ContactMail, R.string.my_patients)
+        object Exercises : BottomNavigationItem(Route.Therapist.MyExercises, Icons.Outlined.RecordVoiceOver, R.string.my_exercises)
+        object Forms : BottomNavigationItem(Route.Therapist.MyForms, Icons.Outlined.Assignment, R.string.my_forms)
 
-        fun items() = listOf(Home, Patients)
-    }
-
-    companion object {
-        val lastVisitedItem: BottomNavigationItem? = null
-
-//        fun getTitleByRoute(path: String): Int{
-//
-//            return ALL_ROUTES.first { it.path == path }.title
-//        }
+        fun items() = listOf(Home, Patients, Exercises, Forms)
     }
 }
 
