@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.icon.ImageMessagePage
-import com.disfluency.model.ExerciseAssignment
+import com.disfluency.model.exercise.ExerciseAssignment
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.patient.exercises.ExercisePracticeList
 import com.disfluency.viewmodel.ExercisesViewModel

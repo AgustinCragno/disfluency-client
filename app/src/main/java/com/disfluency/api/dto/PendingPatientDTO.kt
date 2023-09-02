@@ -1,6 +1,6 @@
 package com.disfluency.api.dto
 
-import com.disfluency.model.Patient
+import com.disfluency.model.user.Patient
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 import java.time.LocalTime

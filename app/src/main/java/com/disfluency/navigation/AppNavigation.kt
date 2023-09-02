@@ -8,8 +8,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.navDeepLink
-import com.disfluency.model.Patient
-import com.disfluency.model.Therapist
+import com.disfluency.model.user.Patient
+import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.graph.PatientNavigationGraph
 import com.disfluency.navigation.graph.TherapistNavigationGraph
 import com.disfluency.navigation.routing.Route

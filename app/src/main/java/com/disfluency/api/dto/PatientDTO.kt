@@ -2,9 +2,7 @@ package com.disfluency.api.dto
 
 import com.disfluency.api.serialization.DayOfWeekDeserializer
 import com.disfluency.api.serialization.DayOfWeekSerializer
-import com.disfluency.model.Patient
-import com.disfluency.model.UserRole
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.disfluency.model.user.Patient
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize

@@ -11,7 +11,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.disfluency.components.bar.HomeTopAppBar
-import com.disfluency.model.Therapist
+import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.structure.BottomNavigationScaffold
 import com.disfluency.viewmodel.LoggedUserViewModel

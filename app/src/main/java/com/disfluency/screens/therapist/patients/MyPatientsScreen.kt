@@ -20,8 +20,8 @@ import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.components.list.item.PatientListItem
 import com.disfluency.components.skeleton.SkeletonLoader
 import com.disfluency.components.skeleton.list.PatientListSkeleton
-import com.disfluency.model.Patient
-import com.disfluency.model.Therapist
+import com.disfluency.model.user.Patient
+import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BottomNavigationScaffold

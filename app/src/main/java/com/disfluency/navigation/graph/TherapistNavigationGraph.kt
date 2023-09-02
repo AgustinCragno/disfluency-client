@@ -9,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.disfluency.R
 import com.disfluency.components.icon.ImageMessagePage
-import com.disfluency.model.Therapist
+import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.screens.therapist.exercises.MyExercisesScreen
 import com.disfluency.screens.therapist.*

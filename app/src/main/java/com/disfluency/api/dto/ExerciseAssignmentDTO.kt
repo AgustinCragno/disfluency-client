@@ -1,6 +1,6 @@
 package com.disfluency.api.dto
 
-import com.disfluency.model.ExerciseAssignment
+import com.disfluency.model.exercise.ExerciseAssignment
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSetter
 import com.fasterxml.jackson.annotation.Nulls

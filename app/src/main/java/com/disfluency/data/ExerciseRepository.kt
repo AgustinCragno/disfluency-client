@@ -3,10 +3,8 @@ package com.disfluency.data
 import android.util.Log
 import com.disfluency.api.DisfluencyAPI
 import com.disfluency.api.error.PatientNotFoundException
-import com.disfluency.model.ExerciseAssignment
-import okhttp3.MediaType
+import com.disfluency.model.exercise.ExerciseAssignment
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
 import retrofit2.HttpException

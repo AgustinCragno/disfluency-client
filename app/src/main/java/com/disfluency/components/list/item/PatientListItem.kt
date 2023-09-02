@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.disfluency.R
 import com.disfluency.components.icon.IconLabeled
-import com.disfluency.model.Patient
+import com.disfluency.model.user.Patient
 import com.disfluency.utilities.format.formatWeeklyTurn
 import java.time.format.DateTimeFormatter
 

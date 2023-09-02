@@ -5,9 +5,9 @@ import com.disfluency.api.DisfluencyAPI
 import com.disfluency.api.dto.*
 import com.disfluency.api.error.*
 import com.disfluency.api.session.SessionManager
-import com.disfluency.model.Patient
-import com.disfluency.model.Therapist
-import com.disfluency.model.UserRole
+import com.disfluency.model.user.Patient
+import com.disfluency.model.user.Therapist
+import com.disfluency.model.user.UserRole
 import retrofit2.HttpException
 
 class UserRepository {

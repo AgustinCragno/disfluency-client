@@ -1,7 +1,6 @@
 package com.disfluency.api.service
 
 import com.disfluency.api.dto.PatientDTO
-import com.disfluency.model.Patient
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

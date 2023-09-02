@@ -31,7 +31,7 @@ import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.grid.span.TwoColumnGridItemSpan
 import com.disfluency.components.icon.IconLabeled
-import com.disfluency.model.Patient
+import com.disfluency.model.user.Patient
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.utilities.format.formatWeeklyTurn

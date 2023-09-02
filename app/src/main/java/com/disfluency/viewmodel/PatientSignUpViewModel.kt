@@ -5,14 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.disfluency.api.error.PatientConfirmationException
 import com.disfluency.api.error.PatientNotFoundException
-import com.disfluency.api.error.TherapistCreationException
 import com.disfluency.data.UserRepository
-import com.disfluency.model.Patient
+import com.disfluency.model.user.Patient
 import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.launch
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.LocalTime
 
 class PatientSignUpViewModel : ViewModel() {
 
