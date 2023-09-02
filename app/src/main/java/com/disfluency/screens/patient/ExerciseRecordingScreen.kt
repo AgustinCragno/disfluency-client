@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,7 +30,7 @@ import com.disfluency.components.button.RecordButton
 import com.disfluency.model.Exercise
 import com.disfluency.model.ExerciseAssignment
 import com.disfluency.navigation.routing.Route
-import com.disfluency.screens.signup.BackNavigationScaffold
+import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.RecordExerciseViewModel
@@ -137,7 +138,7 @@ private fun RecordExercise(
         derivedStateOf { BOTTOM_SHEET_TITLE_PADDING_OPEN }
     }
 
-    BackNavigationScaffold(title = R.string.practice, navController = navController) { paddingValues ->
+    BackNavigationScaffold(title = stringResource(R.string.practice), navController = navController) { paddingValues ->
         Box(
             Modifier.fillMaxSize()
         ) {

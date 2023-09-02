@@ -35,7 +35,7 @@ import com.disfluency.model.Exercise
 import com.disfluency.model.ExerciseAssignment
 import com.disfluency.model.ExercisePractice
 import com.disfluency.navigation.routing.Route
-import com.disfluency.screens.signup.BackNavigationScaffold
+import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.therapist.ExerciseDetailScreen
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDateAsWords
@@ -89,19 +89,12 @@ private fun AssignmentDetailPreview(){
     exercisesViewModel.assignments.value = listOf(assignment)
 
     DisfluencyTheme() {
-        //TODO: cambiar el scaffold en casi todas las pantallas
-        BackNavigationScaffold(title = R.string.exercises, navController = navHostController) { paddingValues ->
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-            ){
-                ExerciseAssignmentDetailScreen(
-                    assignmentId = assignmentId,
-                    navController = navHostController,
-                    viewModel = exercisesViewModel
-                )
-            }
-        }
+
+        ExerciseAssignmentDetailScreen(
+            assignmentId = assignmentId,
+            navController = navHostController,
+            viewModel = exercisesViewModel
+        )
     }
 }
 
@@ -113,21 +106,30 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
         assignment.value = viewModel.getAssignmentById(assignmentId)
     }
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        assignment.value?.let {
-            ExerciseDetailScreen(exercise = it.exercise)
 
-            ExercisePracticeList(
-                assignment = it,
-                title = "Mis resoluciones",
-                emptyListContent = { NoPracticesMessage() }
-            )
+    BackNavigationScaffold(title = stringResource(R.string.exercises), navController = navController) { paddingValues ->
+        Box(
+            modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+        ){
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                assignment.value?.let {
+                    ExerciseDetailScreen(exercise = it.exercise)
 
-            Spacer(modifier = Modifier.height(64.dp))
+                    ExercisePracticeList(
+                        assignment = it,
+                        title = "Mis resoluciones",
+                        emptyListContent = { NoPracticesMessage() }
+                    )
+
+                    Spacer(modifier = Modifier.height(64.dp))
+                }
+            }
+
+            PracticeButton(assignmentId = assignmentId, navController = navController)
         }
     }
-
-    PracticeButton(assignmentId = assignmentId, navController = navController)
 }
 
 @Composable

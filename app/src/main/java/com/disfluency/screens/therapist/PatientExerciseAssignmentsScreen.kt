@@ -24,6 +24,7 @@ import com.disfluency.components.skeleton.list.ExerciseAssignmentListSkeleton
 import com.disfluency.components.thumbnail.ExerciseThumbnail
 import com.disfluency.model.ExerciseAssignment
 import com.disfluency.navigation.routing.Route
+import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.utilities.format.formatLocalDate
 import com.disfluency.viewmodel.ExercisesViewModel
 
@@ -40,21 +41,30 @@ fun PatientExerciseAssignmentsScreen(patientId: String, navController: NavHostCo
     // ya que puede darse que el paciente resuelva un ejercicio mientras yo estoy en la aplicacion tambien.
 
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        SkeletonLoader(
-            state = viewModel.assignments,
-            content = {
-                viewModel.assignments.value?.let {
-                    ExerciseAssignmentList(exerciseAssignments = it, navController = navController, onClickRoute = Route.Therapist.ExerciseAssignmentDetail)
+    BackNavigationScaffold(
+        title = stringResource(R.string.patient_exercises),
+        navController = navController
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize().padding(paddingValues)
+        ) {
+            SkeletonLoader(
+                state = viewModel.assignments,
+                content = {
+                    viewModel.assignments.value?.let {
+                        ExerciseAssignmentList(
+                            exerciseAssignments = it,
+                            navController = navController,
+                            onClickRoute = Route.Therapist.ExerciseAssignmentDetail
+                        )
+                    }
+                },
+                skeleton = {
+                    ExerciseAssignmentListSkeleton()
                 }
-            },
-            skeleton = {
-                ExerciseAssignmentListSkeleton()
-            }
-        )
+            )
+        }
     }
 }
 

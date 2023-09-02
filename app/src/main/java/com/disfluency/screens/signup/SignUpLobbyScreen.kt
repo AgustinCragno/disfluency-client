@@ -7,8 +7,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -29,6 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.R
 import com.disfluency.navigation.routing.Route
+import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.random.randomSign
 
@@ -37,7 +36,7 @@ fun SignUpLobbyScreen(navController: NavHostController) {
     val exitAnimationState = remember { mutableStateOf(false) }
 
     BackNavigationScaffold(
-        title = R.string.signup,
+        title = stringResource(R.string.signup),
         navController = navController,
         onBackNavigation = { navController.navigate(Route.Launch.path) }
     ) { paddingValues ->
@@ -92,36 +91,7 @@ fun SignUpLobbyScreen(navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BackNavigationScaffold(
-    title: Int,
-    navController: NavHostController,
-    onBackNavigation: () -> Unit = { navController.popBackStack() },
-    content: @Composable (PaddingValues) -> Unit
-) {
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = title)
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackNavigation) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.Transparent)
-            )
-        },
-        content = content
-    )
-}
+
 
 @Composable
 private fun UserRoleBanner(

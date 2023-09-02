@@ -56,8 +56,9 @@ class UserRepository {
         }
     }
 
-    suspend fun logout(){
-        //TODO: implementation
+    fun logout(){
+        Log.i("logout", "Deleting local access and refresh tokens for current user")
+        SessionManager.resetSession()
     }
 
     suspend fun getPendingPatient(id: String): Patient {

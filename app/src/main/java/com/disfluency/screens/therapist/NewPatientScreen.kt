@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.inputs.*
@@ -31,6 +32,7 @@ import com.disfluency.components.stepper.StepScreen
 import com.disfluency.model.Patient
 import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
+import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.utilities.avatar.AvatarManager
 import com.disfluency.utilities.format.formatLocalDate
 import com.disfluency.utilities.format.formatWeeklyTurn
@@ -47,6 +49,26 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun NewPatientScreen(
+    therapist: Therapist,
+    navController: NavHostController,
+    viewModel: PatientsViewModel = viewModel()
+){
+    BackNavigationScaffold(
+        title = stringResource(R.string.new_patient),
+        navController = navController
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            NewPatientForms(therapist = therapist, navController = navController, viewModel = viewModel)
+        }
+    }
+}
+
+@Composable
+private fun NewPatientForms(
     therapist: Therapist,
     navController: NavController,
     viewModel: PatientsViewModel = viewModel()

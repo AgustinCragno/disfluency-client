@@ -1,7 +1,6 @@
 package com.disfluency.screens.signup
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -11,21 +10,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.disfluency.R
-import com.disfluency.components.dialogs.TermsAndConditionsDialog
 import com.disfluency.components.inputs.avatar.AvatarPicker
 import com.disfluency.components.inputs.text.*
 import com.disfluency.components.text.TermsAndConditions
 import com.disfluency.navigation.routing.Route
+import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.viewmodel.SignUpViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 
@@ -39,7 +34,7 @@ fun TherapistSignUpScreen(
     }
 
     BackNavigationScaffold(
-        title = R.string.signup,
+        title = stringResource(R.string.signup),
         navController = navController,
         onBackNavigation = { navController.navigate(Route.Launch.path) }
     ) { paddingValues ->

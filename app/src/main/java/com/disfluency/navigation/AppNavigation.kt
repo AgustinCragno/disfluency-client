@@ -31,7 +31,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 @Composable
 fun AppNavigation(){
     val navController = rememberAnimatedNavController()
-    val userViewModel: LoggedUserViewModel = viewModel()
+    val userViewModel = LoggedUserViewModel(navController)
     val signUpViewModel = SignUpViewModel(userViewModel)
     val patientSignUpViewModel: PatientSignUpViewModel = viewModel()
 
@@ -82,10 +82,10 @@ fun AppNavigation(){
             PatientSignUpConfirmationScreen(navController, patientSignUpViewModel)
         }
         composable(Route.Patient.Home.path){
-            PatientNavigationGraph(patient = userViewModel.getLoggedUser() as Patient)
+            PatientNavigationGraph(patient = userViewModel.getLoggedUser() as Patient, loggedUserViewModel = userViewModel)
         }
         composable(Route.Therapist.Home.path){
-            TherapistNavigationGraph(therapist = userViewModel.getLoggedUser() as Therapist)
+            TherapistNavigationGraph(therapist = userViewModel.getLoggedUser() as Therapist, loggedUserViewModel = userViewModel)
         }
     }
 }
