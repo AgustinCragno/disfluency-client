@@ -45,6 +45,8 @@ fun DisfluencyLaunchScreen(
                 SessionManager.getRefreshToken()?.let {
                     viewModel.login(it)
                 }
+            } else {
+                viewModel.resetCredentials()
             }
         }
     }
@@ -53,6 +55,7 @@ fun DisfluencyLaunchScreen(
         LaunchedEffect(Unit) {
             launch {
                 delay((ON_AUTH_EXIT_TIME * 0.5).toLong())
+                viewModel.firstLoadDone.value = true
                 navController.navigate(
                     when (viewModel.getLoggedUser()) {
                         is Therapist -> Route.Therapist.Home.path

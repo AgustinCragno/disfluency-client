@@ -15,10 +15,11 @@ import com.disfluency.screens.therapist.MyExercisesScreen
 import com.disfluency.screens.therapist.*
 import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
+import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.PatientsViewModel
 
 @Composable
-fun TherapistNavigationGraph(therapist: Therapist){
+fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUserViewModel){
     val patientsViewModel: PatientsViewModel = viewModel()
     val exercisesViewModel: ExercisesViewModel = viewModel()
 
@@ -26,7 +27,7 @@ fun TherapistNavigationGraph(therapist: Therapist){
 
     NavHost(navController = navHostController, startDestination = Route.Therapist.Home.path){
         composable(Route.Therapist.Home.path){
-            HomeTherapistScreen(therapist = therapist, navController = navHostController)
+            HomeTherapistScreen(therapist = therapist, navController = navHostController, viewModel = loggedUserViewModel)
         }
         composable(Route.Therapist.MyPatients.path){
             MyPatientsScreen(therapist = therapist, navController = navHostController, viewModel = patientsViewModel)

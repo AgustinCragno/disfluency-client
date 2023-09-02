@@ -14,10 +14,11 @@ import com.disfluency.navigation.structure.BottomNavigationScaffold
 import com.disfluency.screens.patient.*
 import com.disfluency.screens.patient.success.RecordingConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
+import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.RecordExerciseViewModel
 
 @Composable
-fun PatientNavigationGraph(patient: Patient){
+fun PatientNavigationGraph(patient: Patient, loggedUserViewModel: LoggedUserViewModel){
     val exercisesViewModel: ExercisesViewModel = viewModel()
     val recordViewModel = RecordExerciseViewModel(LocalContext.current, LocalLifecycleOwner.current)
 
@@ -25,7 +26,7 @@ fun PatientNavigationGraph(patient: Patient){
 
     NavHost(navController = navHostController, startDestination = Route.Patient.Home.path){
         composable(Route.Patient.Home.path){
-            HomePatientScreen(patient = patient, navController = navHostController)
+            HomePatientScreen(patient = patient, navController = navHostController, viewModel = loggedUserViewModel)
         }
         composable(Route.Patient.MyExercises.path){
             MyExercisesScreen(patient = patient, navController = navHostController, viewModel = exercisesViewModel)

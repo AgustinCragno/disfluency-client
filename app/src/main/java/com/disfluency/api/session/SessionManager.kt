@@ -32,4 +32,11 @@ object SessionManager {
     fun getAccessToken(): String? {
         return accessToken
     }
+
+    fun resetSession() {
+        accessToken = null
+        val editor = prefs.edit()
+        editor.remove(USER_TOKEN)
+        editor.apply()
+    }
 }

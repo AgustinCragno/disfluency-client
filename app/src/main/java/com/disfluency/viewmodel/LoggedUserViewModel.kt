@@ -5,15 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.disfluency.api.error.ExpiredTokenException
 import com.disfluency.api.error.UserNotFoundException
 import com.disfluency.data.UserRepository
 import com.disfluency.model.User
 import com.disfluency.model.UserRole
+import com.disfluency.navigation.routing.Route
 import com.disfluency.viewmodel.states.LoginState
 import kotlinx.coroutines.launch
 
-class LoggedUserViewModel : ViewModel() {
+class LoggedUserViewModel(private val navHostController: NavHostController) : ViewModel() {
 
     private val userRepository = UserRepository()
 
@@ -46,10 +48,20 @@ class LoggedUserViewModel : ViewModel() {
         }
     }
 
-    fun logout() = viewModelScope.launch {
-        user?.let { userRepository.logout() }
-        user = null
+    fun exitToLaunch() = viewModelScope.launch {
         loginState = LoginState.INPUT
+
+        //TODO: esta bien esto?
+        navHostController.navigate(Route.Launch.path){
+            popUpTo(Route.Launch.path){
+                inclusive = true
+            }
+        }
+    }
+
+    fun resetCredentials() = viewModelScope.launch {
+        user?.let { userRepository.logout() }
+//        user = null
     }
 
     fun registerLoggedUser(userRole: UserRole){

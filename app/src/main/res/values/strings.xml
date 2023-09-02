@@ -139,6 +139,8 @@
     <string name="complete_password">Complete una contraseña para su usuario y comience a usar Disfluency</string>
     <string name="expired_invitation">La invitacion recibida caducó o ya fue confirmada</string>
     <string name="my_forms">Cuestionarios</string>
+    <string name="exit">Salir</string>
+    <string name="logout_confirmation">¿Desea cerrar sesion?</string>
 
 
 </resources>
