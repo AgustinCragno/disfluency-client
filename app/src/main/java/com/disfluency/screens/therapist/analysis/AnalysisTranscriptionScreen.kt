@@ -248,10 +248,10 @@ private fun CompositeDisfluencyDisplay(types: List<DisfluencyType>){
 @Composable
 private fun WordDisfluencyDisplay(word: AnalysedWord){
     word.disfluency?.let {
-        if (it is CompositeDisfluency)
-            CompositeDisfluencyDisplay(types = it.multipleDisfluency)
-        else if (it is SingleDisfluency)
-            SingleDisfluencyDisplay(disfluency = it.disfluencyType)
+        if (it.size > 1)
+            CompositeDisfluencyDisplay(types = it)
+        else
+            SingleDisfluencyDisplay(disfluency = it.single())
     }
     ?: DisfluencyDisplayText(letter = "", color = Color.Transparent)
 }
