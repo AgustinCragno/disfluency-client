@@ -1,6 +1,7 @@
 package com.disfluency.navigation.structure
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -14,6 +15,7 @@ fun BackNavigationScaffold(
     title: String,
     navController: NavHostController,
     onBackNavigation: () -> Unit = { navController.popBackStack() },
+    actions: @Composable() (RowScope.() -> Unit) = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
@@ -32,6 +34,7 @@ fun BackNavigationScaffold(
                         )
                     }
                 },
+                actions = actions,
                 colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.Transparent)
             )
         },

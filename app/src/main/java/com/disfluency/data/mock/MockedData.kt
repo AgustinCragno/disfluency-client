@@ -118,4 +118,57 @@ object MockedData {
             AnalysedWord("determinados.",14900,16660)
         )
     )
+
+    val analysisResults = AnalysisResults(
+        totalWords = 153,
+        totalDisfluencies = 23,
+        totalPhrases = 29,
+        cleanWordsCount = 130,
+        fluencyIndex = 0.84f,
+        avgDisfluenciesPerPhrase = 0.79f,
+        disfluencyStats = listOf(
+            DisfluencyTypeStats(
+                type = DisfluencyType.RS,
+                count = 7,
+                percentageInTotalWords = 0.04f,
+                percentageInTotalDisfluencies = 0.31f
+            ),
+            DisfluencyTypeStats(
+                type = DisfluencyType.I,
+                count = 2,
+                percentageInTotalWords = 0.02f,
+                percentageInTotalDisfluencies = 0.12f
+            ),
+            DisfluencyTypeStats(
+                type = DisfluencyType.V,
+                count = 8,
+                percentageInTotalWords = 0.06f,
+                percentageInTotalDisfluencies = 0.39f
+            ),
+            DisfluencyTypeStats(
+                type = DisfluencyType.RSI,
+                count = 4,
+                percentageInTotalWords = 0.035f,
+                percentageInTotalDisfluencies = 0.18f
+            ),
+            DisfluencyTypeStats(
+                type = DisfluencyType.RP,
+                count = 1,
+                percentageInTotalWords = 0.01f,
+                percentageInTotalDisfluencies = 0.05f
+            ),
+            DisfluencyTypeStats(
+                type = DisfluencyType.RF,
+                count = 1,
+                percentageInTotalWords = 0.01f,
+                percentageInTotalDisfluencies = 0.05f
+            ),
+            DisfluencyTypeStats(
+                type = DisfluencyType.M,
+                count = 0,
+                percentageInTotalWords = 0.0f,
+                percentageInTotalDisfluencies = 0f
+            ),
+        )
+    )
 }

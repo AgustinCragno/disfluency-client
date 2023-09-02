@@ -5,6 +5,13 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Analytics
+import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.StackedBarChart
+import androidx.compose.material.icons.outlined.Analytics
+import androidx.compose.material.icons.outlined.GraphicEq
+import androidx.compose.material.icons.outlined.QueryStats
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -50,7 +57,13 @@ fun AnalysisTranscriptionScreen(
     val url = "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3"
     val disfluencyAudioPlayer = DisfluencyAudioUrlPlayer(LocalContext.current)
 
-    BackNavigationScaffold(title = "Analisis de Disfluencias", navController = navController) { paddingValues ->
+    BackNavigationScaffold(
+        title = "Analisis de Disfluencias",
+        navController = navController,
+        actions = {
+            ViewResultsAction(analysis = analysis, navController = navController)
+        }
+    ) { paddingValues ->
 
         Column(
             modifier = Modifier
@@ -70,6 +83,13 @@ fun AnalysisTranscriptionScreen(
             )
         }
 
+    }
+}
+
+@Composable
+private fun ViewResultsAction(analysis: Analysis, navController: NavHostController){
+    IconButton(onClick = { /*TODO agregar ruta y hacer el navigate*/ }) {
+        Icon(imageVector = Icons.Outlined.QueryStats, contentDescription = null)
     }
 }
 
@@ -158,7 +178,12 @@ private fun TranscriptionPanel(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Transcription(analysis: Analysis, audioPlayer: DisfluencyAudioPlayer){
+    //TODO: auto-scroll on play
     val scrollState = rememberScrollState()
+
+    //TODO: las palabras cortitas no se llegan a pintar en naranja cuando las reproduce
+    // porque el tiempo entre los timestamps es muy chico, habria que ver alguna forma de
+    // evitar eso
 
     Box(
         modifier = Modifier
@@ -169,7 +194,9 @@ private fun Transcription(analysis: Analysis, audioPlayer: DisfluencyAudioPlayer
             )
     ){
         FlowRow(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             analysis.analysedWords.forEach { word ->
@@ -191,7 +218,7 @@ private fun Transcription(analysis: Analysis, audioPlayer: DisfluencyAudioPlayer
                     )
 
                     // Se arregla en androidx.compose.foundation:foundation-layout:1.5.0 que agrega al FlowRow un VerticalArrangement
-                    Spacer(modifier = Modifier.height(2.dp))
+//                    Spacer(modifier = Modifier.height(2.dp))
                 }
             }
         }
