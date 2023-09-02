@@ -1,4 +1,4 @@
-package com.disfluency.screens.patient
+package com.disfluency.screens.patient.exercises
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -36,7 +36,7 @@ import com.disfluency.model.ExerciseAssignment
 import com.disfluency.model.ExercisePractice
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
-import com.disfluency.screens.therapist.ExerciseDetailScreen
+import com.disfluency.screens.therapist.exercises.ExerciseDetailScreen
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDateAsWords
 import com.disfluency.utilities.format.formatLocalTime

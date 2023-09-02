@@ -1,4 +1,4 @@
-package com.disfluency.screens.therapist
+package com.disfluency.screens.therapist.exercises
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable

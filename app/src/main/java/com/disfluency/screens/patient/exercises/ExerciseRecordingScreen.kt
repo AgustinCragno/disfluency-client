@@ -1,4 +1,4 @@
-package com.disfluency.screens.patient
+package com.disfluency.screens.patient.exercises
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState

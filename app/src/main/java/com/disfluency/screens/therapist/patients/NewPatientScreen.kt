@@ -1,4 +1,4 @@
-package com.disfluency.screens.therapist
+package com.disfluency.screens.therapist.patients
 
 
 import androidx.compose.foundation.BorderStroke

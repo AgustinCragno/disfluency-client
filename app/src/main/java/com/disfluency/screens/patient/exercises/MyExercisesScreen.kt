@@ -1,4 +1,4 @@
-package com.disfluency.screens.patient
+package com.disfluency.screens.patient.exercises
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +16,7 @@ import com.disfluency.model.Patient
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BottomNavigationScaffold
-import com.disfluency.screens.therapist.ExerciseAssignmentList
+import com.disfluency.screens.therapist.exercises.ExerciseAssignmentList
 import com.disfluency.viewmodel.ExercisesViewModel
 
 @Composable

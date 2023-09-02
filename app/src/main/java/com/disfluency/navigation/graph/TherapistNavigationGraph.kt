@@ -11,8 +11,14 @@ import com.disfluency.R
 import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.model.Therapist
 import com.disfluency.navigation.routing.Route
-import com.disfluency.screens.therapist.MyExercisesScreen
+import com.disfluency.screens.therapist.exercises.MyExercisesScreen
 import com.disfluency.screens.therapist.*
+import com.disfluency.screens.therapist.exercises.ExerciseAssignmentDetailScreen
+import com.disfluency.screens.therapist.exercises.PatientExerciseAssignmentsScreen
+import com.disfluency.screens.therapist.forms.MyFormsScreen
+import com.disfluency.screens.therapist.patients.MyPatientsScreen
+import com.disfluency.screens.therapist.patients.NewPatientScreen
+import com.disfluency.screens.therapist.patients.PatientDetailScreen
 import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.LoggedUserViewModel

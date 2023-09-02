@@ -1,4 +1,4 @@
-package com.disfluency.screens.therapist
+package com.disfluency.screens.therapist.exercises
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn

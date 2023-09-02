@@ -8,10 +8,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.model.Patient
-import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.routing.Route
-import com.disfluency.navigation.structure.BottomNavigationScaffold
 import com.disfluency.screens.patient.*
+import com.disfluency.screens.patient.exercises.ExerciseAssignmentDetailScreen
+import com.disfluency.screens.patient.exercises.MyExercisesScreen
+import com.disfluency.screens.patient.exercises.RecordExerciseScreen
+import com.disfluency.screens.patient.forms.MyFormsScreen
 import com.disfluency.screens.patient.success.RecordingConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.LoggedUserViewModel
