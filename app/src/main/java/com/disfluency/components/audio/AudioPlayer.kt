@@ -117,6 +117,76 @@ fun AudioPlayer(audioPlayer: DisfluencyAudioPlayer, modifier: Modifier = Modifie
     }
 }
 
+@Composable
+fun CompactAudioPlayer(audioPlayer: DisfluencyAudioPlayer, modifier: Modifier = Modifier){
+
+    Column() {
+        Row(
+            modifier = modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                modifier = Modifier.size(40.dp),
+                contentPadding = PaddingValues(1.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                onClick = {
+                    if (!audioPlayer.isPlaying()){
+                        audioPlayer.play()
+                    } else {
+                        audioPlayer.pause()
+                    }
+                },
+                enabled = audioPlayer.asyncReady()
+            ) {
+                if (audioPlayer.isPlaying())
+                    Icon(imageVector = Icons.Filled.Pause, contentDescription = "Pause")
+                else
+                    Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = "Play")
+            }
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(30.dp)
+                    ){
+                AudioWaveformCustom(
+                    modifier = Modifier.fillMaxSize(),
+                    amplitudes = audioPlayer.amplitudes(),
+                    spikeHeight = 30.dp,
+                    progress = audioPlayer.position() / audioPlayer.duration(),
+                    onProgressChange = { progressChange ->
+                        audioPlayer.seekTo(audioPlayer.duration() * progressChange)
+                    }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(2.dp))
+
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.position().toLong()),
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.Gray,
+                modifier = Modifier.padding(start = 3.dp)
+            )
+
+            Text(
+                text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.duration().toLong()),
+                style = MaterialTheme.typography.labelSmall,
+                color = Color.Gray,
+                modifier = Modifier.padding(end = 8.dp)
+            )
+        }
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
