@@ -47,11 +47,10 @@ fun AnalysisResultsScreen(
                 .padding(paddingValues)
         ) {
             Column(
-                Modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState)
             ) {
-
                 FluencyIndexChart(analysisResults = analysisResults)
 
                 Spacer(modifier = Modifier.height(16.dp))

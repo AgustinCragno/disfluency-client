@@ -22,6 +22,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.min
@@ -52,6 +53,7 @@ internal fun DonutChart(
     inputValues: List<Float>,
     textColor: Color = MaterialTheme.colors.primary,
     centerText: String = "",
+    centerTextSize: Dp = 30.dp,
     sliceWidthDp: Dp = defaultSliceWidth,
     slicePaddingDp: Dp = defaultSlicePadding,
     sliceClickPaddingDp: Dp = defaultSliceClickPadding,
@@ -96,7 +98,7 @@ internal fun DonutChart(
     val sliceClickPaddingPx = with(density) { sliceClickPaddingDp.toPx() }
 
     // text style
-    val textFontSize = with(density) { 30.dp.toPx() }
+    val textFontSize = with(density) { centerTextSize.toPx() }
     val textPaint = remember {
         Paint().apply {
             color = textColor.toArgb()
