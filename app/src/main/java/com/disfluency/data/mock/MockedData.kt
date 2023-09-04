@@ -15,7 +15,7 @@ object MockedData {
             AnalysedWord("la",2600,2660),
             AnalysedWord("capacidad",2760,3420),
             AnalysedWord("de",3580,3660),
-            AnalysedWord("un",3740,3840, listOf(DisfluencyType.RF)),
+            AnalysedWord("un",3740,3840, listOf(DisfluencyType.Rf)),
             AnalysedWord("sistema",3960,4460),
             AnalysedWord("o",4900,4920),
             AnalysedWord("componente",5020,5680, (listOf(DisfluencyType.M, DisfluencyType.I))),
@@ -28,11 +28,11 @@ object MockedData {
             AnalysedWord("se",11220,11280, listOf(DisfluencyType.V)),
             AnalysedWord("usa",11420,11640),
             AnalysedWord("bajo",11980,12220),
-            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.RF))),
+            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.Rf))),
             AnalysedWord("condiciones",12640,13300, listOf(DisfluencyType.V)),
             AnalysedWord("y",13580,13640),
             AnalysedWord("periodo",13740,14160),
-            AnalysedWord("de",14240,14280, listOf(DisfluencyType.RP)),
+            AnalysedWord("de",14240,14280, listOf(DisfluencyType.Rp)),
             AnalysedWord("tiempo",14380,14700),
             AnalysedWord("determinados.",14900,16660)
         )
@@ -46,7 +46,7 @@ object MockedData {
             AnalysedWord("la",2600,2660),
             AnalysedWord("capacidad",2760,3420),
             AnalysedWord("de",3580,3660),
-            AnalysedWord("un",3740,3840, listOf(DisfluencyType.RF)),
+            AnalysedWord("un",3740,3840, listOf(DisfluencyType.Rf)),
             AnalysedWord("sistema",3960,4460),
             AnalysedWord("o",4900,4920),
             AnalysedWord("componente",5020,5680, (listOf(DisfluencyType.M, DisfluencyType.I))),
@@ -59,11 +59,11 @@ object MockedData {
             AnalysedWord("se",11220,11280, listOf(DisfluencyType.V)),
             AnalysedWord("usa",11420,11640),
             AnalysedWord("bajo",11980,12220),
-            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.RF))),
+            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.Rf))),
             AnalysedWord("condiciones",12640,13300, listOf(DisfluencyType.V)),
             AnalysedWord("y",13580,13640),
             AnalysedWord("periodo",13740,14160),
-            AnalysedWord("de",14240,14280, listOf(DisfluencyType.RP)),
+            AnalysedWord("de",14240,14280, listOf(DisfluencyType.Rp)),
             AnalysedWord("tiempo",14380,14700),
             AnalysedWord("determinados",14900,16660),
             AnalysedWord("fiabilidad",1400,2140, listOf(DisfluencyType.V)),
@@ -71,7 +71,7 @@ object MockedData {
             AnalysedWord("la",2600,2660),
             AnalysedWord("capacidad",2760,3420),
             AnalysedWord("de",3580,3660),
-            AnalysedWord("un",3740,3840, listOf(DisfluencyType.RF)),
+            AnalysedWord("un",3740,3840, listOf(DisfluencyType.Rf)),
             AnalysedWord("sistema",3960,4460),
             AnalysedWord("o",4900,4920),
             AnalysedWord("componente",5020,5680, (listOf(DisfluencyType.M, DisfluencyType.I))),
@@ -84,11 +84,11 @@ object MockedData {
             AnalysedWord("se",11220,11280, listOf(DisfluencyType.V)),
             AnalysedWord("usa",11420,11640),
             AnalysedWord("bajo",11980,12220),
-            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.RF))),
+            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.Rf))),
             AnalysedWord("condiciones",12640,13300, listOf(DisfluencyType.V)),
             AnalysedWord("y",13580,13640),
             AnalysedWord("periodo",13740,14160),
-            AnalysedWord("de",14240,14280, listOf(DisfluencyType.RP)),
+            AnalysedWord("de",14240,14280, listOf(DisfluencyType.Rp)),
             AnalysedWord("tiempo",14380,14700),
             AnalysedWord("determinados",14900,16660),
             AnalysedWord("fiabilidad",1400,2140, listOf(DisfluencyType.V)),
@@ -96,7 +96,7 @@ object MockedData {
             AnalysedWord("la",2600,2660),
             AnalysedWord("capacidad",2760,3420),
             AnalysedWord("de",3580,3660),
-            AnalysedWord("un",3740,3840, listOf(DisfluencyType.RF)),
+            AnalysedWord("un",3740,3840, listOf(DisfluencyType.Rf)),
             AnalysedWord("sistema",3960,4460),
             AnalysedWord("o",4900,4920),
             AnalysedWord("componente",5020,5680, (listOf(DisfluencyType.M, DisfluencyType.I))),
@@ -109,11 +109,11 @@ object MockedData {
             AnalysedWord("se",11220,11280, listOf(DisfluencyType.V)),
             AnalysedWord("usa",11420,11640),
             AnalysedWord("bajo",11980,12220),
-            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.RF))),
+            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.Rf))),
             AnalysedWord("condiciones",12640,13300, listOf(DisfluencyType.V)),
             AnalysedWord("y",13580,13640),
             AnalysedWord("periodo",13740,14160),
-            AnalysedWord("de",14240,14280, listOf(DisfluencyType.RP)),
+            AnalysedWord("de",14240,14280, listOf(DisfluencyType.Rp)),
             AnalysedWord("tiempo",14380,14700),
             AnalysedWord("determinados.",14900,16660)
         )
@@ -128,7 +128,7 @@ object MockedData {
         avgDisfluenciesPerPhrase = 0.79f,
         disfluencyStats = listOf(
             DisfluencyTypeStats(
-                type = DisfluencyType.RS,
+                type = DisfluencyType.Rs,
                 count = 7,
                 percentageInTotalWords = 0.04f,
                 percentageInTotalDisfluencies = 0.31f
@@ -146,19 +146,19 @@ object MockedData {
                 percentageInTotalDisfluencies = 0.39f
             ),
             DisfluencyTypeStats(
-                type = DisfluencyType.RSI,
+                type = DisfluencyType.Rsi,
                 count = 4,
                 percentageInTotalWords = 0.035f,
                 percentageInTotalDisfluencies = 0.18f
             ),
             DisfluencyTypeStats(
-                type = DisfluencyType.RP,
+                type = DisfluencyType.Rp,
                 count = 1,
                 percentageInTotalWords = 0.01f,
                 percentageInTotalDisfluencies = 0.05f
             ),
             DisfluencyTypeStats(
-                type = DisfluencyType.RF,
+                type = DisfluencyType.Rf,
                 count = 1,
                 percentageInTotalWords = 0.01f,
                 percentageInTotalDisfluencies = 0.05f
