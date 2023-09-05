@@ -36,25 +36,31 @@ import com.disfluency.model.analysis.*
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDateAsMonthInWords
+import com.disfluency.viewmodel.AnalysisViewModel
 import java.time.LocalDate
 
 @Preview
 @Composable
 private fun AnalysisScreenPreview(){
+    val analysisViewModel = AnalysisViewModel()
+    analysisViewModel.getAnalysisListByPatientId("1234")
+
     DisfluencyTheme() {
         AnalysisTranscriptionScreen(
-            analysis = MockedData.longAnalysis,
-            navController = rememberNavController()
+            "1",
+            navController = rememberNavController(),
+            analysisViewModel
         )
     }
 }
 
 @Composable
 fun AnalysisTranscriptionScreen(
-    analysis: Analysis, //TODO: temp, recibir id e ir a buscarlo al viewModel
-    navController: NavHostController
+    analysisId: String,
+    navController: NavHostController,
+    analysisViewModel: AnalysisViewModel
 ){
-    val url = "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3"
+    val analysis = analysisViewModel.getAnalysis(analysisId)
     val disfluencyAudioPlayer = DisfluencyAudioUrlPlayer(LocalContext.current)
 
     BackNavigationScaffold(
@@ -77,7 +83,7 @@ fun AnalysisTranscriptionScreen(
             )
 
             SessionPlayerPanel(
-                audioUrl = url,
+                audioUrl = analysis.audioUrl,
                 audioPlayer = disfluencyAudioPlayer,
                 modifier = Modifier.weight(2f)
             )

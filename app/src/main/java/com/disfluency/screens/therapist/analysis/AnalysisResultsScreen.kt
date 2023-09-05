@@ -4,36 +4,48 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.data.mock.MockedData
+import com.disfluency.model.analysis.Analysis
 import com.disfluency.model.analysis.AnalysisResults
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.therapist.analysis.results.DisfluenciesPerPhraseChart
 import com.disfluency.screens.therapist.analysis.results.DisfluencyTypeCharts
 import com.disfluency.screens.therapist.analysis.results.FluencyIndexChart
 import com.disfluency.ui.theme.DisfluencyTheme
+import com.disfluency.viewmodel.AnalysisViewModel
 
 
 @Preview
 @Composable
 private fun ResultsScreenPreview(){
+    val analysisViewModel = AnalysisViewModel()
+    analysisViewModel.getAnalysisListByPatientId("1234")
+
     DisfluencyTheme() {
         AnalysisResultsScreen(
-            analysisResults = MockedData.analysisResults,
-            navController = rememberNavController()
+            "1",
+            navController = rememberNavController(),
+            analysisViewModel
         )
     }
 }
 
 @Composable
 fun AnalysisResultsScreen(
-    analysisResults: AnalysisResults, //TODO: temp, recibir id e ir a buscarlo al viewModel
-    navController: NavHostController
+    analysisId: String,
+    navController: NavHostController,
+    viewModel: AnalysisViewModel
 ){
+    val analysisResults = viewModel.getAnalysis(analysisId).results
+
     val scrollState = rememberScrollState()
 
     BackNavigationScaffold(
@@ -46,20 +58,22 @@ fun AnalysisResultsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-            ) {
-                FluencyIndexChart(analysisResults = analysisResults)
+            analysisResults?.let {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                ) {
+                    FluencyIndexChart(analysisResults = it)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                DisfluenciesPerPhraseChart(analysisResults = analysisResults)
+                    DisfluenciesPerPhraseChart(analysisResults = it)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                DisfluencyTypeCharts(analysisResults = analysisResults)
+                    DisfluencyTypeCharts(analysisResults = it)
+                }
             }
         }
     }
