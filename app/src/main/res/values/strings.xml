@@ -162,4 +162,7 @@
 
     <string name="rsi_description_1">La </string>
     <string name="rsi_description_2"> consiste en repetir involuntariamente alguna silaba de la palabra que se esta tratando de comunicar. Por ejemplo: \'yo-yo-yogur\'.</string>
+
+    <string name="p_description_1">La </string>
+    <string name="p_description_2"> consiste en alargar la pronunciacion de una letra dentro de la palabra a decir, hasta que la persona logra desbloquearse y completar el resto de la palabra.</string>
 </resources>

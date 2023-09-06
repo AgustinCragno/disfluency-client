@@ -32,6 +32,8 @@ import androidx.navigation.compose.rememberNavController
 import com.disfluency.R
 import com.disfluency.audio.playback.DisfluencyAudioPlayer
 import com.disfluency.audio.playback.DisfluencyAudioUrlPlayer
+import com.disfluency.components.audio.AudioMediaType
+import com.disfluency.components.audio.AudioPlayer
 import com.disfluency.components.audio.CompactAudioPlayer
 import com.disfluency.components.scroll.verticalFadingEdge
 import com.disfluency.data.mock.MockedData
@@ -47,7 +49,7 @@ import java.time.LocalDate
 @Composable
 private fun AnalysisScreenPreview(){
     val analysisViewModel = AnalysisViewModel()
-    analysisViewModel.getAnalysisListByPatientId("1234")
+    analysisViewModel.patientAnalysis.value = listOf(MockedData.longAnalysis)
 
     DisfluencyTheme() {
         AnalysisTranscriptionScreen(
@@ -66,13 +68,7 @@ fun AnalysisTranscriptionScreen(
 ){
     val analysis = viewModel.getAnalysis(analysisId)
     val index = viewModel.getSessionIndex(analysis)
-    val disfluencyAudioPlayer = DisfluencyAudioUrlPlayer(LocalContext.current)
-
-    DisposableEffect(Lifecycle.Event.ON_STOP){
-        onDispose {
-            disfluencyAudioPlayer.release()
-        }
-    }
+//    val disfluencyAudioPlayer = DisfluencyAudioUrlPlayer(LocalContext.current)
 
 //    BackHandler() {
 //        viewModel.analysisResults.value = null
@@ -94,13 +90,13 @@ fun AnalysisTranscriptionScreen(
             TranscriptionPanel(
                 analysis = analysis,
                 index = index,
-                disfluencyAudioPlayer = disfluencyAudioPlayer,
+//                disfluencyAudioPlayer = disfluencyAudioPlayer,
                 modifier = Modifier.weight(11f)
             )
 
             SessionPlayerPanel(
                 audioUrl = analysis.audioUrl,
-                audioPlayer = disfluencyAudioPlayer,
+//                audioPlayer = disfluencyAudioPlayer,
                 modifier = Modifier.weight(2f)
             )
         }
@@ -123,13 +119,9 @@ private fun ViewResultsAction(analysis: Analysis, navController: NavHostControll
 @Composable
 private fun SessionPlayerPanel(
     audioUrl: String,
-    audioPlayer: DisfluencyAudioUrlPlayer,
+//    audioPlayer: DisfluencyAudioUrlPlayer,
     modifier: Modifier = Modifier
 ){
-    LaunchedEffect(Unit){
-        audioPlayer.load(audioUrl)
-    }
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -143,7 +135,8 @@ private fun SessionPlayerPanel(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 8.dp)
         ){
-            CompactAudioPlayer(audioPlayer = audioPlayer)
+//            AudioPlayer(url = audioUrl, AudioMediaType.URL)
+            CompactAudioPlayer(url = audioUrl, type = AudioMediaType.URL)
         }
     }
 }
@@ -152,7 +145,7 @@ private fun SessionPlayerPanel(
 private fun TranscriptionPanel(
     analysis: Analysis,
     index: Int,
-    disfluencyAudioPlayer: DisfluencyAudioPlayer,
+//    disfluencyAudioPlayer: DisfluencyAudioPlayer,
     modifier: Modifier = Modifier
 ) {
 
@@ -198,14 +191,20 @@ private fun TranscriptionPanel(
                 color = Color.Gray.copy(alpha = 0.3f)
             )
 
-            Transcription(analysis = analysis, audioPlayer = disfluencyAudioPlayer)
+            Transcription(
+                analysis = analysis,
+//                audioPlayer = disfluencyAudioPlayer
+            )
         }
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun Transcription(analysis: Analysis, audioPlayer: DisfluencyAudioPlayer){
+private fun Transcription(
+    analysis: Analysis,
+//    audioPlayer: DisfluencyAudioPlayer
+){
     //TODO: auto-scroll on play
     val scrollState = rememberScrollState()
 
@@ -218,7 +217,7 @@ private fun Transcription(analysis: Analysis, audioPlayer: DisfluencyAudioPlayer
             .verticalFadingEdge(scrollState, length = 100.dp, edgeColor = Color.White)
             .verticalScroll(
                 state = scrollState,
-                enabled = !audioPlayer.isPlaying()
+//                enabled = !audioPlayer.isPlaying()
             )
     ){
         FlowRow(
@@ -233,16 +232,16 @@ private fun Transcription(analysis: Analysis, audioPlayer: DisfluencyAudioPlayer
                 ) {
                     WordDisfluencyDisplay(word = word)
 
-                    val bgColor: Color by animateColorAsState(
-                        targetValue = if (word.isTimeInBetween(audioPlayer.position().toInt())) MaterialTheme.colorScheme.primary else Color.Black,
-                        animationSpec = tween(50, 0, LinearEasing)
-                    )
+//                    val bgColor: Color by animateColorAsState(
+//                        targetValue = if (word.isTimeInBetween(audioPlayer.position().toInt())) MaterialTheme.colorScheme.primary else Color.Black,
+//                        animationSpec = tween(50, 0, LinearEasing)
+//                    )
 
                     Text(
                         text = word.word + " ",
                         fontSize = 18.sp,
-                        modifier = Modifier.clickable { audioPlayer.seekTo(word.startTime.toFloat()) },
-                        color = bgColor
+//                        modifier = Modifier.clickable { audioPlayer.seekTo(word.startTime.toFloat()) },
+                        color = /*bgColor*/ Color.Black
                     )
 
                     // Se arregla en androidx.compose.foundation:foundation-layout:1.5.0 que agrega al FlowRow un VerticalArrangement

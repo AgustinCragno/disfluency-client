@@ -22,6 +22,7 @@ import com.disfluency.screens.therapist.analysis.RecordSessionScreen
 import com.disfluency.screens.therapist.exercises.ExerciseAssignmentDetailScreen
 import com.disfluency.screens.therapist.exercises.PatientExerciseAssignmentsScreen
 import com.disfluency.screens.therapist.forms.MyFormsScreen
+import com.disfluency.screens.therapist.forms.PatientFormAssignmentsScreen
 import com.disfluency.screens.therapist.patients.MyPatientsScreen
 import com.disfluency.screens.therapist.patients.NewPatientScreen
 import com.disfluency.screens.therapist.patients.PatientDetailScreen
@@ -75,7 +76,7 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
         }
         composable(Route.Therapist.PatientForms.path, listOf(navArgument("id"){})){ backStackEntry ->
             backStackEntry.arguments?.getString("id")?.let {
-                ImageMessagePage(imageResource = R.drawable.form_fill, text = stringResource(id = R.string.patient_has_no_assigned_forms))
+                PatientFormAssignmentsScreen(patientId = it, navController = navHostController)
             }
         }
         composable(Route.Therapist.ConfirmationNewPatient.path){
@@ -127,9 +128,5 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                 )
             }
         }
-
-        //TODO:  en algun lado el viewModel de analysis tiene que estar mirando al de record,
-        // para saber cuando se termino de hacer el analisis y actualizar
-
     }
 }

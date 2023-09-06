@@ -51,7 +51,7 @@ fun PatientNavigationGraph(patient: Patient, loggedUserViewModel: LoggedUserView
                 )
             }
         }
-        composable(Route.Therapist.NewSessionConfirmation.path){
+        composable(Route.Patient.RecordConfirmation.path){
             RecordingConfirmationScreen(navController = navHostController, viewModel = recordViewModel)
         }
     }

@@ -25,6 +25,7 @@ import com.disfluency.viewmodel.states.ConfirmationState
 fun RecordSessionScreen(patientId: String, navController: NavHostController, viewModel: AnalysisViewModel, recordViewModel: RecordSessionViewModel){
     DisposableEffect(Lifecycle.Event.ON_STOP){
         onDispose {
+            recordViewModel.audioRecorder.reset()
             recordViewModel.audioPlayer.release()
         }
     }

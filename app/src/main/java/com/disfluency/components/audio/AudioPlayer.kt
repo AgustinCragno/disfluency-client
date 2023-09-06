@@ -118,6 +118,30 @@ fun AudioPlayer(audioPlayer: DisfluencyAudioPlayer, modifier: Modifier = Modifie
 }
 
 @Composable
+fun CompactAudioPlayer(url: String, type: AudioMediaType, modifier: Modifier = Modifier){
+    CompactAudioPlayer(url = url, audioPlayer = type.getPlayer(LocalContext.current), modifier)
+}
+
+@Composable
+fun CompactAudioPlayer(
+    url: String,
+    audioPlayer: DisfluencyAudioPlayer,
+    modifier: Modifier = Modifier
+){
+    LaunchedEffect(Unit){
+        audioPlayer.load(url)
+    }
+
+    DisposableEffect(Lifecycle.Event.ON_STOP) {
+        onDispose {
+            audioPlayer.release()
+        }
+    }
+
+    CompactAudioPlayer(audioPlayer = audioPlayer, modifier = modifier)
+}
+
+@Composable
 fun CompactAudioPlayer(audioPlayer: DisfluencyAudioPlayer, modifier: Modifier = Modifier){
 
     Column() {
