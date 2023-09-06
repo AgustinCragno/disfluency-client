@@ -32,7 +32,7 @@ fun HomeTherapistScreen(therapist: Therapist, navController: NavHostController, 
 
             Box(Modifier.fillMaxSize()) {
                 Text(
-                    text = "user: ${therapist.id}",
+                    text = "Bienvenido",
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray,
                     modifier = Modifier.align(Alignment.Center),
