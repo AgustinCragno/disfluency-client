@@ -46,7 +46,10 @@ fun PatientSessionsScreen(
     navController: NavHostController,
     viewModel: AnalysisViewModel
 ){
-    val sessions = viewModel.analysisListOf(patientId)
+//    val sessions = viewModel.analysisListOf(patientId)
+//    val sessions = remember {
+//        mutableStateOf<List<Analysis>?>(null)
+//    }
 
     LaunchedEffect(Unit){
         viewModel.getAnalysisListByPatientId(patientId)
@@ -61,7 +64,7 @@ fun PatientSessionsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            sessions?.value?.let { list ->
+            viewModel.patientAnalysis.value?.let { list ->
 //                list.sortedBy {  }
                 list.forEachIndexed { index, it ->
                     SessionListItem(analysis = it, index = index + 1, navController = navController)
@@ -77,7 +80,9 @@ fun PatientSessionsScreen(
                 onClick = {
                     navController.navigate(Route.Therapist.NewSession.routeTo(patientId))
                 },
-                modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp),
                 containerColor = MaterialTheme.colorScheme.secondary
             ) {
                 Icon(imageVector = Icons.Default.Mic, contentDescription = null)

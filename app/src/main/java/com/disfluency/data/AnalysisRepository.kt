@@ -4,7 +4,6 @@ import android.util.Log
 import com.disfluency.api.DisfluencyAPI
 import com.disfluency.api.dto.PracticeDTO
 import com.disfluency.api.error.PatientNotFoundException
-import com.disfluency.data.mock.MockedData
 import com.disfluency.model.analysis.Analysis
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -18,11 +17,12 @@ class AnalysisRepository {
         Log.i("analysis", "Retrieving analysis of patient: $patientId")
         try {
             val sessionList = DisfluencyAPI.patientService.getSessionsByPatientId(patientId)
-            Log.i("analysis", "Successfully retrieved ${sessionList.size} analysis of patient: $patientId")
-            val analysisList = sessionList.map { it.asSession() }
-            println(analysisList)
-            return analysisList
-        } catch (e: HttpException){
+            Log.i(
+                "analysis",
+                "Successfully retrieved ${sessionList.size} analysis of patient: $patientId"
+            )
+            return sessionList.map { it.asSession() }
+        } catch (e: HttpException) {
             throw PatientNotFoundException(patientId)
         }
     }

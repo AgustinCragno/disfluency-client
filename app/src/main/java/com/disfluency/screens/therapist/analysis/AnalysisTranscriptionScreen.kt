@@ -158,7 +158,7 @@ private fun TranscriptionPanel(
                 val padding = 12.dp
 
                 Text(
-                    text = "Sesión #12",
+                    text = "Sesión #7",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
@@ -286,10 +286,15 @@ private fun CompositeDisfluencyDisplay(types: List<DisfluencyType>){
 @Composable
 private fun WordDisfluencyDisplay(word: AnalysedWord){
     word.disfluency?.let {
-        if (it.size > 1)
-            CompositeDisfluencyDisplay(types = it)
-        else
-            SingleDisfluencyDisplay(disfluency = it.single())
+        if (it.isNotEmpty()){ //TODO: ver como hacer esto bien
+            if (it.size > 1)
+                CompositeDisfluencyDisplay(types = it)
+            else
+                SingleDisfluencyDisplay(disfluency = it.single())
+        }else{
+            DisfluencyDisplayText(letter = "", color = Color.Transparent)
+        }
+
     }
     ?: DisfluencyDisplayText(letter = "", color = Color.Transparent)
 }

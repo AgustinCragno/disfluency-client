@@ -18,7 +18,7 @@ enum class DisfluencyType(
     RF("repeticion de frase", Color(0.298f, 0.686f, 0.314f, 1.0f), R.string.rf_description_1, R.string.rf_description_2),
     RP("repeticion de palabra", Color(0.188f, 0.31f, 1.0f, 1.0f), R.string.rp_description_1, R.string.rp_description_2),
     RS("repeticion de sonido", Color(1.0f, 0.216f, 0.157f, 1.0f), R.string.rs_description_1, R.string.rs_description_2),
-    RSI("repeticion de silaba", Color(0.933f, 0.459f, 0.31f, 1.0f), R.string.rsi_description_1, R.string.rsi_description_2),
+    Rsi("repeticion de silaba", Color(0.933f, 0.459f, 0.31f, 1.0f), R.string.rsi_description_1, R.string.rsi_description_2),
     //TODO: actualizar el texto de prolongacion
     P("prolongacion", Color(1.0f, 0.757f, 0.035f, 1.0f), R.string.rsi_description_1, R.string.rsi_description_2)
 }

@@ -69,7 +69,7 @@ object MockedData {
                 percentageInTotalDisfluencies = 0.39f
             ),
             DisfluencyTypeStats(
-                type = DisfluencyType.RSI,
+                type = DisfluencyType.Rsi,
                 count = 4,
                 percentageInTotalWords = 0.035f,
                 percentageInTotalDisfluencies = 0.18f
