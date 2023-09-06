@@ -1,10 +1,8 @@
 package com.disfluency.screens.therapist.analysis
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.*
@@ -14,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.R
@@ -46,14 +45,19 @@ fun PatientSessionsScreen(
     navController: NavHostController,
     viewModel: AnalysisViewModel
 ){
-//    val sessions = viewModel.analysisListOf(patientId)
-//    val sessions = remember {
-//        mutableStateOf<List<Analysis>?>(null)
-//    }
-
     LaunchedEffect(Unit){
         viewModel.getAnalysisListByPatientId(patientId)
     }
+
+//    DisposableEffect(Lifecycle.Event.ON_STOP){
+//        onDispose {
+//            viewModel.patientAnalysis.value = null
+//        }
+//    }
+
+//    BackHandler() {
+//        viewModel.patientAnalysis.value = null
+//    }
 
     BackNavigationScaffold(
         title = "Sesiones",
@@ -65,16 +69,12 @@ fun PatientSessionsScreen(
                 .padding(paddingValues)
         ) {
             viewModel.patientAnalysis.value?.let { list ->
-//                list.sortedBy {  }
-                list.forEachIndexed { index, it ->
-                    SessionListItem(analysis = it, index = index + 1, navController = navController)
-                }
+                SessionList(list = list, navController = navController)
             }
                 ?:
-            ImageMessagePage(
-                imageResource = R.drawable.record_action,
-                text = stringResource(id = R.string.patient_has_no_recorded_sessions)
-            )
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                CircularProgressIndicator()
+            }
 
             FloatingActionButton(
                 onClick = {
@@ -88,6 +88,22 @@ fun PatientSessionsScreen(
                 Icon(imageVector = Icons.Default.Mic, contentDescription = null)
             }
         }
+    }
+}
+
+@Composable
+private fun SessionList(list: List<Analysis>, navController: NavHostController){
+    if (list.isNotEmpty()){
+        Column(Modifier.fillMaxWidth()) {
+            list.forEachIndexed { index, it ->
+                SessionListItem(analysis = it, index = index + 1, navController = navController)
+            }
+        }
+    }else {
+        ImageMessagePage(
+            imageResource = R.drawable.record_action,
+            text = stringResource(id = R.string.patient_has_no_recorded_sessions)
+        )
     }
 }
 

@@ -14,24 +14,20 @@ class AnalysisViewModel : ViewModel() {
 
     private val analysisRepository = AnalysisRepository()
 
-    private val patientAnalysisMap = mutableMapOf<String, MutableState<List<Analysis>>>()
-
     val patientAnalysis = mutableStateOf<List<Analysis>?>(null)
     val analysisResults = mutableStateOf<AnalysisResults?>(null)
 
     fun getAnalysisListByPatientId(patientId: String) = viewModelScope.launch {
-//        patientAnalysisMap[patientId] = mutableStateOf(analysisRepository.getAnalysisListByPatient(patientId))
         patientAnalysis.value = analysisRepository.getAnalysisListByPatient(patientId)
-    }
-
-    fun analysisListOf(patientId: String): MutableState<List<Analysis>>? {
-        return patientAnalysisMap[patientId]
     }
 
     fun getAnalysis(id: String): Analysis {
         return patientAnalysis.value?.find { it.id == id }
-//        return patientAnalysisMap.values.flatMap { it.value }.find { it.id == id }
             ?: throw AnalysisNotFoundException(id)
+    }
+
+    fun getSessionIndex(analysis: Analysis): Int {
+        return patientAnalysis.value!!.indexOf(analysis) + 1
     }
 
     fun getResults(id: String) = viewModelScope.launch {

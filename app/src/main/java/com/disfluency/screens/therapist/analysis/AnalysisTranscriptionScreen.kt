@@ -1,5 +1,6 @@
 package com.disfluency.screens.therapist.analysis
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.QueryStats
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -24,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.R
@@ -62,7 +65,18 @@ fun AnalysisTranscriptionScreen(
     viewModel: AnalysisViewModel
 ){
     val analysis = viewModel.getAnalysis(analysisId)
+    val index = viewModel.getSessionIndex(analysis)
     val disfluencyAudioPlayer = DisfluencyAudioUrlPlayer(LocalContext.current)
+
+    DisposableEffect(Lifecycle.Event.ON_STOP){
+        onDispose {
+            disfluencyAudioPlayer.release()
+        }
+    }
+
+//    BackHandler() {
+//        viewModel.analysisResults.value = null
+//    }
 
     BackNavigationScaffold(
         title = "Analisis de Disfluencias",
@@ -79,6 +93,7 @@ fun AnalysisTranscriptionScreen(
         ) {
             TranscriptionPanel(
                 analysis = analysis,
+                index = index,
                 disfluencyAudioPlayer = disfluencyAudioPlayer,
                 modifier = Modifier.weight(11f)
             )
@@ -98,7 +113,8 @@ private fun ViewResultsAction(analysis: Analysis, navController: NavHostControll
     IconButton(
         onClick = {
             navController.navigate(Route.Therapist.AnalysisResults.routeTo(analysis.id))
-        }
+        },
+        enabled = analysis != null
     ) {
         Icon(imageVector = Icons.Outlined.QueryStats, contentDescription = null)
     }
@@ -135,6 +151,7 @@ private fun SessionPlayerPanel(
 @Composable
 private fun TranscriptionPanel(
     analysis: Analysis,
+    index: Int,
     disfluencyAudioPlayer: DisfluencyAudioPlayer,
     modifier: Modifier = Modifier
 ) {
@@ -158,7 +175,7 @@ private fun TranscriptionPanel(
                 val padding = 12.dp
 
                 Text(
-                    text = "Sesión #7",
+                    text = "Sesión #$index",
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
