@@ -33,8 +33,8 @@ import com.disfluency.viewmodel.*
 fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUserViewModel){
     val patientsViewModel: PatientsViewModel = viewModel()
     val exercisesViewModel: ExercisesViewModel = viewModel()
-    val analysisViewModel: AnalysisViewModel = viewModel()
     val recordViewModel = RecordSessionViewModel(LocalContext.current, LocalLifecycleOwner.current)
+    val analysisViewModel: AnalysisViewModel = viewModel()
 
     val navHostController = rememberNavController()
 
@@ -86,7 +86,8 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                 PatientSessionsScreen(
                     patientId = it,
                     navController = navHostController,
-                    viewModel = analysisViewModel
+                    viewModel = analysisViewModel,
+                    recordSessionViewModel = recordViewModel
                 )
             }
         }

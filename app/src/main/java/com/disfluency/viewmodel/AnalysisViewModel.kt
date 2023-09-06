@@ -17,8 +17,9 @@ class AnalysisViewModel : ViewModel() {
     val patientAnalysis = mutableStateOf<List<Analysis>?>(null)
     val analysisResults = mutableStateOf<AnalysisResults?>(null)
 
-    fun getAnalysisListByPatientId(patientId: String) = viewModelScope.launch {
+    fun getAnalysisListByPatientId(patientId: String, onComplete: () -> Unit = {}) = viewModelScope.launch {
         patientAnalysis.value = analysisRepository.getAnalysisListByPatient(patientId)
+        onComplete.invoke()
     }
 
     fun getAnalysis(id: String): Analysis {

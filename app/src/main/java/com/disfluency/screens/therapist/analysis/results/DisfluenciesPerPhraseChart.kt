@@ -51,7 +51,7 @@ fun DisfluenciesPerPhraseChart(analysisResults: AnalysisResults){
                             sliceWidthDp = 10.dp,
                             colors = listOf(Color.Blue.copy(alpha = 0.25f)),
                             inputValues = listOf(1f),
-                            centerText = "${analysisResults.avgDisfluenciesPerPhrase}  ",
+                            centerText = "${analysisResults.avgDisfluenciesPerPhrase.toString().take(3)}  ",
                             textColor = Color.Blue
                         )
                     }

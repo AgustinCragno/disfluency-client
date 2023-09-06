@@ -4,9 +4,9 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,6 +34,7 @@ abstract class DisfluencyAudioPlayer(private val context: Context) {
 
     fun load(media: String){
         MediaPlayer().apply {
+            Log.i("DisfluencyAudioPlayer", "loading media")
             player = this
 
             setAudioAttributes(

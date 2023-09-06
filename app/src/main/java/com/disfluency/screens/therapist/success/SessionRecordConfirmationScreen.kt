@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.disfluency.components.icon.IconMessage
 import com.disfluency.components.success.ConfirmationScreen
 import com.disfluency.navigation.routing.Route
 import com.disfluency.ui.theme.Green40
@@ -47,6 +48,7 @@ fun SessionRecordConfirmationScreen(patientId: String, navController: NavHostCon
         confirmationState.value = ConfirmationState.SUCCESS
         delay(3000)
         navController.popBackStack()
+        navController.popBackStack()
         navController.navigate(Route.Therapist.PatientSessions.routeTo(patientId))
     }
 }
@@ -73,7 +75,7 @@ private fun LoadingState(){
     IconMessage(
         imageVector = Icons.Filled.Backup,
         color = Color.Transparent,
-        message = "En unos momentos estara disponible el analisis sistematico de disfluencias"
+        message = "Se guardará la sesion en segundo plano"
     )
 }
 
@@ -93,37 +95,4 @@ private fun ErrorState(){
         color = Color.Red,
         message = "Ocurrio un error al subir la grabacion"
     )
-}
-
-@Composable
-private fun IconMessage(imageVector: ImageVector, color: Color, message: String){
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .padding(16.dp)
-                .background(color, CircleShape)
-        ){
-            Icon(
-                imageVector = imageVector,
-                contentDescription = "Done",
-                tint = Color.White,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-            )
-        }
-
-        Text(
-            text = message,
-            color = Color.White,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(32.dp)
-        )
-    }
 }
