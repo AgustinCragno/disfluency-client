@@ -1,6 +1,7 @@
 package com.disfluency.api
 
 import com.disfluency.api.interceptor.AuthInterceptor
+import com.disfluency.api.service.AnalysisService
 import com.disfluency.api.service.ExerciseService
 import com.disfluency.api.service.PatientService
 import com.disfluency.api.service.UserService
@@ -39,4 +40,5 @@ object DisfluencyAPI {
     val userService: UserService by lazy { retrofit.create(UserService::class.java) }
     val patientService: PatientService by lazy { retrofit.create(PatientService::class.java) }
     val exerciseService: ExerciseService by lazy { retrofit.create(ExerciseService::class.java) }
+    val analysisService: AnalysisService by lazy { retrofit.create(AnalysisService::class.java) }
 }

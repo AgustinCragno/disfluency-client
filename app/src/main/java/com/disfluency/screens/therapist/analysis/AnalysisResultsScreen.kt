@@ -3,18 +3,15 @@ package com.disfluency.screens.therapist.analysis
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.disfluency.data.mock.MockedData
-import com.disfluency.model.analysis.Analysis
-import com.disfluency.model.analysis.AnalysisResults
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.therapist.analysis.results.DisfluenciesPerPhraseChart
 import com.disfluency.screens.therapist.analysis.results.DisfluencyTypeCharts
@@ -44,7 +41,9 @@ fun AnalysisResultsScreen(
     navController: NavHostController,
     viewModel: AnalysisViewModel
 ){
-    val analysisResults = viewModel.getAnalysis(analysisId).results
+    LaunchedEffect(Unit){
+        viewModel.getResults(analysisId)
+    }
 
     val scrollState = rememberScrollState()
 
@@ -58,7 +57,7 @@ fun AnalysisResultsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            analysisResults?.let {
+            viewModel.analysisResults.value?.let {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -74,6 +73,10 @@ fun AnalysisResultsScreen(
 
                     DisfluencyTypeCharts(analysisResults = it)
                 }
+            }
+                ?:
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                CircularProgressIndicator()
             }
         }
     }

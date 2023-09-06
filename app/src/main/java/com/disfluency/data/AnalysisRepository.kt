@@ -3,8 +3,10 @@ package com.disfluency.data
 import android.util.Log
 import com.disfluency.api.DisfluencyAPI
 import com.disfluency.api.dto.PracticeDTO
+import com.disfluency.api.error.AnalysisNotFoundException
 import com.disfluency.api.error.PatientNotFoundException
 import com.disfluency.model.analysis.Analysis
+import com.disfluency.model.analysis.AnalysisResults
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
@@ -24,6 +26,18 @@ class AnalysisRepository {
             return sessionList.map { it.asSession() }
         } catch (e: HttpException) {
             throw PatientNotFoundException(patientId)
+        }
+    }
+
+    suspend fun getAnalysisResultsById(sessionId: String): AnalysisResults {
+        Log.i("analysis", "Retrieving results of analysis: $sessionId")
+        try {
+            val results = DisfluencyAPI.analysisService.getResultsBySessionId(sessionId)
+            Log.i("analysis", "Successfully retrieved results of analysis: $sessionId"
+            )
+            return results.asAnalysisResults()
+        } catch (e: HttpException) {
+            throw AnalysisNotFoundException(sessionId)
         }
     }
 

@@ -51,7 +51,7 @@ object MockedData {
         avgDisfluenciesPerPhrase = 0.79f,
         disfluencyStats = listOf(
             DisfluencyTypeStats(
-                type = DisfluencyType.RS,
+                type = DisfluencyType.Rs,
                 count = 7,
                 percentageInTotalWords = 0.04f,
                 percentageInTotalDisfluencies = 0.31f
