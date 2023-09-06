@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object DisfluencyAPI {
     private val retrofit: Retrofit by lazy {
@@ -29,6 +30,9 @@ object DisfluencyAPI {
         return OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor())
             .addInterceptor(httpLoggingInterceptor)
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(30, TimeUnit.MINUTES)
+            .writeTimeout(15, TimeUnit.MINUTES)
             .build()
     }
 

@@ -1,6 +1,8 @@
 package com.disfluency.navigation.graph
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -13,6 +15,10 @@ import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.screens.therapist.exercises.MyExercisesScreen
 import com.disfluency.screens.therapist.*
+import com.disfluency.screens.therapist.analysis.AnalysisResultsScreen
+import com.disfluency.screens.therapist.analysis.AnalysisTranscriptionScreen
+import com.disfluency.screens.therapist.analysis.PatientSessionsScreen
+import com.disfluency.screens.therapist.analysis.RecordSessionScreen
 import com.disfluency.screens.therapist.exercises.ExerciseAssignmentDetailScreen
 import com.disfluency.screens.therapist.exercises.PatientExerciseAssignmentsScreen
 import com.disfluency.screens.therapist.forms.MyFormsScreen
@@ -20,14 +26,15 @@ import com.disfluency.screens.therapist.patients.MyPatientsScreen
 import com.disfluency.screens.therapist.patients.NewPatientScreen
 import com.disfluency.screens.therapist.patients.PatientDetailScreen
 import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
-import com.disfluency.viewmodel.ExercisesViewModel
-import com.disfluency.viewmodel.LoggedUserViewModel
-import com.disfluency.viewmodel.PatientsViewModel
+import com.disfluency.screens.therapist.success.SessionRecordConfirmationScreen
+import com.disfluency.viewmodel.*
 
 @Composable
 fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUserViewModel){
     val patientsViewModel: PatientsViewModel = viewModel()
     val exercisesViewModel: ExercisesViewModel = viewModel()
+    val analysisViewModel: AnalysisViewModel = viewModel()
+    val recordViewModel = RecordSessionViewModel(LocalContext.current, LocalLifecycleOwner.current)
 
     val navHostController = rememberNavController()
 
@@ -71,13 +78,57 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                 ImageMessagePage(imageResource = R.drawable.form_fill, text = stringResource(id = R.string.patient_has_no_assigned_forms))
             }
         }
-        composable(Route.Therapist.PatientSessions.path, listOf(navArgument("id"){})){ backStackEntry ->
-            backStackEntry.arguments?.getString("id")?.let {
-                ImageMessagePage(imageResource = R.drawable.record_action, text = stringResource(id = R.string.patient_has_no_recorded_sessions))
-            }
-        }
         composable(Route.Therapist.ConfirmationNewPatient.path){
             NewPatientConfirmationScreen(navController = navHostController, viewModel = patientsViewModel)
         }
+        composable(Route.Therapist.PatientSessions.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                PatientSessionsScreen(
+                    patientId = it,
+                    navController = navHostController,
+                    viewModel = analysisViewModel
+                )
+            }
+        }
+
+        composable(Route.Therapist.NewSession.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                RecordSessionScreen(
+                    patientId = it,
+                    navController = navHostController,
+                    viewModel = analysisViewModel,
+                    recordViewModel = recordViewModel
+                )
+            }
+        }
+
+        composable(Route.Therapist.NewSessionConfirmation.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                SessionRecordConfirmationScreen(patientId = it, navController = navHostController)
+            }
+        }
+
+        composable(Route.Therapist.AnalysisTranscription.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                AnalysisTranscriptionScreen(
+                    analysisId = it,
+                    navController = navHostController,
+                    viewModel = analysisViewModel
+                )
+            }
+        }
+        composable(Route.Therapist.AnalysisResults.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                AnalysisResultsScreen(
+                    analysisId = it,
+                    navController = navHostController,
+                    viewModel = analysisViewModel
+                )
+            }
+        }
+
+        //TODO:  en algun lado el viewModel de analysis tiene que estar mirando al de record,
+        // para saber cuando se termino de hacer el analisis y actualizar
+
     }
 }

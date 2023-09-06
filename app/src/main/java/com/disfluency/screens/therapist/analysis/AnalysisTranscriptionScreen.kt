@@ -33,6 +33,7 @@ import com.disfluency.components.audio.CompactAudioPlayer
 import com.disfluency.components.scroll.verticalFadingEdge
 import com.disfluency.data.mock.MockedData
 import com.disfluency.model.analysis.*
+import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDateAsMonthInWords
@@ -58,9 +59,9 @@ private fun AnalysisScreenPreview(){
 fun AnalysisTranscriptionScreen(
     analysisId: String,
     navController: NavHostController,
-    analysisViewModel: AnalysisViewModel
+    viewModel: AnalysisViewModel
 ){
-    val analysis = analysisViewModel.getAnalysis(analysisId)
+    val analysis = viewModel.getAnalysis(analysisId)
     val disfluencyAudioPlayer = DisfluencyAudioUrlPlayer(LocalContext.current)
 
     BackNavigationScaffold(
@@ -94,7 +95,11 @@ fun AnalysisTranscriptionScreen(
 
 @Composable
 private fun ViewResultsAction(analysis: Analysis, navController: NavHostController){
-    IconButton(onClick = { /*TODO agregar ruta y hacer el navigate*/ }) {
+    IconButton(
+        onClick = {
+            navController.navigate(Route.Therapist.AnalysisResults.routeTo(analysis.id))
+        }
+    ) {
         Icon(imageVector = Icons.Outlined.QueryStats, contentDescription = null)
     }
 }
@@ -205,7 +210,7 @@ private fun Transcription(analysis: Analysis, audioPlayer: DisfluencyAudioPlayer
                 .padding(16.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            analysis.analysedWords.forEach { word ->
+            analysis.analysedWords?.forEach { word ->
                 Column(
                     modifier = Modifier.wrapContentWidth()
                 ) {

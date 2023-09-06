@@ -1,6 +1,7 @@
 package com.disfluency.data.mock
 
 import com.disfluency.model.analysis.*
+import java.time.LocalDate
 
 /**
  * Object with mocked model examples used for preview testing purposes
@@ -10,6 +11,7 @@ object MockedData {
     val analysis = Analysis(
         "2",
         "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3",
+        LocalDate.now(),
         listOf(
             AnalysedWord("La",1220,1280),
             AnalysedWord("fiabilidad",1400,2140, listOf(DisfluencyType.V)),
@@ -17,7 +19,7 @@ object MockedData {
             AnalysedWord("la",2600,2660),
             AnalysedWord("capacidad",2760,3420),
             AnalysedWord("de",3580,3660),
-            AnalysedWord("un",3740,3840, listOf(DisfluencyType.Rf)),
+            AnalysedWord("un",3740,3840, listOf(DisfluencyType.RF)),
             AnalysedWord("sistema",3960,4460),
             AnalysedWord("o",4900,4920),
             AnalysedWord("componente",5020,5680, (listOf(DisfluencyType.M, DisfluencyType.I))),
@@ -30,11 +32,11 @@ object MockedData {
             AnalysedWord("se",11220,11280, listOf(DisfluencyType.V)),
             AnalysedWord("usa",11420,11640),
             AnalysedWord("bajo",11980,12220),
-            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.Rf))),
+            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.RF))),
             AnalysedWord("condiciones",12640,13300, listOf(DisfluencyType.V)),
             AnalysedWord("y",13580,13640),
             AnalysedWord("periodo",13740,14160),
-            AnalysedWord("de",14240,14280, listOf(DisfluencyType.Rp)),
+            AnalysedWord("de",14240,14280, listOf(DisfluencyType.RP)),
             AnalysedWord("tiempo",14380,14700),
             AnalysedWord("determinados.",14900,16660)
         )
@@ -49,7 +51,7 @@ object MockedData {
         avgDisfluenciesPerPhrase = 0.79f,
         disfluencyStats = listOf(
             DisfluencyTypeStats(
-                type = DisfluencyType.Rs,
+                type = DisfluencyType.RS,
                 count = 7,
                 percentageInTotalWords = 0.04f,
                 percentageInTotalDisfluencies = 0.31f
@@ -67,19 +69,19 @@ object MockedData {
                 percentageInTotalDisfluencies = 0.39f
             ),
             DisfluencyTypeStats(
-                type = DisfluencyType.Rsi,
+                type = DisfluencyType.RSI,
                 count = 4,
                 percentageInTotalWords = 0.035f,
                 percentageInTotalDisfluencies = 0.18f
             ),
             DisfluencyTypeStats(
-                type = DisfluencyType.Rp,
+                type = DisfluencyType.RP,
                 count = 1,
                 percentageInTotalWords = 0.01f,
                 percentageInTotalDisfluencies = 0.05f
             ),
             DisfluencyTypeStats(
-                type = DisfluencyType.Rf,
+                type = DisfluencyType.RF,
                 count = 1,
                 percentageInTotalWords = 0.01f,
                 percentageInTotalDisfluencies = 0.05f
@@ -96,6 +98,7 @@ object MockedData {
     val longAnalysis = Analysis(
         "1",
         "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3",
+        LocalDate.now(),
         listOf(
             AnalysedWord("La",1220,1280),
             AnalysedWord("fiabilidad",1400,2140, listOf(DisfluencyType.V)),
@@ -103,7 +106,7 @@ object MockedData {
             AnalysedWord("la",2600,2660),
             AnalysedWord("capacidad",2760,3420),
             AnalysedWord("de",3580,3660),
-            AnalysedWord("un",3740,3840, listOf(DisfluencyType.Rf)),
+            AnalysedWord("un",3740,3840, listOf(DisfluencyType.RF)),
             AnalysedWord("sistema",3960,4460),
             AnalysedWord("o",4900,4920),
             AnalysedWord("componente",5020,5680, (listOf(DisfluencyType.M, DisfluencyType.I))),
@@ -116,11 +119,11 @@ object MockedData {
             AnalysedWord("se",11220,11280, listOf(DisfluencyType.V)),
             AnalysedWord("usa",11420,11640),
             AnalysedWord("bajo",11980,12220),
-            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.Rf))),
+            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.RF))),
             AnalysedWord("condiciones",12640,13300, listOf(DisfluencyType.V)),
             AnalysedWord("y",13580,13640),
             AnalysedWord("periodo",13740,14160),
-            AnalysedWord("de",14240,14280, listOf(DisfluencyType.Rp)),
+            AnalysedWord("de",14240,14280, listOf(DisfluencyType.RP)),
             AnalysedWord("tiempo",14380,14700),
             AnalysedWord("determinados",14900,16660),
             AnalysedWord("fiabilidad",1400,2140, listOf(DisfluencyType.V)),
@@ -128,7 +131,7 @@ object MockedData {
             AnalysedWord("la",2600,2660),
             AnalysedWord("capacidad",2760,3420),
             AnalysedWord("de",3580,3660),
-            AnalysedWord("un",3740,3840, listOf(DisfluencyType.Rf)),
+            AnalysedWord("un",3740,3840, listOf(DisfluencyType.RF)),
             AnalysedWord("sistema",3960,4460),
             AnalysedWord("o",4900,4920),
             AnalysedWord("componente",5020,5680, (listOf(DisfluencyType.M, DisfluencyType.I))),
@@ -141,11 +144,11 @@ object MockedData {
             AnalysedWord("se",11220,11280, listOf(DisfluencyType.V)),
             AnalysedWord("usa",11420,11640),
             AnalysedWord("bajo",11980,12220),
-            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.Rf))),
+            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.RF))),
             AnalysedWord("condiciones",12640,13300, listOf(DisfluencyType.V)),
             AnalysedWord("y",13580,13640),
             AnalysedWord("periodo",13740,14160),
-            AnalysedWord("de",14240,14280, listOf(DisfluencyType.Rp)),
+            AnalysedWord("de",14240,14280, listOf(DisfluencyType.RP)),
             AnalysedWord("tiempo",14380,14700),
             AnalysedWord("determinados",14900,16660),
             AnalysedWord("fiabilidad",1400,2140, listOf(DisfluencyType.V)),
@@ -153,7 +156,7 @@ object MockedData {
             AnalysedWord("la",2600,2660),
             AnalysedWord("capacidad",2760,3420),
             AnalysedWord("de",3580,3660),
-            AnalysedWord("un",3740,3840, listOf(DisfluencyType.Rf)),
+            AnalysedWord("un",3740,3840, listOf(DisfluencyType.RF)),
             AnalysedWord("sistema",3960,4460),
             AnalysedWord("o",4900,4920),
             AnalysedWord("componente",5020,5680, (listOf(DisfluencyType.M, DisfluencyType.I))),
@@ -166,11 +169,11 @@ object MockedData {
             AnalysedWord("se",11220,11280, listOf(DisfluencyType.V)),
             AnalysedWord("usa",11420,11640),
             AnalysedWord("bajo",11980,12220),
-            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.Rf))),
+            AnalysedWord("unas",12340,12520, (listOf(DisfluencyType.V, DisfluencyType.RF))),
             AnalysedWord("condiciones",12640,13300, listOf(DisfluencyType.V)),
             AnalysedWord("y",13580,13640),
             AnalysedWord("periodo",13740,14160),
-            AnalysedWord("de",14240,14280, listOf(DisfluencyType.Rp)),
+            AnalysedWord("de",14240,14280, listOf(DisfluencyType.RP)),
             AnalysedWord("tiempo",14380,14700),
             AnalysedWord("determinados.",14900,16660)
         ),
