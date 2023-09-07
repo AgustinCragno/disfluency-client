@@ -10,7 +10,6 @@ enum class DisfluencyType(
     val descriptionPt1: Int,
     val descriptionPt2: Int
 ) {
-    //TODO: terminar de agregar el resto de disfluencias!
     V("vacilacion", Color(1.0f, 0.29f, 0.8f, 1.0f), R.string.v_description_1, R.string.v_description_2),
     I("interjeccion", Color(0.016f, 0.592f, 0.667f, 1.0f), R.string.i_description_1, R.string.i_description_2),
     M("modificacion", Color(1.0f, 0.757f, 0.035f, 1.0f), R.string.m_description_1, R.string.m_description_2),
