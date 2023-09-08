@@ -56,9 +56,6 @@ class AnalysisRepository {
     suspend fun createSession(patientId: String, sessionUrl: String): Analysis {
         Log.i("analysis", "Creating session for patient: $patientId")
         try {
-            /**
-             * TODO: implement
-             */
             val result = DisfluencyAPI.patientService.createSession(patientId, PracticeDTO(sessionUrl))
             Log.i("analysis", "Successfully created session of patient: $patientId")
             return result.asSession()
