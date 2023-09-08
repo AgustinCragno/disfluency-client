@@ -54,7 +54,7 @@ fun DisfluencyLaunchScreen(
     if (viewModel.loginState == LoginState.AUTHENTICATED && viewModel.firstLoadDone.value){
         LaunchedEffect(Unit) {
             launch {
-                delay((ON_AUTH_EXIT_TIME * 0.5).toLong())
+                delay(ON_AUTH_EXIT_TIME.toLong())
                 viewModel.firstLoadDone.value = true
                 navController.navigate(
                     when (viewModel.getLoggedUser()) {

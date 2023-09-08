@@ -11,7 +11,6 @@ import kotlin.math.roundToInt
 private const val MIN_AMPLITUDE_VALUE = 0F
 //const val MAX_AMPLITUDE_VALUE = 32762F
 const val MAX_AMPLITUDE_VALUE = 9000F
-//TODO: con lo del encoding se desconfiguro este valor, hay que encontrarlo de nuevo
 
 private const val MAX_AMPLITUDE_VALUE_INT = 11
 
