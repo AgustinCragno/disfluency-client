@@ -27,7 +27,7 @@ class ExerciseRepository {
     suspend fun saveExercisePractice(assignmentId: String, audio: File): ResponseBody {
         val url = DisfluencyAPI.exerciseService.createPracticeInAssignment(assignmentId).recordingUrl
         Log . i ("S3--------", url)
-        return DisfluencyAPI.exerciseService.uploadAudioToS3(
+        return DisfluencyAPI.audioUploadString.uploadAudioToS3(
             url,
             audio.asRequestBody("audio/mpeg".toMediaTypeOrNull())
         )

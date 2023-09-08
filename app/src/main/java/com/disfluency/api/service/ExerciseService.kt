@@ -14,9 +14,4 @@ sealed interface ExerciseService{
 
     @POST("exercisesAssignments/{exerciseAssignmentId}/practices")
     suspend fun createPracticeInAssignment(@Path("exerciseAssignmentId") exerciseAssignmentId: String): PracticeDTO
-
-    @Headers("Content-Type: audio/mpeg", "$NOT_SEND_AUTH_HEADER: true")
-    @PUT
-    suspend fun uploadAudioToS3(@Url awsPreSignedUrl: String, @Body file: RequestBody): ResponseBody
-    //TODO: mover fuera de exercise service
 }

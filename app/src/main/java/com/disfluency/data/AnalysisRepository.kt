@@ -47,7 +47,7 @@ class AnalysisRepository {
 
     suspend fun saveSession(url: String, audio: File): ResponseBody {
         Log . i ("S3--------", url)
-        return DisfluencyAPI.exerciseService.uploadAudioToS3(
+        return DisfluencyAPI.audioUploadString.uploadAudioToS3(
             url,
             audio.asRequestBody("audio/mpeg".toMediaTypeOrNull())
         )
