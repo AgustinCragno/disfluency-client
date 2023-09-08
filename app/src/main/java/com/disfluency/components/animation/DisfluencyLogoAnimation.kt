@@ -33,7 +33,7 @@ import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.states.LoginState
 import kotlinx.coroutines.delay
 
-private const val ANIMATION_LENGTH = 200L
+private const val ANIMATION_LENGTH = 300L
 private const val ANIMATION_CYCLE_COUNT = 10
 
 @Composable

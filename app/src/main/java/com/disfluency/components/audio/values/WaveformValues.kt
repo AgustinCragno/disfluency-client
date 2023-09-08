@@ -1,4 +1,4 @@
-package com.disfluency.components.audio
+package com.disfluency.components.audio.values
 
 const val WAVEFORM_SPIKE_WIDTH = 6
 const val WAVEFORM_SPIKE_RADIUS = 6

@@ -17,12 +17,11 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.disfluency.audio.record.MAX_AMPLITUDE_VALUE
+import com.disfluency.components.audio.values.*
 
 
 const val MAX_SPIKES = 37
 
-//TODO: tratar de calcular de donde sale el 250
-private const val MIN_AMPLITUDE_THRESHOLD = 250
 
 @Composable
 fun AudioLiveWaveform(
@@ -47,10 +46,7 @@ fun AudioLiveWaveform(
 
                     val x = index * (spikeWidth.toPx() + spikePadding.toPx())
 
-                    val length = (
-                            if (amplitude <= MIN_AMPLITUDE_THRESHOLD) WAVEFORM_SPIKE_MIN_DRAWABLE_HEIGHT
-                        else (spikeHeight.value * (amplitude / MAX_AMPLITUDE_VALUE)).coerceAtMost(spikeHeight.value)
-                    ).dp.toPx()
+                    val length = calculateLength(amplitude, spikeHeight).toPx()
 
                     val y = size.center.y - length/2
 
@@ -72,4 +68,9 @@ fun AudioLiveWaveform(
             }
         }
     )
+}
+
+private fun calculateLength(amplitude: Float, maxSpikeHeight: Dp): Dp {
+    val amplitudeLength = maxSpikeHeight.value * (amplitude / MAX_AMPLITUDE_VALUE)
+    return amplitudeLength.coerceIn(WAVEFORM_SPIKE_MIN_DRAWABLE_HEIGHT, maxSpikeHeight.value).dp
 }
