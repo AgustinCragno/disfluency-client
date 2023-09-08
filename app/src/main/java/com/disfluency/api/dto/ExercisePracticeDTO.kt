@@ -1,6 +1,6 @@
 package com.disfluency.api.dto
 
-import com.disfluency.model.ExercisePractice
+import com.disfluency.model.exercise.ExercisePractice
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize

@@ -1,6 +1,6 @@
 package com.disfluency.api.dto
 
-import com.disfluency.model.Exercise
+import com.disfluency.model.exercise.Exercise
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ExerciseDTO(

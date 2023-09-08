@@ -8,14 +8,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun IconLabeled(
     icon: ImageVector,
     label: String,
     iconColor: Color = MaterialTheme.colorScheme.primary,
-    labelColor: Color = Color.Black
+    labelColor: Color = Color.Black,
+    labelSize: TextUnit = 12.sp
 ){
     Row {
         Icon(
@@ -27,6 +30,7 @@ fun IconLabeled(
         Text(
             text = label,
             style = MaterialTheme.typography.labelMedium,
+            fontSize = labelSize,
             color = labelColor,
             modifier = Modifier
                 .padding(start = 4.dp)

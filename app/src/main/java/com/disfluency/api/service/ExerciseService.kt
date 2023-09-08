@@ -18,4 +18,5 @@ sealed interface ExerciseService{
     @Headers("Content-Type: audio/mpeg", "$NOT_SEND_AUTH_HEADER: true")
     @PUT
     suspend fun uploadAudioToS3(@Url awsPreSignedUrl: String, @Body file: RequestBody): ResponseBody
+    //TODO: mover fuera de exercise service
 }

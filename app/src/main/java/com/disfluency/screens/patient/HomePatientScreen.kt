@@ -11,7 +11,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.disfluency.components.bar.HomeTopAppBar
-import com.disfluency.model.Patient
+import com.disfluency.model.user.Patient
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.structure.BottomNavigationScaffold
 import com.disfluency.viewmodel.LoggedUserViewModel
@@ -32,7 +32,7 @@ fun HomePatientScreen(patient: Patient, navController: NavHostController, viewMo
 
             Box(Modifier.fillMaxSize()) {
                 Text(
-                    text = "user: ${patient.id}",
+                    text = "Bienvenido",
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray,
                     modifier = Modifier.align(Alignment.Center),

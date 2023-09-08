@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.disfluency.api.error.PatientCreationException
 import com.disfluency.api.error.PatientNotFoundException
 import com.disfluency.data.PatientRepository
-import com.disfluency.model.Patient
+import com.disfluency.model.user.Patient
 import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.launch
 

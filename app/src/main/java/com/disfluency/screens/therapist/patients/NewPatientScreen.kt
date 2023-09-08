@@ -29,8 +29,8 @@ import com.disfluency.components.inputs.date.WeeklyTurnPicker
 import com.disfluency.components.inputs.text.*
 import com.disfluency.components.stepper.PageStepper
 import com.disfluency.components.stepper.StepScreen
-import com.disfluency.model.Patient
-import com.disfluency.model.Therapist
+import com.disfluency.model.user.Patient
+import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.utilities.avatar.AvatarManager

@@ -67,6 +67,8 @@ private fun DisfluencyAnimatedLogo(viewModel: LoggedUserViewModel){
 @OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun DisfluencyLogo(atEnd: Boolean = true){
+    //TODO: en algun momento hacer la prueba de esto pero sin el animated vector
+    // se puede poner la imagen sin los puntos y dibujarle en un canvas los puntos que quiera
     val image = AnimatedImageVector.animatedVectorResource(R.drawable.disfluency_logo_animation)
 
     Image(

@@ -42,7 +42,7 @@ class RecordExerciseViewModel(context: Context, private val lifecycleOwner: Life
             .build()
 
         Log.i("RecordExerciseViewModel", "Preparing exercise upload worker")
-        workManager.enqueueUniqueWork(ExerciseUploadWorker.WORK_NAME, ExistingWorkPolicy.APPEND, workRequest)
+        workManager.enqueueUniqueWork(ExerciseUploadWorker.WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
         Log.i("RecordExerciseViewModel", "Enqueued exercise upload worker")
 
         workManager.getWorkInfoByIdLiveData(workRequest.id).observe(lifecycleOwner) { workInfo ->

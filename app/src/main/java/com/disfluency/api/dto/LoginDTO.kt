@@ -1,6 +1,5 @@
 package com.disfluency.api.dto
 
-import com.disfluency.model.UserRole
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class LoginDTO(

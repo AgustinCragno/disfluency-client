@@ -1,10 +1,10 @@
-package com.disfluency.model
+package com.disfluency.model.user
 
+import com.disfluency.model.exercise.ExerciseAssignment
 import com.disfluency.utilities.avatar.AvatarManager
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-import kotlin.random.Random
 
 data class Patient(
     val id: String,

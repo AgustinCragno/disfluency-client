@@ -1,6 +1,6 @@
 package com.disfluency.api.dto
 
-import com.disfluency.model.UserRole
+import com.disfluency.model.user.UserRole
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 

@@ -22,3 +22,11 @@ fun formatLocalDateAsWords(localDate: LocalDate, localeId: String): String{
 
     return "$dayOfWeek ${localDate.dayOfMonth} de $month, ${localDate.year}"
 }
+
+fun formatLocalDateAsMonthInWords(localDate: LocalDate, localeId: String): String{
+    val locale = Locale(localeId)
+
+    val month = localDate.month.getDisplayName(TextStyle.FULL, locale)
+
+    return "${localDate.dayOfMonth} de $month, ${localDate.year}"
+}

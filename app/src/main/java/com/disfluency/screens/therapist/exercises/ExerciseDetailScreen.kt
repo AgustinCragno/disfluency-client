@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import com.disfluency.audio.playback.DisfluencyAudioUrlPlayer
 import com.disfluency.components.audio.AudioPlayer
-import com.disfluency.model.Exercise
+import com.disfluency.model.exercise.Exercise
 
 @Composable
 fun ExerciseDetailScreen(exercise: Exercise){

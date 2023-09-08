@@ -5,7 +5,7 @@ import com.disfluency.api.DisfluencyAPI
 import com.disfluency.api.dto.PatientDTO
 import com.disfluency.api.error.PatientCreationException
 import com.disfluency.api.error.TherapistNotFoundException
-import com.disfluency.model.Patient
+import com.disfluency.model.user.Patient
 import retrofit2.HttpException
 
 class PatientRepository {

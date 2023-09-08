@@ -31,9 +31,9 @@ import com.disfluency.components.audio.AudioMediaType
 import com.disfluency.components.audio.AudioPlayer
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.icon.ImageMessagePage
-import com.disfluency.model.Exercise
-import com.disfluency.model.ExerciseAssignment
-import com.disfluency.model.ExercisePractice
+import com.disfluency.model.exercise.Exercise
+import com.disfluency.model.exercise.ExerciseAssignment
+import com.disfluency.model.exercise.ExercisePractice
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.therapist.exercises.ExerciseDetailScreen

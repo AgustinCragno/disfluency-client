@@ -1,7 +1,7 @@
 package com.disfluency.api.dto
 
-import com.disfluency.model.Therapist
-import com.disfluency.model.UserRole
+import com.disfluency.model.user.Therapist
+import com.disfluency.model.user.UserRole
 import com.fasterxml.jackson.annotation.JsonProperty
 
 class TherapistDTO(

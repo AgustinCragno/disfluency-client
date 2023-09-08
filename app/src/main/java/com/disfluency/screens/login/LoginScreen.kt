@@ -23,8 +23,8 @@ import com.disfluency.components.animation.DisfluencyLogo
 import com.disfluency.components.inputs.text.EmailInput
 import com.disfluency.components.inputs.text.NoValidation
 import com.disfluency.components.inputs.text.PasswordInput
-import com.disfluency.model.Patient
-import com.disfluency.model.Therapist
+import com.disfluency.model.user.Patient
+import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.viewmodel.LoggedUserViewModel

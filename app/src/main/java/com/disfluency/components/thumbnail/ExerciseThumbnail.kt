@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.disfluency.model.Exercise
+import com.disfluency.model.exercise.Exercise
 import com.disfluency.utilities.color.stringToRGB
 
 @Composable

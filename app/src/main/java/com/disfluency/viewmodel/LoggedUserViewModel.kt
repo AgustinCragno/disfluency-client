@@ -9,8 +9,7 @@ import androidx.navigation.NavHostController
 import com.disfluency.api.error.ExpiredTokenException
 import com.disfluency.api.error.UserNotFoundException
 import com.disfluency.data.UserRepository
-import com.disfluency.model.User
-import com.disfluency.model.UserRole
+import com.disfluency.model.user.UserRole
 import com.disfluency.navigation.routing.Route
 import com.disfluency.viewmodel.states.LoginState
 import kotlinx.coroutines.launch

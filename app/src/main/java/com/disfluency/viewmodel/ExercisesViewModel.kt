@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.disfluency.api.error.ExerciseAssignmentNotFoundException
 import com.disfluency.data.ExerciseRepository
-import com.disfluency.model.ExerciseAssignment
+import com.disfluency.model.exercise.ExerciseAssignment
 import kotlinx.coroutines.launch
 
 class ExercisesViewModel : ViewModel() {

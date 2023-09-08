@@ -1,4 +1,4 @@
-package com.disfluency.model
+package com.disfluency.model.exercise
 
 data class Exercise(
     val id: String,

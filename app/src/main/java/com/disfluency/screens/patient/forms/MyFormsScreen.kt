@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.bar.SearchBar
 import com.disfluency.components.icon.ImageMessagePage
-import com.disfluency.model.Patient
+import com.disfluency.model.user.Patient
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.structure.BottomNavigationScaffold
 

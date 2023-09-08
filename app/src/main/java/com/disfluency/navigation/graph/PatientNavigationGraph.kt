@@ -7,7 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.disfluency.model.Patient
+import com.disfluency.model.user.Patient
 import com.disfluency.navigation.routing.Route
 import com.disfluency.screens.patient.*
 import com.disfluency.screens.patient.exercises.ExerciseAssignmentDetailScreen
