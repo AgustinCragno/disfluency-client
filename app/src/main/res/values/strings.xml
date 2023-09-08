@@ -1,4 +1,6 @@
 <resources>
+<!--    TODO: acentos en los textos-->
+<!--    TODO: buscar en el codigo todo texto suelto y pasarlo a string-->
     <string name="app_name">Disfluency</string>
     <string name="login">Iniciar Sesion</string>
     <string name="username">Nombre de Usuario</string>
@@ -78,7 +80,7 @@
     <string name="disfluency_slogan">Facilitá el tratamiento de la disfluencia</string>
     <string name="back">Atras</string>
     <string name="agree_and_continue">Aceptar y Continuar</string>
-    <string name="invalid_password">Contraseña invalida</string>
+    <string name="invalid_password">La contraseña debe tener al menos 8 caracteres, y contener al menos un numero y una mayuscula</string>
     <string name="repeat_password">Repetir Contraseña</string>
     <string name="password_doesnt_match">La contraseña ingresada no coincide</string>
     <string name="terms_and_conditions">Terminos y Condiciones</string>

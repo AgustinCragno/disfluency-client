@@ -106,7 +106,7 @@ private fun SignUpForm(
             enabled = true,
             validation = EqualToValidation(viewModel.password.value),
             validationFailMessage = R.string.password_doesnt_match,
-            onSubmit = onSubmit
+            onSubmit = { if (submitEnabled) onSubmit() }
         )
 
         Button(

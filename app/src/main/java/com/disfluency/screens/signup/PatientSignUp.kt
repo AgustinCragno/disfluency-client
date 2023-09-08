@@ -230,7 +230,7 @@ private fun PasswordFormPage(viewModel: PatientSignUpViewModel){
         enabled = true,
         validation = EqualToValidation(viewModel.password.value),
         validationFailMessage = R.string.password_doesnt_match,
-        onSubmit = { viewModel.signUp() }
+        onSubmit = { if(submitEnabled) viewModel.signUp() }
     )
 
     Button(
