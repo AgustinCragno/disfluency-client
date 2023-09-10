@@ -12,6 +12,6 @@ class TherapistDTO(
 ) : RoleDTO {
 
     override fun toRole(): UserRole {
-        return Therapist(id)
+        return Therapist(id, emptyList())
     }
 }

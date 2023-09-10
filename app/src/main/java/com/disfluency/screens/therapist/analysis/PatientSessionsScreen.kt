@@ -1,31 +1,27 @@
 package com.disfluency.screens.therapist.analysis
 
-import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HeadsetMic
 import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.MicExternalOff
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.R
 import com.disfluency.components.icon.ImageMessagePage
+import com.disfluency.components.list.item.ListItem
 import com.disfluency.data.mock.MockedData
 import com.disfluency.model.analysis.Analysis
 import com.disfluency.navigation.routing.Route
@@ -121,11 +117,16 @@ fun PatientSessionsScreen(
 @Composable
 private fun SessionList(list: List<Analysis>, navController: NavHostController, recordViewModel: RecordSessionViewModel){
     Column(
-        Modifier.fillMaxSize()
+        Modifier.fillMaxSize().padding(horizontal = 16.dp)
     ) {
         if (list.isNotEmpty() || recordViewModel.uploadConfirmationState.value != ConfirmationState.DONE){
-            list.forEachIndexed { index, it ->
-                SessionListItem(analysis = it, index = index + 1, navController = navController)
+            LazyColumn(
+                contentPadding = PaddingValues(top = 16.dp, bottom = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ){
+                itemsIndexed(list){ index, it ->
+                    SessionListItem(analysis = it, index = index + 1, navController = navController)
+                }
             }
         } else {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
@@ -144,76 +145,43 @@ private fun SessionList(list: List<Analysis>, navController: NavHostController, 
 
 @Composable
 private fun SessionListItem(analysis: Analysis, index: Int, navController: NavHostController){
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp)
-            .clickable {
-                navController.navigate(Route.Therapist.AnalysisTranscription.routeTo(analysis.id))
-            },
-        colors = CardDefaults.cardColors(Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        ListItem(
-            modifier = Modifier.height(56.dp),
-            headlineContent = {
-                Text(
-                    text = "Sesion #$index",
-                    fontWeight = FontWeight.SemiBold
-                )
-            },
-            trailingContent = {
-                Text(
-                    text = formatLocalDate(analysis.date),
-                    fontSize = 13.sp
-                )
-            },
-            leadingContent = {
-                 Icon(
-                     imageVector = Icons.Default.HeadsetMic,
-                     contentDescription = null,
-                     tint = MaterialTheme.colorScheme.primary
-                 )
-            },
-            colors = ListItemDefaults.colors(Color.Transparent)
-        )
-    }
+    ListItem(
+        title = "Sesion #$index",
+        leadingContent = {
+            Icon(
+                imageVector = Icons.Default.HeadsetMic,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        },
+        trailingContent = {
+            Text(
+                text = formatLocalDate(analysis.date),
+                fontSize = 13.sp
+            )
+        },
+        onClick = {
+            navController.navigate(
+                Route.Therapist.AnalysisTranscription.routeTo(analysis.id)
+            )
+        }
+    )
 }
 
 @Composable
 private fun PendingSessionListItem(index: Int){
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp),
-        colors = CardDefaults.cardColors(Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        ListItem(
-            modifier = Modifier.height(56.dp),
-            headlineContent = {
-                Text(
-                    text = "Sesion #$index",
-                    fontWeight = FontWeight.SemiBold
-                )
-            },
-            supportingContent = {
-                Text(
-                    text = "en proceso de analisis",
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontSize = 14.sp
-                )
-            },
-            trailingContent = {
-                Text(
-                    text = formatLocalDate(LocalDate.now()),
-                    fontSize = 13.sp
-                )
-            },
-            leadingContent = {
-                CircularProgressIndicator(modifier = Modifier.size(24.dp))
-            },
-            colors = ListItemDefaults.colors(Color.Transparent)
-        )
-    }
+    ListItem(
+        title = "Sesion #$index",
+        subtitle = "en proceso de analisis",
+        subtitleColor = MaterialTheme.colorScheme.secondary,
+        leadingContent = {
+            CircularProgressIndicator(modifier = Modifier.size(24.dp))
+        },
+        trailingContent = {
+            Text(
+                text = formatLocalDate(LocalDate.now()),
+                fontSize = 13.sp
+            )
+        }
+    )
 }
