@@ -34,6 +34,8 @@ import kotlinx.coroutines.launch
 val LOGO_OFFSET = 120.dp
 const val ON_AUTH_EXIT_TIME = 750
 
+//TODO: cuando entra del logout, la animacion la hace desde la esquina?
+
 @Composable
 fun DisfluencyLaunchScreen(
     navController: NavController,

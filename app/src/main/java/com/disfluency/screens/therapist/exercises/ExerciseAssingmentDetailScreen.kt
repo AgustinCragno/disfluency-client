@@ -32,7 +32,7 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues).verticalScroll(rememberScrollState())) {
             assignment.value?.let {
-                ExerciseDetailScreen(exercise = it.exercise)
+                ExerciseDetailPanel(exercise = it.exercise)
 
                 ExercisePracticeList(
                     assignment = it,

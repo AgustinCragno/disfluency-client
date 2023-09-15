@@ -21,6 +21,7 @@ fun AnimatedDialog(
     dismissAction: () -> Unit,
     content: @Composable (() -> Unit) -> Unit
 ){
+    //TODO: arreglar que cuando se cierra se va para una esquina
     val coroutineScope = rememberCoroutineScope()
     val animateVisibility = remember { mutableStateOf(false) }
 

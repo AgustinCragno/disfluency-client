@@ -7,15 +7,4 @@ data class Exercise(
     val phrase: String? = null,
     val sampleRecordingUrl: String
 ) {
-    fun fullName(): String{
-        return "$title $instruction $phrase"
-    }
-
-    fun getFullInstructions(): String{
-        return if (phrase.isNullOrBlank()){
-            instruction
-        }else{
-            "$instruction: $phrase"
-        }
-    }
 }

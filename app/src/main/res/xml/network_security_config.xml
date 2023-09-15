@@ -3,6 +3,6 @@
 <!--    <base-config cleartextTrafficPermitted="true" />-->
     <domain-config cleartextTrafficPermitted="true">
         <!--TODO: read from property file-->
-        <domain includeSubdomains="true">192.168.0.22</domain>
+        <domain includeSubdomains="true">192.168.0.12</domain>
     </domain-config>
 </network-security-config>
