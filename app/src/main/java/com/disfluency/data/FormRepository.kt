@@ -1,5 +1,6 @@
 package com.disfluency.data
 
+import com.disfluency.api.dto.FormEntryDTO
 import com.disfluency.model.form.*
 import java.time.LocalDate
 
@@ -17,5 +18,9 @@ class FormRepository {
 
         return listOf(FormAssignment("1", form, LocalDate.now(), listOf(entries, entries2)),
             FormAssignment("10", form2, LocalDate.now(), listOf(entries2)))
+    }
+
+    fun createFormEntry(responses: FormEntryDTO) {
+        println(responses)
     }
 }

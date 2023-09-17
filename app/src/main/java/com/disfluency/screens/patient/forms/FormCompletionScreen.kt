@@ -1,6 +1,7 @@
 package com.disfluency.screens.patient.forms
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Slider
@@ -13,17 +14,18 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.disfluency.api.dto.FormEntryDTO
 import com.disfluency.components.stepper.PageStepper
 import com.disfluency.components.stepper.StepScreen
 import com.disfluency.model.form.FormAssignment
 import com.disfluency.model.form.FormQuestion
+import com.disfluency.navigation.routing.Route
 import com.disfluency.viewmodel.FormsViewModel
-import java.time.LocalTime
+import java.time.LocalDate
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun FormCompletionScreen(assignmentId: String, navController: NavHostController, viewModel: FormsViewModel){
-    println(LocalTime.now())
     val assignment = remember { mutableStateOf<FormAssignment?>(null) }
 
     LaunchedEffect(Unit){
@@ -34,17 +36,29 @@ fun FormCompletionScreen(assignmentId: String, navController: NavHostController,
 
     assignment.value?.let {
         val responses = remember { mutableStateOf<MutableList<QuestionResponse>>(mutableListOf()) }
-        val steps = it.form.questions.map { formQuestion ->
-            val response = QuestionResponse()
-            responses.value.add(response)
-            StepScreen("") {
-                QuestionPageScreen(questionPage = formQuestion, response = response)
-            }
+        val steps = remember { mutableStateOf<MutableList<StepScreen>>(mutableListOf()) }
+        if (steps.value.size < it.form.questions.size) {
+            steps.value.addAll(it.form.questions.map { formQuestion ->
+                val response = QuestionResponse(formQuestion.id)
+                responses.value.add(response)
+                StepScreen("") {
+                    QuestionPageScreen(questionPage = formQuestion, response = response)
+                }
+            })
         }
         Column(Modifier.fillMaxSize()) {
-            PageStepper(steps = steps, onCancel = { /*TODO*/ }) {
-                println(responses.toString())
+            PageStepper(steps = steps.value, onCancel = { navController.popBackStack() }) {
+                val newEntry = FormEntryDTO(responses.value)
+                viewModel.completeFormAssignment(assignmentId, newEntry)
+                submitted = true
             }
+        }
+    }
+
+    if (submitted){
+        LaunchedEffect(Unit){
+            navController.popBackStack()
+            navController.navigate(Route.Patient.MyForms.path)
         }
     }
 }
@@ -70,15 +84,15 @@ fun QuestionPageScreen(questionPage: FormQuestion, response: QuestionResponse) {
         Text(text = questionPage.followUpQuestion)
         TextField(value = response.followUpResponse.value, onValueChange = {
             response.followUpResponse.value = it
-        }, keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next, capitalization = KeyboardCapitalization.Words),)
+        }, keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next))
     }
 }
 
-class QuestionResponse {
+class QuestionResponse(private val idQuestion: String) {
     val scaleResponse: MutableState<Float> = mutableStateOf(1f)
     val followUpResponse: MutableState<String> = mutableStateOf("")
 
     override fun toString(): String {
-        return scaleResponse.value.toString() + " " + followUpResponse.value
+        return scaleResponse.value.toString() + " " + followUpResponse.value + " " + idQuestion
     }
 }
