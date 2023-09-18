@@ -24,7 +24,7 @@ class FormsViewModel : ViewModel() {
         return assignedForms.value?.first { it.id == assignmentId } ?: throw ExerciseAssignmentNotFoundException(assignmentId)
     }
 
-    fun completeFormAssignment(formAssignmentId: String, responses: FormEntryDTO) {
-        formsRepository.createFormEntry(responses)
+    fun completeFormAssignment(formAssignmentId: String, responses: FormEntryDTO) = viewModelScope.launch {
+        formsRepository.createFormEntry(formAssignmentId, responses)
     }
 }
