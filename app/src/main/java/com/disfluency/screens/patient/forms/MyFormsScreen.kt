@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.bar.SearchBar
 import com.disfluency.components.icon.ImageMessagePage
+import com.disfluency.components.list.item.ListItem
 import com.disfluency.model.form.FormAssignment
 import com.disfluency.model.user.Patient
 import com.disfluency.navigation.routing.BottomNavigationItem
@@ -76,32 +77,18 @@ fun FormAssignmentList(assignedForms: List<FormAssignment>, navController: NavHo
 
 @Composable
 fun FormAssignmentListItem(formAssignment: FormAssignment, navController: NavHostController, onClickRoute: Route){
-    val onClick = {
-        navController.navigate(
-            onClickRoute.routeTo(formAssignment.id)
-        )
-    }
-
     ListItem(
-        modifier = Modifier.height(56.dp).clickable { onClick() },
-        headlineContent = {
-            Text(
-                text = formAssignment.form.title,
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
-        supportingContent = {
-            Text(
-                text = formatLocalDate(formAssignment.date),
-                style = MaterialTheme.typography.labelMedium
-            )
-        },
+        title = formAssignment.form.title,
+        subtitle = formatLocalDate(formAssignment.date),
         trailingContent = {
             Text(
                 text = "${formAssignment.completionEntries.count()} " + if (formAssignment.completionEntries.count() != 1) stringResource(R.string.resolutions)
                 else stringResource(R.string.resolution)
+            )
+        },
+        onClick = {
+            navController.navigate(
+                onClickRoute.routeTo(formAssignment.id)
             )
         }
     )
