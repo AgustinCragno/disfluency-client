@@ -1,7 +1,9 @@
 package com.disfluency.screens.therapist.forms
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseInBounce
+import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -230,7 +232,6 @@ private fun CountIndicator(count: Int){
         )
     }
 }
-//TODO: actualizar las bubbles cuando cambio de entry
 
 //TODO: agregar alguna animacion cada vez que se recompone la vista de las respuestas
 
@@ -478,7 +479,7 @@ private fun BubbleLayout(
     )
 
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
     ){
         Column(
             modifier = Modifier
@@ -487,7 +488,8 @@ private fun BubbleLayout(
                 .bubble(
                     bubbleState = bubbleState,
                     color = bubbleType.color
-                ),
+                )
+                .animateContentSize(tween(400, easing = EaseIn)),
         ) {
             content()
         }

@@ -23,7 +23,9 @@ fun WidthWrappedText(
     padding: Dp = 0.dp
 ){
     var fullWidthPercentage by remember { mutableStateOf(1f) }
-    var processed by remember { mutableStateOf(false) }
+    var processed by remember(text) {
+        mutableStateOf(false)
+    }
 
     Text(
         text = text,
