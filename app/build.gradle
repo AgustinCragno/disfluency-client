@@ -95,4 +95,5 @@ dependencies {
     implementation ("androidx.work:work-runtime-ktx:2.7.1")
 
     implementation "io.github.oleksandrbalan:textflow:1.1.1"
+    implementation 'com.github.SmartToolFactory:Compose-Bubble:1.0.0'
 }
