@@ -1,10 +1,7 @@
 package com.disfluency.screens.therapist.forms
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.EaseIn
-import androidx.compose.animation.core.EaseInBounce
-import androidx.compose.animation.core.EaseOut
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -233,8 +230,6 @@ private fun CountIndicator(count: Int){
     }
 }
 
-//TODO: agregar alguna animacion cada vez que se recompone la vista de las respuestas
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DateSelector(
@@ -430,8 +425,21 @@ private fun ScaleIndicator(questionResponse: FormQuestionResponse){
         ){
             val percentage = (questionResponse.scaleResponse.toFloat() - 1F) / 4F
 
+            var state by remember(percentage) {
+                mutableStateOf(false)
+            }
+
+            if (!state){
+                state = true
+            }
+
+            val animatedPercentage by animateFloatAsState(
+                targetValue = if (!state) 0.5f else percentage,
+                animationSpec = tween(400, easing = EaseIn)
+            )
+
             LinearProgressIndicator(
-                progress = percentage,
+                progress = animatedPercentage,
                 color = MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 strokeCap = StrokeCap.Round
@@ -439,7 +447,7 @@ private fun ScaleIndicator(questionResponse: FormQuestionResponse){
 
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(percentage + 0.025f)
+                    .fillMaxWidth(animatedPercentage + 0.025f)
                     .align(Alignment.CenterStart)
             ){
                 val height = 14.dp
