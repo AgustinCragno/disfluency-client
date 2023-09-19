@@ -12,12 +12,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun IconLabeled(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     label: String,
     iconColor: Color = MaterialTheme.colorScheme.primary,
     labelColor: Color = Color.Black
 ){
-    Row {
+    Row(modifier) {
         Icon(
             imageVector = icon,
             contentDescription = null,

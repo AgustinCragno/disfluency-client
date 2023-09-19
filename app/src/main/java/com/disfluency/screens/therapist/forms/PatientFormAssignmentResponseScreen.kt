@@ -1,18 +1,27 @@
 package com.disfluency.screens.therapist.forms
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.animation.*
+import androidx.compose.animation.core.EaseInBounce
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterEnd
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.Alignment.Companion.End
+import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -22,14 +31,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.R
+import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.text.WidthWrappedText
 import com.disfluency.model.form.*
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.color.darken
+import com.disfluency.utilities.color.mix
+import com.disfluency.utilities.format.formatLocalDate
+import com.disfluency.utilities.format.formatLocalDateAsWords
 import com.smarttoolfactory.bubble.ArrowAlignment
 import com.smarttoolfactory.bubble.bubble
 import com.smarttoolfactory.bubble.rememberBubbleState
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 
 @Preview
@@ -114,7 +128,7 @@ fun PatientFormAssignmentResponseScreen(
         ),
         FormCompletionEntry(
             id = "2",
-            date = LocalDate.now(),
+            date = LocalDate.of(2023, 7, 16),
             responses = listOf(
                 FormQuestionResponse(
                     id = "5",
@@ -151,56 +165,195 @@ fun PatientFormAssignmentResponseScreen(
         completionEntries = entries
     )
 
-    BackNavigationScaffold(title = stringResource(id = R.string.solved_forms), navController = navController) { paddingValues ->
+    val assignment = testAssignment
+
+    BackNavigationScaffold(
+        title = assignment.form.title,
+        navController = navController
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            FormAssignmentPanel(formAssignment = testAssignment)
+            Divider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                thickness = 2.dp,
+                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+            )
+
+            FormAssignmentPanel(formAssignment = assignment)
         }
     }
 }
 
 @Composable
-private fun FormAssignmentPanel(formAssignment: FormAssignment){
-    val entry = 0
+private fun EntrySelector(
+    entries: List<FormCompletionEntry>,
+    selectedIndex: MutableState<Int>
+){
 
-//    Card(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 8.dp),
-//        colors = CardDefaults.cardColors(Color.White),
-//        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-//    ) {
-        Column(
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        CountIndicator(count = entries.size)
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        DateSelector(entries = entries, selectedIndex = selectedIndex)
+    }
+
+}
+
+@Composable
+private fun CountIndicator(count: Int){
+    Card(
+        modifier = Modifier.wrapContentWidth(),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer.mix(color = Color.White)
+        ),
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
+        IconLabeled(
             modifier = Modifier
-                .fillMaxWidth()
-//                .padding(horizontal = 16.dp)
+                .wrapContentWidth()
+                .padding(8.dp),
+            icon = Icons.Outlined.Refresh,
+            label = count.toString(),
+            iconColor = Color.White,
+            labelColor = Color.White
+        )
+    }
+}
+//TODO: actualizar las bubbles cuando cambio de entry
+
+//TODO: agregar alguna animacion cada vez que se recompone la vista de las respuestas
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DateSelector(
+    entries: List<FormCompletionEntry>,
+    selectedIndex: MutableState<Int>
+){
+    var isExpanded by remember {
+        mutableStateOf(false)
+    }
+
+    Card(
+        modifier = Modifier
+            .width(256.dp)
+            .clickable { },
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer//.mix(color = Color.Red)
+        ),
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
+        ExposedDropdownMenuBox(
+            expanded = isExpanded,
+            onExpandedChange = { isExpanded = !isExpanded }
         ) {
-//            Text(
-//                text = formAssignment.form.title,
-//                color = Color.Black,
-//                fontWeight = FontWeight.Bold,
-//                fontSize = 24.sp,
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier
-//                    .background(Color.LightGray.copy(alpha = 0.15f))
-//                    .fillMaxWidth()
-//                    .padding(16.dp)
-//            )
-//
-//            Divider(
-//                modifier = Modifier.fillMaxWidth(),
-//                thickness = 3.dp,
-//                color = Color.Gray.copy(alpha = 0.3f)
-//            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            FormResponsePanel(entry = formAssignment.completionEntries[entry])
+            DateDisplay(
+                date = entries[selectedIndex.value].date,
+                trailingIcon = Icons.Default.ArrowDropDown,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .menuAnchor()
+            )
+            
+            ExposedDropdownMenu(
+                expanded = isExpanded,
+                onDismissRequest = { isExpanded = false },
+                modifier = Modifier
+                    .width(256.dp)
+                    .background(MaterialTheme.colorScheme.onPrimaryContainer)
+            ) {
+                entries.forEachIndexed { i, it ->
+                    DropdownMenuItem(
+                        modifier = Modifier.height(40.dp),
+                        text = {
+                            DateDisplay(
+                                date = it.date,
+                                color = Color.Black
+                            )
+                        },
+                        onClick = {
+                            selectedIndex.value = i
+                            isExpanded = false
+                        }
+                    )
+                }
+            }
         }
-//    }
+    }
+}
+
+@Composable
+private fun DateDisplay(
+    modifier: Modifier = Modifier,
+    date: LocalDate,
+    color: Color = Color.White,
+    trailingIcon: ImageVector? = null
+){
+    val dateAsText = formatLocalDateAsWords(date, stringResource(id = R.string.locale))
+
+    Row(
+        modifier = modifier
+            .width(240.dp),
+        verticalAlignment = CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.CalendarMonth,
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = color
+        )
+        Text(
+            text = dateAsText,
+            style = MaterialTheme.typography.labelMedium,
+            color = color,
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .height(20.dp)
+                .width(184.dp)
+                .wrapContentHeight()
+        )
+        trailingIcon?.let {
+            Icon(
+                imageVector = it,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+                tint = color
+            )
+        }
+
+    }
+}
+
+@Composable
+private fun FormAssignmentPanel(formAssignment: FormAssignment){
+    val entry = remember {
+        mutableStateOf(0)
+    }
+
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .verticalScroll(scrollState)
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
+        EntrySelector(entries = formAssignment.completionEntries, selectedIndex = entry)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        FormResponsePanel(entry = formAssignment.completionEntries[entry.value])
+    }
 }
 
 @Composable
@@ -208,9 +361,7 @@ private fun FormResponsePanel(entry: FormCompletionEntry){
     val fontSize = 14.sp
 
     Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 32.dp)
+        modifier = Modifier.padding(horizontal = 32.dp)
     ) {
         entry.responses.forEachIndexed { index, questionResponse ->
 
@@ -314,6 +465,7 @@ private fun ScaleIndicator(questionResponse: FormQuestionResponse){
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun BubbleLayout(
     bubbleType: BubbleType,
@@ -340,7 +492,6 @@ private fun BubbleLayout(
             content()
         }
     }
-
 }
 
 private enum class BubbleType(
