@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.disfluency.api.dto.FormEntryDTO
+import com.disfluency.api.dto.QuestionResponseDTO
 import com.disfluency.components.stepper.PageStepper
 import com.disfluency.components.stepper.StepScreen
 import com.disfluency.model.form.FormAssignment
@@ -47,7 +48,7 @@ fun FormCompletionScreen(assignmentId: String, navController: NavHostController,
         Column(Modifier.fillMaxSize()) {
             Text(text = it.form.title, fontSize = 24.sp, modifier = Modifier.padding(16.dp))
             PageStepper(steps = steps.value, onCancel = { navController.popBackStack() }) {
-                val newEntry = FormEntryDTO(responses.value)
+                val newEntry = FormEntryDTO(responses.value.map { r -> QuestionResponseDTO(r) })
                 viewModel.completeFormAssignment(assignmentId, newEntry)
                 submitted = true
             }
@@ -109,7 +110,7 @@ private fun ScaleQuestion(
     }
 }
 
-class QuestionResponse(private val idQuestion: String) {
+class QuestionResponse(val idQuestion: String) {
     val scaleResponse: MutableState<Float> = mutableStateOf(1f)
     val followUpResponse: MutableState<String> = mutableStateOf("")
 

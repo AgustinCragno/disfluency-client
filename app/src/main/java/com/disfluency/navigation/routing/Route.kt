@@ -44,5 +44,6 @@ sealed class Route(val path: String, private vararg val params: String) {
         object PatientSessions: Route("patients/{id}/sessions", "id")
 
         object ExerciseAssignmentDetail: Route("exercise-assignments/{id}", "id")
+        object FormAssignmentDetail: Route("form-assignments/{id}", "id")
     }
 }
