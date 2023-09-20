@@ -15,12 +15,11 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.disfluency.model.exercise.Exercise
 import com.disfluency.utilities.color.stringToRGB
 
 @Composable
-fun ExerciseThumbnail(exercise: Exercise){
-    val color = stringToRGB(exercise.title)
+fun TitleThumbnail(title: String){
+    val color = stringToRGB(title)
     Surface(
         color = color,
         modifier = Modifier
@@ -36,7 +35,7 @@ fun ExerciseThumbnail(exercise: Exercise){
     ) {
         Box(contentAlignment = Alignment.Center){
             Text(
-                text = exercise.title.first().uppercaseChar().toString(),
+                text = title.first().uppercaseChar().toString(),
                 style = TextStyle(color = Color.White, fontSize = 18.sp)
             )
         }

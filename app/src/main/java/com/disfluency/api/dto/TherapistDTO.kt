@@ -14,10 +14,11 @@ class TherapistDTO(
     @JsonProperty("name") val name: String,
     @JsonProperty("lastName") val lastName: String,
     @JsonProperty("profilePictureUrl") val profilePictureUrl: Int,
-    @JsonSetter(nulls = Nulls.AS_EMPTY) @JsonProperty("exercises") val exercises: List<ExerciseDTO> = emptyList()
+    @JsonSetter(nulls = Nulls.AS_EMPTY) @JsonProperty("exercises") val exercises: List<ExerciseDTO> = emptyList(),
+    @JsonSetter(nulls = Nulls.AS_EMPTY) @JsonProperty("forms") val forms: List<FormDTO> = emptyList()
 ) : RoleDTO {
 
     override fun toRole(): UserRole {
-        return Therapist(id, exercises.map { it.asExercise() })
+        return Therapist(id, exercises.map { it.asExercise() }, forms.map { it.asForm() })
     }
 }

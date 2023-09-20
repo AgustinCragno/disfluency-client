@@ -16,10 +16,7 @@ import com.disfluency.screens.therapist.analysis.AnalysisTranscriptionScreen
 import com.disfluency.screens.therapist.analysis.PatientSessionsScreen
 import com.disfluency.screens.therapist.analysis.RecordSessionScreen
 import com.disfluency.screens.therapist.exercises.*
-import com.disfluency.screens.therapist.forms.MyFormsScreen
-import com.disfluency.screens.therapist.forms.PatientFormAssignmentResponseScreen
-import com.disfluency.screens.therapist.forms.PatientFormAssignmentsScreen
-import com.disfluency.screens.therapist.forms.PatientFormAssignmentsScreen
+import com.disfluency.screens.therapist.forms.*
 import com.disfluency.screens.therapist.patients.MyPatientsScreen
 import com.disfluency.screens.therapist.patients.NewPatientScreen
 import com.disfluency.screens.therapist.patients.PatientDetailScreen
@@ -147,6 +144,15 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
             backStackEntry.arguments?.getString("id")?.let {
                 ExerciseDetailScreen(
                     exerciseId = it,
+                    therapist = therapist,
+                    navController = navHostController
+                )
+            }
+        }
+        composable(Route.Therapist.FormDetail.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                FormDetailScreen(
+                    formId = it,
                     therapist = therapist,
                     navController = navHostController
                 )

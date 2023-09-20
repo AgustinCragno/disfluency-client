@@ -15,7 +15,7 @@ import com.disfluency.R
 import com.disfluency.components.bar.SearchBar
 import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.components.list.item.ListItem
-import com.disfluency.components.thumbnail.ExerciseThumbnail
+import com.disfluency.components.thumbnail.TitleThumbnail
 import com.disfluency.model.exercise.Exercise
 import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.BottomNavigationItem
@@ -79,7 +79,7 @@ private fun ExerciseListItem(exercise: Exercise, navController: NavHostControlle
     ListItem(
         title = exercise.title,
         leadingContent = {
-            ExerciseThumbnail(exercise = exercise)
+            TitleThumbnail(exercise.title)
         },
         onClick = {
             navController.navigate(
