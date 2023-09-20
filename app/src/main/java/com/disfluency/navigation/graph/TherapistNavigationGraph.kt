@@ -22,11 +22,17 @@ import com.disfluency.screens.therapist.analysis.RecordSessionScreen
 import com.disfluency.screens.therapist.exercises.ExerciseAssignmentDetailScreen
 import com.disfluency.screens.therapist.exercises.PatientExerciseAssignmentsScreen
 import com.disfluency.screens.therapist.forms.MyFormsScreen
+import com.disfluency.screens.therapist.forms.PatientFormAssignmentResponseScreen
+import com.disfluency.screens.therapist.forms.PatientFormAssignmentsScreen
 import com.disfluency.screens.therapist.forms.PatientFormAssignmentsScreen
 import com.disfluency.screens.therapist.patients.MyPatientsScreen
 import com.disfluency.screens.therapist.patients.NewPatientScreen
 import com.disfluency.screens.therapist.patients.PatientDetailScreen
 import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
+import com.disfluency.viewmodel.ExercisesViewModel
+import com.disfluency.viewmodel.FormsViewModel
+import com.disfluency.viewmodel.LoggedUserViewModel
+import com.disfluency.viewmodel.PatientsViewModel
 import com.disfluency.screens.therapist.success.SessionRecordConfirmationScreen
 import com.disfluency.viewmodel.*
 
@@ -34,6 +40,7 @@ import com.disfluency.viewmodel.*
 fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUserViewModel){
     val patientsViewModel: PatientsViewModel = viewModel()
     val exercisesViewModel: ExercisesViewModel = viewModel()
+    val formsViewModel: FormsViewModel = viewModel()
     val recordViewModel = RecordSessionViewModel(LocalContext.current, LocalLifecycleOwner.current)
     val analysisViewModel: AnalysisViewModel = viewModel()
 
@@ -76,7 +83,25 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
         }
         composable(Route.Therapist.PatientForms.path, listOf(navArgument("id"){})){ backStackEntry ->
             backStackEntry.arguments?.getString("id")?.let {
-                PatientFormAssignmentsScreen(patientId = it, navController = navHostController)
+                PatientFormAssignmentsScreen(
+                    patientId = it,
+                    navController = navHostController,
+                    viewModel = formsViewModel
+                )
+            }
+        }
+        composable(Route.Therapist.FormAssignmentDetail.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                PatientFormAssignmentResponseScreen(
+                    assignmentId = it,
+                    navController = navHostController,
+                    viewModel = formsViewModel
+                )
+            }
+        }
+        composable(Route.Therapist.PatientSessions.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                ImageMessagePage(imageResource = R.drawable.record_action, text = stringResource(id = R.string.patient_has_no_recorded_sessions))
             }
         }
         composable(Route.Therapist.ConfirmationNewPatient.path){
