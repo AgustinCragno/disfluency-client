@@ -58,7 +58,7 @@ fun FormCompletionScreen(assignmentId: String, navController: NavHostController,
     if (submitted){
         LaunchedEffect(Unit){
             navController.popBackStack()
-            navController.navigate(Route.Patient.MyForms.path)
+            navController.navigate(Route.Patient.FormCompletionConfirmation.routeTo(assignmentId))
         }
     }
 }

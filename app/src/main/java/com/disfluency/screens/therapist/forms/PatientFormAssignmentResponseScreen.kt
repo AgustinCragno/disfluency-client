@@ -257,7 +257,7 @@ private fun FormResponsePanel(entry: FormCompletionEntry){
                     bubbleType = BubbleType.THERAPIST
                 ) {
                     WidthWrappedText(
-                        text = questionResponse.question.followUpQuestion,
+                        text = questionResponse.question.followUpQuestion.trim(),
                         fontSize = fontSize.times(0.9f),
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White,
@@ -271,7 +271,7 @@ private fun FormResponsePanel(entry: FormCompletionEntry){
                     bubbleType = BubbleType.PATIENT
                 ) {
                     WidthWrappedText(
-                        text = questionResponse.followUpResponse,
+                        text = questionResponse.followUpResponse.trim(),
                         fontSize = fontSize.times(1f),
                         color = Color.White,
                         padding = 8.dp

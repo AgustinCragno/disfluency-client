@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.disfluency.api.dto.FormEntryDTO
 import com.disfluency.api.error.ExerciseAssignmentNotFoundException
+import com.disfluency.api.error.FormAssignmentNotFoundException
+import com.disfluency.api.error.FormEntryCreationException
 import com.disfluency.data.FormRepository
 import com.disfluency.model.form.FormAssignment
+import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.launch
 
 class FormsViewModel : ViewModel() {
@@ -16,15 +19,24 @@ class FormsViewModel : ViewModel() {
 
     val assignedForms: MutableState<List<FormAssignment>?> = mutableStateOf(null)
 
+    val completionConfirmationState: MutableState<ConfirmationState> = mutableStateOf(ConfirmationState.DONE)
+
     fun getAssignmentsOfPatient(patientId: String) = viewModelScope.launch {
         assignedForms.value = formsRepository.getAssignmentsByPatientId(patientId)
     }
 
     fun getAssignmentById(assignmentId: String): FormAssignment {
-        return assignedForms.value?.first { it.id == assignmentId } ?: throw ExerciseAssignmentNotFoundException(assignmentId)
+        return assignedForms.value?.first { it.id == assignmentId } ?: throw FormAssignmentNotFoundException(assignmentId)
     }
 
     fun completeFormAssignment(formAssignmentId: String, responses: FormEntryDTO) = viewModelScope.launch {
-        formsRepository.createFormEntry(formAssignmentId, responses)
+        completionConfirmationState.value = ConfirmationState.LOADING
+        try {
+            formsRepository.createFormEntry(formAssignmentId, responses)
+            completionConfirmationState.value = ConfirmationState.SUCCESS
+        }
+        catch (e: FormEntryCreationException){
+            completionConfirmationState.value = ConfirmationState.ERROR
+        }
     }
 }
