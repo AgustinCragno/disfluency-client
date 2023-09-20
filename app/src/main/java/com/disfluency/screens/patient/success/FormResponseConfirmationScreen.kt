@@ -43,9 +43,15 @@ fun FormResponseConfirmationScreen(
     if (viewModel.completionConfirmationState.value > ConfirmationState.LOADING){
         LaunchedEffect(Unit){
             delay(2000)
-            viewModel.completionConfirmationState.value = ConfirmationState.DONE
-            navController.popBackStack()
-            navController.navigate(Route.Patient.FormCompletionLastEntry.routeTo(formAssignmentId))
+            if (viewModel.completionConfirmationState.value == ConfirmationState.SUCCESS){
+                viewModel.completionConfirmationState.value = ConfirmationState.DONE
+                navController.popBackStack()
+                navController.navigate(Route.Patient.FormCompletionLastEntry.routeTo(formAssignmentId))
+            } else {
+                viewModel.completionConfirmationState.value = ConfirmationState.DONE
+                navController.popBackStack()
+                navController.navigate(Route.Patient.MyForms.path)
+            }
         }
     }
 }
