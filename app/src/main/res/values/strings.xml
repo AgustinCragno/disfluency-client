@@ -40,6 +40,7 @@
     <string name="pending_forms">Cuestionarios Pendientes</string>
     <string name="recorded_sessions">Sesiones Grabadas</string>
     <string name="resolutions">resoluciones</string>
+    <string name="resolution">resolución</string>
     <string name="assigned_exercise">Ejercicio Asignado</string>
     <string name="patient_has_no_assigned_exercises">El paciente no tiene ejercicios asignados</string>
     <string name="patient_has_no_assigned_forms">El paciente no tiene cuestionarios asignados</string>
@@ -168,4 +169,5 @@
     <string name="p_description_1">La </string>
     <string name="p_description_2"> consiste en alargar la pronunciacion de una letra dentro de la palabra a decir, hasta que la persona logra desbloquearse y completar el resto de la palabra.</string>
     <string name="exercise">Ejercicio</string>
+    <string name="your_responses">Tus Respuestas</string>
 </resources>

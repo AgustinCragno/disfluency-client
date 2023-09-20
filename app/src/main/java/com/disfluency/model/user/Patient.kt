@@ -1,10 +1,12 @@
 package com.disfluency.model.user
 
 import com.disfluency.model.exercise.ExerciseAssignment
+import com.disfluency.model.form.FormAssignment
 import com.disfluency.utilities.avatar.AvatarManager
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import kotlin.random.Random
 
 data class Patient(
     val id: String,
@@ -16,7 +18,8 @@ data class Patient(
     val avatarIndex: Int,
     val weeklyTurn: List<DayOfWeek>,
     val weeklyHour: LocalTime,
-    val exercises: List<ExerciseAssignment> = listOf()
+    val exercises: List<ExerciseAssignment> = emptyList(),
+    val forms: List<FormAssignment> = emptyList()
 ) : UserRole {
     fun fullName(): String {
         return "$name $lastName"
