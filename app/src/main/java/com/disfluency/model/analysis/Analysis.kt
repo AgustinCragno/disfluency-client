@@ -1,3 +1,11 @@
 package com.disfluency.model.analysis
 
-data class Analysis(val analysedWords: List<AnalysedWord>)
+import java.time.LocalDate
+
+data class Analysis(
+    val id: String,
+    val audioUrl: String,
+    val date: LocalDate,
+    val analysedWords: List<AnalysedWord>? = null,
+    val results: AnalysisResults? = null
+)

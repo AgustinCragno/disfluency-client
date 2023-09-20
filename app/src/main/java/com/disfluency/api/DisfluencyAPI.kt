@@ -1,6 +1,7 @@
 package com.disfluency.api
 
 import com.disfluency.api.interceptor.AuthInterceptor
+import com.disfluency.api.service.AnalysisService
 import com.disfluency.api.service.ExerciseService
 import com.disfluency.api.service.FormService
 import com.disfluency.api.service.PatientService
@@ -10,6 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object DisfluencyAPI {
     private val retrofit: Retrofit by lazy {
@@ -30,6 +32,9 @@ object DisfluencyAPI {
         return OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor())
             .addInterceptor(httpLoggingInterceptor)
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(30, TimeUnit.MINUTES)
+            .writeTimeout(15, TimeUnit.MINUTES)
             .build()
     }
 
@@ -37,4 +42,5 @@ object DisfluencyAPI {
     val patientService: PatientService by lazy { retrofit.create(PatientService::class.java) }
     val exerciseService: ExerciseService by lazy { retrofit.create(ExerciseService::class.java) }
     val formService: FormService by lazy { retrofit.create(FormService::class.java) }
+    val analysisService: AnalysisService by lazy { retrofit.create(AnalysisService::class.java) }
 }

@@ -143,5 +143,27 @@
     <string name="exit">Salir</string>
     <string name="logout_confirmation">¿Desea cerrar sesion?</string>
 
+    <string name="i_description_1">La </string>
+    <string name="i_description_2"> consiste en emitir palabras de relleno de manera inconciente al hablar. Se trata de palabras como \'emm\', \'este\', \'osea\' entre otras.</string>
 
+    <string name="rs_description_1">La </string>
+    <string name="rs_description_2"> es una disfluencia en la cual la persona repite involuntariamente una unica letra de la palabra que esta tratando de comunicar, suele ocurrir con la primera letra de la palabra. Se da de manera que la persona termina diciendo por ejemplo: \'p-p-p-orcelana\' repitiendo el sonido de esa primera letra hasta que logra terminar de pronunciar la palabra.</string>
+
+    <string name="rp_description_1">La </string>
+    <string name="rp_description_2"> se trata de la repeticion involuntaria de una misma palabra en un contexto semanticamente equivoco, donde la persona inconcientemente repite la ultima palabra que dijo debido a que se encuentra bloqueado frente a la proxima palabra.</string>
+
+    <string name="rf_description_1">La </string>
+    <string name="rf_description_2"> se trata de la repeticion involuntaria de un mismo conjunto de palabras que fueron recientemente emitidas por la persona. Suele ocurrir cuando la persona siente una especie de bloqueo frente a la proxima palabra que quiere decir.</string>
+
+    <string name="v_description_1">La </string>
+    <string name="v_description_2"> ocurre cuando una persona intenta pronunciar una palabra pero no lo logra, emitiendo pequeños sonidos no identificables sin poder comenzar a pronunciarla.</string>
+
+    <string name="m_description_1">La </string>
+    <string name="m_description_2"> consiste en el intercambio de una palabra que a la persona le resulta dificil de emitir, por un sinonimo o palabra que pueda reemplazarla dentro del contexto de la oracion.</string>
+
+    <string name="rsi_description_1">La </string>
+    <string name="rsi_description_2"> consiste en repetir involuntariamente alguna silaba de la palabra que se esta tratando de comunicar. Por ejemplo: \'yo-yo-yogur\'.</string>
+
+    <string name="p_description_1">La </string>
+    <string name="p_description_2"> consiste en alargar la pronunciacion de una letra dentro de la palabra a decir, hasta que la persona logra desbloquearse y completar el resto de la palabra.</string>
 </resources>

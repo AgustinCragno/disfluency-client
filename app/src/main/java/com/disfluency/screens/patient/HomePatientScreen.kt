@@ -32,7 +32,7 @@ fun HomePatientScreen(patient: Patient, navController: NavHostController, viewMo
 
             Box(Modifier.fillMaxSize()) {
                 Text(
-                    text = "user: ${patient.id}",
+                    text = "Bienvenido",
                     fontWeight = FontWeight.Bold,
                     color = Color.Gray,
                     modifier = Modifier.align(Alignment.Center),

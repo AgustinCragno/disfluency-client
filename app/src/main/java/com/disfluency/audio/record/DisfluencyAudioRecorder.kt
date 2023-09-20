@@ -11,10 +11,14 @@ import kotlin.math.roundToInt
 private const val MIN_AMPLITUDE_VALUE = 0F
 //const val MAX_AMPLITUDE_VALUE = 32762F
 const val MAX_AMPLITUDE_VALUE = 9000F
+//TODO: con lo del encoding se desconfiguro este valor, hay que encontrarlo de nuevo
 
 private const val MAX_AMPLITUDE_VALUE_INT = 11
 
 private const val AMPLITUDE_SAMPLE_TIME = 50L
+
+private const val SAMPLING_RATE = 44100
+private const val ENCODING_BIT_RATE = 16
 
 class DisfluencyAudioRecorder(private val context: Context) {
 
@@ -36,6 +40,8 @@ class DisfluencyAudioRecorder(private val context: Context) {
     fun start(outputFile: File){
         createRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.VOICE_RECOGNITION)
+            setAudioEncodingBitRate(ENCODING_BIT_RATE * SAMPLING_RATE)
+            setAudioSamplingRate(SAMPLING_RATE)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             setOutputFile(outputFile)
