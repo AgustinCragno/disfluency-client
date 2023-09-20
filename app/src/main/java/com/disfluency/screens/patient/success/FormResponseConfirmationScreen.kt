@@ -45,9 +45,7 @@ fun FormResponseConfirmationScreen(
             delay(2000)
             viewModel.completionConfirmationState.value = ConfirmationState.DONE
             navController.popBackStack()
-            navController.navigate(Route.Patient.MyForms.path)
-            //TODO: agregarle que le lleve a una pantalla donde le muestra la respuesta del form
-            // (que tenga una cruz arriba para salir y no se pueda acceder de otra manera)
+            navController.navigate(Route.Patient.FormCompletionLastEntry.routeTo(formAssignmentId))
         }
     }
 }

@@ -14,6 +14,7 @@ import com.disfluency.screens.patient.exercises.ExerciseAssignmentDetailScreen
 import com.disfluency.screens.patient.exercises.MyExercisesScreen
 import com.disfluency.screens.patient.exercises.RecordExerciseScreen
 import com.disfluency.screens.patient.forms.FormCompletionScreen
+import com.disfluency.screens.patient.forms.FormEntryVisualizationScreen
 import com.disfluency.screens.patient.forms.MyFormsScreen
 import com.disfluency.screens.patient.success.FormResponseConfirmationScreen
 import com.disfluency.screens.patient.success.RecordingConfirmationScreen
@@ -53,6 +54,11 @@ fun PatientNavigationGraph(patient: Patient, loggedUserViewModel: LoggedUserView
         composable(Route.Patient.FormCompletionConfirmation.path){ backStackEntry ->
             backStackEntry.arguments?.getString("id")?.let {
                 FormResponseConfirmationScreen(formAssignmentId = it, navController = navHostController, viewModel = formsViewModel)
+            }
+        }
+        composable(Route.Patient.FormCompletionLastEntry.path){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                FormEntryVisualizationScreen(assignmentId = it, navController = navHostController, viewModel = formsViewModel)
             }
         }
         composable(Route.Patient.ExercisePractice.path){ backStackEntry ->

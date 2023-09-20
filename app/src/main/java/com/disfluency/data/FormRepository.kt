@@ -15,11 +15,12 @@ class FormRepository {
         return DisfluencyAPI.formService.getAssignmentsByPatientId(patientId).map { it.asAssignment() }
     }
 
-    suspend fun createFormEntry(formAssignmentId: String, responses: FormEntryDTO) {
+    suspend fun createFormEntry(formAssignmentId: String, responses: FormEntryDTO): FormAssignment {
         Log.i("forms", "Creating new form entry for assignment: $formAssignmentId")
         try {
-            DisfluencyAPI.formService.createPracticeInAssignment(formAssignmentId, responses)
+            val assignmentDTO = DisfluencyAPI.formService.createPracticeInAssignment(formAssignmentId, responses)
             Log.i("forms", "Successfully submitted entry for assignment: $formAssignmentId")
+            return assignmentDTO.asAssignment()
         }
         catch (e: HttpException){
             Log.i("forms", "Error creating entry for assignment: $formAssignmentId ==> $e")

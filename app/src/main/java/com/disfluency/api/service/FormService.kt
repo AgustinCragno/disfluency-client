@@ -14,5 +14,5 @@ sealed interface FormService {
     suspend fun getAssignmentsByPatientId(@Path("patientId") patientId: String): List<FormAssignmentDTO>
 
     @POST("formAssignments/{formAssignmentId}/formCompletionEntries")
-    suspend fun createPracticeInAssignment(@Path("formAssignmentId") formAssignmentId: String, @Body responses: FormEntryDTO)
+    suspend fun createPracticeInAssignment(@Path("formAssignmentId") formAssignmentId: String, @Body responses: FormEntryDTO): FormAssignmentDTO
 }

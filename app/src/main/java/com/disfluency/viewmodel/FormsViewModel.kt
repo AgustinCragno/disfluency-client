@@ -32,11 +32,21 @@ class FormsViewModel : ViewModel() {
     fun completeFormAssignment(formAssignmentId: String, responses: FormEntryDTO) = viewModelScope.launch {
         completionConfirmationState.value = ConfirmationState.LOADING
         try {
-            formsRepository.createFormEntry(formAssignmentId, responses)
+            val updatedAssignment = formsRepository.createFormEntry(formAssignmentId, responses)
+            updateAssignmentInList(updatedAssignment)
             completionConfirmationState.value = ConfirmationState.SUCCESS
         }
         catch (e: FormEntryCreationException){
             completionConfirmationState.value = ConfirmationState.ERROR
+        }
+    }
+
+    private fun updateAssignmentInList(updatedAssignment: FormAssignment) {
+        assignedForms.value?.let { list ->
+            val oldAssignment = list.find { it.id == updatedAssignment.id }
+            oldAssignment?.let {
+                assignedForms.value = list.minus(oldAssignment).plus(updatedAssignment)
+            }
         }
     }
 }
