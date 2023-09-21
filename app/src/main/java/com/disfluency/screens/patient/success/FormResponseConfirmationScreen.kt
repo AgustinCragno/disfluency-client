@@ -16,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.disfluency.R
 import com.disfluency.components.success.ConfirmationScreen
 import com.disfluency.navigation.routing.Route
 import com.disfluency.ui.theme.Green40
@@ -68,7 +70,7 @@ private fun LoadingState(){
             color = Color.White
         )
         Text(
-            text = "Espere un momento mientras se envia el cuestionario",
+            text = stringResource(R.string.wait_while_the_form_is_sent),
             color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold
@@ -81,7 +83,7 @@ private fun SuccessState(){
     IconMessage(
         imageVector = Icons.Filled.Done,
         color = Green40,
-        message = "Se envio el cuestionario correctamente"
+        message = stringResource(R.string.the_form_was_submitted_successfully)
     )
 }
 
@@ -90,7 +92,7 @@ private fun ErrorState(){
     IconMessage(
         imageVector = Icons.Filled.Close,
         color = Color.Red,
-        message = "Ocurrio un error al enviar el cuestionario"
+        message = stringResource(R.string.an_error_occurred_while_submitting_the_form)
     )
 }
 
@@ -109,7 +111,7 @@ private fun IconMessage(imageVector: ImageVector, color: Color, message: String)
         ){
             Icon(
                 imageVector = imageVector,
-                contentDescription = "Done",
+                contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier
                     .fillMaxSize()

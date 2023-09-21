@@ -83,7 +83,7 @@ fun PatientSessionsScreen(
 //    }
 
     BackNavigationScaffold(
-        title = "Sesiones",
+        title = stringResource(R.string.sessions),
         navController = navController
     ) { paddingValues ->
         Box(
@@ -117,7 +117,9 @@ fun PatientSessionsScreen(
 @Composable
 private fun SessionList(list: List<Analysis>, navController: NavHostController, recordViewModel: RecordSessionViewModel){
     Column(
-        Modifier.fillMaxSize().padding(horizontal = 16.dp)
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
     ) {
         if (list.isNotEmpty() || recordViewModel.uploadConfirmationState.value != ConfirmationState.DONE){
             LazyColumn(
@@ -172,7 +174,7 @@ private fun SessionListItem(analysis: Analysis, index: Int, navController: NavHo
 private fun PendingSessionListItem(index: Int){
     ListItem(
         title = "Sesion #$index",
-        subtitle = "en proceso de analisis",
+        subtitle = stringResource(R.string.in_analysis_process),
         subtitleColor = MaterialTheme.colorScheme.secondary,
         leadingContent = {
             CircularProgressIndicator(modifier = Modifier.size(24.dp))

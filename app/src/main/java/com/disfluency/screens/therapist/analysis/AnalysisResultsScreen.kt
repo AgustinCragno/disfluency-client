@@ -9,11 +9,13 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.disfluency.R
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.therapist.analysis.results.DisfluenciesPerPhraseChart
 import com.disfluency.screens.therapist.analysis.results.DisfluencyTypeCharts
@@ -50,7 +52,7 @@ fun AnalysisResultsScreen(
     val scrollState = rememberScrollState()
 
     BackNavigationScaffold(
-        title = "Analisis de Disfluencias",
+        title = stringResource(R.string.disfluency_analisis),
         navController = navController
     ) { paddingValues ->
 

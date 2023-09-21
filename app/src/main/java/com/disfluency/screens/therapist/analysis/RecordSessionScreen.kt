@@ -9,9 +9,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
+import com.disfluency.R
 import com.disfluency.components.audio.AudioLiveWaveform
 import com.disfluency.components.audio.AudioWaveformCustom
 import com.disfluency.components.button.RecordButton
@@ -50,7 +52,7 @@ private fun RecordSession(patientId: String, navController: NavHostController, v
     val context = LocalContext.current
 
     BackNavigationScaffold(
-        title = "Nueva Sesion",
+        title = stringResource(R.string.new_session),
         navController = navController
     ) { paddingValues ->
         Box(

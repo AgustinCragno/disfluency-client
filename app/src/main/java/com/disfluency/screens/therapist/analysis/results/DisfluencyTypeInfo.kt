@@ -17,6 +17,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
+import com.disfluency.R
 import com.disfluency.components.charts.DonutChart
 import com.disfluency.model.analysis.AnalysisResults
 import com.disfluency.model.analysis.DisfluencyTypeStats
@@ -71,25 +72,15 @@ fun DisfluencyTypeInfo(
             }
         )
 
-//        Text(
-//            modifier = Modifier
-//                .wrapContentSize()
-//                .padding(horizontal = 16.dp, vertical = 2.dp),
-//            text = "% sobre el total de palabras",
-//            fontSize = 12.sp,
-//            lineHeight = 13.sp,
-//            color = Color.Black
-//        )
-
         val percentageText = "${(disfluencyTypeStats.percentageInTotalWords * 100).toString().take(3)}% "
 
         val percentageOfTotalSection = buildAnnotatedString {
-            append("Conforma el ")
+            append(stringResource(R.string.percentage_of_total_words_prefix))
             withStyle(style = SpanStyle(color = Color.Black) ) {
                 pushStringAnnotation(tag = percentageText, annotation = percentageText)
                 append(percentageText)
             }
-            append("de todas las palabras comunicadas por la persona")
+            append(stringResource(R.string.percentage_of_total_words_suffix))
         }
 
         TextFlow(
@@ -118,20 +109,10 @@ fun DisfluencyTypeInfo(
             }
         )
 
-//        Text(
-//            modifier = Modifier
-//                .wrapContentSize()
-//                .padding(horizontal = 16.dp, vertical = 2.dp),
-//            text = "% sobre el total de disfluencias",
-//            fontSize = 12.sp,
-//            lineHeight = 13.sp,
-//            color = Color.Black
-//        )
-
         val percentageOfDisfluenciesText = "${(disfluencyTypeStats.percentageInTotalDisfluencies * 100).toInt()}%"
 
         TextFlow(
-            text = "del total de las disfluencias producidas fueron de este tipo",
+            text = stringResource(R.string.percentage_of_total_disfluencies_suffix),
             color = Color.Gray,
             fontSize = 12.sp,
             lineHeight = 13.sp,
@@ -155,15 +136,3 @@ fun DisfluencyTypeInfo(
         trailingContent()
     }
 }
-
-//https://dribbble.com/shots/13960806-Business-app
-
-/**
- * Visualizacion de Resultados:
- *
- *      tambien se podria mostrar para cada una (una abajo de la otra)
- *      un panel que diga el nombre completo de la disfluencia, una explicacion breve de
- *      en que consiste, y los 3 datos del DisfluencyStat
- *                                       (count, percentageInTotalWords, percentageInTotalDisfluencies)
- *
- */

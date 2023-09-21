@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.disfluency.R
@@ -52,7 +53,7 @@ fun MyExercisesScreen(
 private fun NoExercisesMessage() {
     ImageMessagePage(
         imageResource = R.drawable.speech_bubble,
-        text = "No tiene ejercicios cargados en el sistema"
+        text = stringResource(R.string.doesnt_have_exercises_in_system)
     )
 }
 

@@ -75,7 +75,7 @@ fun PatientsList(patients: List<Patient>, navController: NavHostController, filt
     val filteredList = patients.filter { patient -> patient.fullName().contains(filter, true) }
 
     if (filteredList.isEmpty()){
-        ImageMessagePage(imageResource = R.drawable.avatar_1, text = "No tiene pacientes registrados en el sistema")
+        ImageMessagePage(imageResource = R.drawable.avatar_1, text = stringResource(R.string.doesnt_have_patients_in_system))
     }
 
     LazyColumn(contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),

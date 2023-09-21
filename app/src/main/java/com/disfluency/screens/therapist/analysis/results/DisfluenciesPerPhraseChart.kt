@@ -7,11 +7,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.disfluency.R
 import com.disfluency.components.charts.DonutChart
 import com.disfluency.model.analysis.AnalysisResults
 import eu.wewox.textflow.TextFlow
@@ -19,18 +21,18 @@ import eu.wewox.textflow.TextFlowObstacleAlignment
 
 @Composable
 fun DisfluenciesPerPhraseChart(analysisResults: AnalysisResults){
-    StatsPanel(title = "Disfluencias por frase") {
+    StatsPanel(title = stringResource(R.string.disfluencies_per_phrase)) {
         val chartPadding = 24.dp
 
         Column() {
-            val adpf = "promedio de disfluencias por frase"
+            val adpf = stringResource(R.string.average_disfluencies_per_phrase)
             val adpfExplanations = buildAnnotatedString {
-                append("El ")
+                append(stringResource(R.string.average_disfluencies_per_phrase_prefix))
                 withStyle(style = SpanStyle(color = Color.Black) ) {
                     pushStringAnnotation(tag = adpf, annotation = adpf)
                     append(adpf)
                 }
-                append(" muestra una aproximacion de cuantas disfluencias ocurren en cada frase que el paciente comunica.\n\nUn valor bajo representa que la persona logro comunicarse de manera relativamente efectiva.")
+                append(stringResource(R.string.average_disfluencies_per_phrase_suffix))
             }
 
             TextFlow(
@@ -59,8 +61,8 @@ fun DisfluenciesPerPhraseChart(analysisResults: AnalysisResults){
             )
 
             StatLabel(
-                title = "frases totales",
-                subtitle = "completadas por el paciente",
+                title = stringResource(R.string.total_phrases),
+                subtitle = stringResource(R.string.completed_by_patient),
                 number = analysisResults.totalPhrases
             ) {
                 Icon(

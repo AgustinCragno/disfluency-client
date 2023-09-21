@@ -58,7 +58,7 @@ fun AnalysisTranscriptionScreen(
 //    }
 
     BackNavigationScaffold(
-        title = "Analisis de Disfluencias",
+        title = stringResource(R.string.disfluency_analisis),
         navController = navController,
         actions = {
             ViewResultsAction(analysis = analysis, navController = navController)

@@ -16,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.disfluency.R
 import com.disfluency.components.icon.IconMessage
 import com.disfluency.components.success.ConfirmationScreen
 import com.disfluency.navigation.routing.Route
@@ -60,7 +62,7 @@ private fun LoadingState(){
             color = Color.White
         )
         Text(
-            text = "Espere un momento mientras se da de alta al paciente",
+            text = stringResource(R.string.wait_while_the_patient_is_submitted),
             color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold
@@ -73,7 +75,7 @@ private fun SuccessState(){
     IconMessage(
         imageVector = Icons.Filled.Done,
         color = Green40,
-        message = "Se creo el paciente correctamente"
+        message = stringResource(R.string.patient_was_created_successfully)
     )
 }
 
@@ -82,6 +84,6 @@ private fun ErrorState(){
     IconMessage(
         imageVector = Icons.Filled.Close,
         color = Color.Red,
-        message = "Ocurrio un error al dar de alta al paciente"
+        message = stringResource(R.string.an_error_occurred_while_submitting_patient)
     )
 }

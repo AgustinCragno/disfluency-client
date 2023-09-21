@@ -119,7 +119,7 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
 
                     ExercisePracticeList(
                         assignment = it,
-                        title = "Mis resoluciones",
+                        title = stringResource(R.string.my_practices),
                         emptyListContent = { NoPracticesMessage() }
                     )
 

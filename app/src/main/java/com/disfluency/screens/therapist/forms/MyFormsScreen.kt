@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.disfluency.R
@@ -83,5 +84,5 @@ private fun FormListItem(form: Form, navController: NavHostController){
 
 @Composable
 private fun NoFormsMessage(){
-    ImageMessagePage(imageResource = R.drawable.form_fill, text = "No tiene cuestionarios cargados en el sistema")
+    ImageMessagePage(imageResource = R.drawable.form_fill, text = stringResource(R.string.doesnt_have_forms_in_system))
 }
