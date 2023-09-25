@@ -7,3 +7,8 @@ import androidx.compose.ui.graphics.Color
 fun Color.darken(percentage: Float = 0.5f): Color {
     return this.mix(color = Color.Black, percentage = percentage)
 }
+
+@Composable
+fun Color.lighten(percentage: Float = 0.5f): Color {
+    return this.mix(color = Color.White, percentage = percentage)
+}

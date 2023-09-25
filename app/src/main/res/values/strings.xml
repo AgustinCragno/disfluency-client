@@ -1,5 +1,4 @@
 <resources>
-<!--    TODO: buscar en el codigo todo texto suelto y pasarlo a string-->
     <string name="app_name">Disfluency</string>
     <string name="login">Iniciar Sesión</string>
     <string name="username">Nombre de Usuario</string>
