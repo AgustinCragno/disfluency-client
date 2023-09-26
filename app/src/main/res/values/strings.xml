@@ -220,4 +220,5 @@
     <string name="wait_while_user_is_confirmed">Espere un momento mientras se da confirma el usuario</string>
     <string name="session_will_be_uploaded_in_background">Se guardará la sesion en segundo plano</string>
     <string name="analysis_will_be_available_in_a_few_moments">En unos momentos estara disponible el analisis sistematico de disfluencias</string>
+    <string name="new_exercise">Nuevo Ejercicio</string>
 </resources>

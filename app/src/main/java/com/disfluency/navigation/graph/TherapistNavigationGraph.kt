@@ -158,5 +158,8 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                 )
             }
         }
+        composable(Route.Therapist.NewExercise.path){
+            ExerciseCreationScreen(therapist = therapist, navController = navHostController, viewModel = exercisesViewModel)
+        }
     }
 }
