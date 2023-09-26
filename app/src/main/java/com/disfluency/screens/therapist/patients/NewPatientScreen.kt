@@ -86,16 +86,16 @@ private fun NewPatientForms(
     var submitted by remember { mutableStateOf(false) }
 
     val steps = listOf(
-        StepScreen("Avatar"){
+        StepScreen(stringResource(R.string.avatar)){
             AvatarSelectionScreen(avatarIndex = avatarIndex)
         },
-        StepScreen("Datos", validateDataInputs(name, lastName, dni, email, dateOfBirth)){
+        StepScreen(stringResource(R.string.data), validateDataInputs(name, lastName, dni, email, dateOfBirth)){
             PatientDataScreen(name = name, lastName = lastName, id = dni, email = email, dateOfBirth = dateOfBirth)
         },
-        StepScreen("Turno", validateTurnInputs(weeklyTurn, weeklyHour)){
+        StepScreen(stringResource(R.string.turn), validateTurnInputs(weeklyTurn, weeklyHour)){
             TurnSelectionScreen(weeklyTurn = weeklyTurn, weeklyHour = weeklyHour)
         },
-        StepScreen("Confirmar"){
+        StepScreen(stringResource(R.string.confirm)){
             ConfirmationScreen(
                 avatar = AvatarManager.getAvatarId(avatarIndex.value),
                 name = name.value,
@@ -148,7 +148,7 @@ private fun AvatarSelectionScreen(avatarIndex: MutableState<Int>){
         AvatarPicker(selectedAvatarIndex = avatarIndex)
         Text(
             modifier = Modifier.padding(top = 8.dp),
-            text = "Seleccione un avatar de usuario",
+            text = stringResource(R.string.select_an_avatar),
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold
         )

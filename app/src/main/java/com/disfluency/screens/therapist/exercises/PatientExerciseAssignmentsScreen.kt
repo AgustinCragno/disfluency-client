@@ -1,22 +1,16 @@
 package com.disfluency.screens.therapist.exercises
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Repeat
-import androidx.compose.material3.Card
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,9 +18,10 @@ import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.icon.ImageMessagePage
+import com.disfluency.components.list.item.ListItem
 import com.disfluency.components.skeleton.SkeletonLoader
 import com.disfluency.components.skeleton.list.ExerciseAssignmentListSkeleton
-import com.disfluency.components.thumbnail.ExerciseThumbnail
+import com.disfluency.components.thumbnail.TitleThumbnail
 import com.disfluency.model.exercise.ExerciseAssignment
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
@@ -92,50 +87,30 @@ fun ExerciseAssignmentList(exerciseAssignments: List<ExerciseAssignment>, navCon
 
 @Composable
 fun ExerciseAssignmentListItem(exerciseAssignment: ExerciseAssignment, navController: NavHostController, onClickRoute: Route){
-    val onClick = {
-        navController.navigate(
-            onClickRoute.routeTo(exerciseAssignment.id)
-        )
-    }
 
-    Card(
-        modifier = Modifier.clickable { onClick() },
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
-    ) {
-        ListItem(
-            modifier = Modifier.height(56.dp),
-            headlineContent = {
-                Text(
-                    text = exerciseAssignment.exercise.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            },
-            supportingContent = {
-                Text(
-                    text = formatLocalDate(exerciseAssignment.dateOfAssignment),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Color.Gray
-                )
-            },
-            leadingContent = {
-                ExerciseThumbnail(exercise = exerciseAssignment.exercise)
-            },
-            trailingContent = {
-                IconLabeled(
-                    icon = Icons.Default.Repeat,
-                    label = exerciseAssignment.attemptsCount().toString(),
-                    iconColor = MaterialTheme.colorScheme.primary,
-                    labelColor = MaterialTheme.colorScheme.primary,
-                    labelSize = 15.sp
-                )
-//                Text(
-//                    text = "${exerciseAssignment.attemptsCount()} ${stringResource(R.string.resolutions)}"
-//                )
-            }
-        )
-    }
+    ListItem(
+        title = exerciseAssignment.exercise.title,
+        subtitle = formatLocalDate(exerciseAssignment.dateOfAssignment),
+        leadingContent = {
+            TitleThumbnail(exerciseAssignment.exercise.title)
+        },
+        trailingContent = {
+            val color = if (exerciseAssignment.attemptsCount() > 0) MaterialTheme.colorScheme.primary else Color.Gray
+
+            IconLabeled(
+                icon = Icons.Default.Repeat,
+                label = exerciseAssignment.attemptsCount().toString(),
+                iconColor = color,
+                labelColor = color,
+                labelSize = 15.sp
+            )
+        },
+        onClick = {
+            navController.navigate(
+                onClickRoute.routeTo(exerciseAssignment.id)
+            )
+        }
+    )
 }
 
 @Composable

@@ -15,7 +15,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 
-@JsonIgnoreProperties(ignoreUnknown = true) //TODO: temporal hasta implementar ejercicios
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class PatientDTO(
     @JsonProperty("id") val id: String,
     @JsonProperty("name") val name: String,

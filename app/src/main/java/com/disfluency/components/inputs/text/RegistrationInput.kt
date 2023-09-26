@@ -1,5 +1,6 @@
 package com.disfluency.components.inputs.text
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.disfluency.R
@@ -134,7 +136,10 @@ fun PasswordInput(
         Text(
             text = stringResource(id = validationFailMessage),
             fontSize = 12.sp,
-            color = Color.Red
+            color = Color.Red,
+            textAlign = TextAlign.Center,
+            lineHeight = 10.sp,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp)
         )
     }
 }

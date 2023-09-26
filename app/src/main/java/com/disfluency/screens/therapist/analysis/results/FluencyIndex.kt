@@ -9,11 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.disfluency.R
 import com.disfluency.components.charts.DonutChart
 import com.disfluency.model.analysis.AnalysisResults
 import eu.wewox.textflow.TextFlow
@@ -38,21 +40,21 @@ fun FluencyIndexChart(analysisResults: AnalysisResults){
 
     StatsPanel(
         modifier = Modifier.wrapContentWidth(),
-        title = "Fluidez"
+        title = stringResource(R.string.fluency)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val fi = "indice de fluidez"
+            val fi = stringResource(R.string.fluency_index)
             val indexExplanation = buildAnnotatedString {
-                append("El ")
+                append(stringResource(R.string.fluency_index_prefix))
                 withStyle(style = SpanStyle(color = Color.Black) ) {
                     pushStringAnnotation(tag = fi, annotation = fi)
                     append(fi)
                 }
-                append(" representa el porcentaje de palabras que fueron pronunciadas de manera correcta con respecto a la cantidad de palabras totales habladas por la persona.\n\nUn indice de fluidez alto significa que la persona pudo comunicarse exitosamente durante gran parte de la sesion.")
+                append(stringResource(R.string.fluency_index_suffix))
             }
 
             TextFlow(
@@ -80,8 +82,8 @@ fun FluencyIndexChart(analysisResults: AnalysisResults){
 
             Column() {
                 StatLabel(
-                    title = "palabras totales",
-                    subtitle = "palabras habladas durante la sesion",
+                    title = stringResource(R.string.total_words),
+                    subtitle = stringResource(R.string.total_words_spoken_in_session),
                     number = analysisResults.totalWords,
                     leadingContent = {
                         Icon(
@@ -94,15 +96,15 @@ fun FluencyIndexChart(analysisResults: AnalysisResults){
                 )
 
                 StatLabel(
-                    title = "palabras limpias",
-                    subtitle = "pronunciadas de manera correcta",
+                    title = stringResource(R.string.clean_words),
+                    subtitle = stringResource(R.string.pronounced_correctly),
                     number = analysisResults.cleanWordsCount,
                     indicator = colors[0]
                 )
 
                 StatLabel(
-                    title = "disfluencias",
-                    subtitle = "errores en la comunicacion",
+                    title = stringResource(R.string.disfluencies_lc),
+                    subtitle = stringResource(R.string.errors_in_comunication),
                     number = analysisResults.totalDisfluencies,
                     indicator = colors[1]
                 )

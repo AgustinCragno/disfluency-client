@@ -1,9 +1,15 @@
 package com.disfluency.components.list.item
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Repeat
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import com.disfluency.R
+import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.model.form.FormAssignment
 import com.disfluency.utilities.format.formatLocalDate
@@ -17,10 +23,14 @@ fun FormAssignmentListItem(
         title = formAssignment.form.title,
         subtitle = formatLocalDate(formAssignment.date),
         trailingContent = {
-            Text(
-                text = "${formAssignment.completionEntries.count()} " + if (formAssignment.completionEntries.count() != 1) stringResource(
-                    R.string.resolutions)
-                else stringResource(R.string.resolution)
+            val color = if (formAssignment.completionEntries.isNotEmpty()) MaterialTheme.colorScheme.primary else Color.Gray
+
+            IconLabeled(
+                icon = Icons.Default.Repeat,
+                label = formAssignment.completionEntries.count().toString(),
+                iconColor = color,
+                labelColor = color,
+                labelSize = 15.sp
             )
         },
         onClick = onClick

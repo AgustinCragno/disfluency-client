@@ -10,9 +10,6 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import java.time.LocalDate
 
-//TODO: validar si vale la pena tener separados asi los dto de los pojo o conviene tener las serializaciones
-// en el pojo. (Exceptuando casos donde necesitemos los datos de una forma en particular como con los user)
-
 data class ExerciseAssignmentDTO(
     @JsonProperty("id") val id: String,
     @JsonProperty("exercise") val exercise: ExerciseDTO,

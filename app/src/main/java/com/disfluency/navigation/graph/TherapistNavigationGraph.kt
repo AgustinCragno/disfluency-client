@@ -3,28 +3,20 @@ package com.disfluency.navigation.graph
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.disfluency.R
-import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
-import com.disfluency.screens.therapist.exercises.MyExercisesScreen
 import com.disfluency.screens.therapist.*
 import com.disfluency.screens.therapist.analysis.AnalysisResultsScreen
 import com.disfluency.screens.therapist.analysis.AnalysisTranscriptionScreen
 import com.disfluency.screens.therapist.analysis.PatientSessionsScreen
 import com.disfluency.screens.therapist.analysis.RecordSessionScreen
-import com.disfluency.screens.therapist.exercises.ExerciseAssignmentDetailScreen
-import com.disfluency.screens.therapist.exercises.PatientExerciseAssignmentsScreen
-import com.disfluency.screens.therapist.forms.MyFormsScreen
-import com.disfluency.screens.therapist.forms.PatientFormAssignmentResponseScreen
-import com.disfluency.screens.therapist.forms.PatientFormAssignmentsScreen
-import com.disfluency.screens.therapist.forms.PatientFormAssignmentsScreen
+import com.disfluency.screens.therapist.exercises.*
+import com.disfluency.screens.therapist.forms.*
 import com.disfluency.screens.therapist.patients.MyPatientsScreen
 import com.disfluency.screens.therapist.patients.NewPatientScreen
 import com.disfluency.screens.therapist.patients.PatientDetailScreen
@@ -99,11 +91,6 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                 )
             }
         }
-        composable(Route.Therapist.PatientSessions.path, listOf(navArgument("id"){})){ backStackEntry ->
-            backStackEntry.arguments?.getString("id")?.let {
-                ImageMessagePage(imageResource = R.drawable.record_action, text = stringResource(id = R.string.patient_has_no_recorded_sessions))
-            }
-        }
         composable(Route.Therapist.ConfirmationNewPatient.path){
             NewPatientConfirmationScreen(navController = navHostController, viewModel = patientsViewModel)
         }
@@ -150,6 +137,24 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                     analysisId = it,
                     navController = navHostController,
                     viewModel = analysisViewModel
+                )
+            }
+        }
+        composable(Route.Therapist.ExerciseDetail.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                ExerciseDetailScreen(
+                    exerciseId = it,
+                    therapist = therapist,
+                    navController = navHostController
+                )
+            }
+        }
+        composable(Route.Therapist.FormDetail.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                FormDetailScreen(
+                    formId = it,
+                    therapist = therapist,
+                    navController = navHostController
                 )
             }
         }

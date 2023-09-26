@@ -26,9 +26,13 @@ class DigitsOnlyValidation: InputValidation {
 }
 
 class PasswordValidation: InputValidation {
+
     override fun validate(input: String): Boolean {
-        //TODO: implementar una vez que se defina el formato de la password
-        return input.isNotBlank()
+        return input.isNotBlank() && input.matches(PASSWORD_REQUIREMENT_REGEX)
+    }
+
+    companion object {
+        private val PASSWORD_REQUIREMENT_REGEX = Regex("^(?=.*[A-Z])(?=.*[0-9]).{8,}\$")
     }
 }
 

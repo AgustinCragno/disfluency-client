@@ -10,7 +10,6 @@ data class AnalysedWordDTO(
     @JsonProperty("disfluency") val disfluencyList: List<DisfluencyType>
 ) {
     fun asAnalysedWord(): AnalysedWord {
-        //TODO: cabiarlo a float
-        return AnalysedWord(text, timestamp.start.toInt(), timestamp.end.toInt(), disfluencyList)
+        return AnalysedWord(text, timestamp.start, timestamp.end, disfluencyList)
     }
 }

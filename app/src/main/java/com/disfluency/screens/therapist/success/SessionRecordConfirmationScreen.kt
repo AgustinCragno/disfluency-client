@@ -17,9 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.disfluency.R
 import com.disfluency.components.icon.IconMessage
 import com.disfluency.components.success.ConfirmationScreen
 import com.disfluency.navigation.routing.Route
@@ -75,7 +77,7 @@ private fun LoadingState(){
     IconMessage(
         imageVector = Icons.Filled.Backup,
         color = Color.Transparent,
-        message = "Se guardará la sesion en segundo plano"
+        message = stringResource(R.string.session_will_be_uploaded_in_background)
     )
 }
 
@@ -84,7 +86,7 @@ private fun SuccessState(){
     IconMessage(
         imageVector = Icons.Filled.HistoryToggleOff,
         color = Color.Transparent,
-        message = "En unos momentos estara disponible el analisis sistematico de disfluencias"
+        message = stringResource(R.string.analysis_will_be_available_in_a_few_moments)
     )
 }
 
@@ -93,6 +95,6 @@ private fun ErrorState(){
     IconMessage(
         imageVector = Icons.Filled.Close,
         color = Color.Red,
-        message = "Ocurrio un error al subir la grabacion"
+        message = stringResource(R.string.an_error_occurred_while_uploading_recording)
     )
 }

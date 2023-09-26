@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.disfluency.R
 import com.disfluency.components.charts.BarChart
 import com.disfluency.components.charts.DonutChart
 import com.disfluency.model.analysis.AnalysisResults
@@ -36,7 +38,7 @@ fun DisfluencyTypeCharts(analysisResults: AnalysisResults){
         .map { it.type.fullName }
 
 
-    StatsPanel(title = "Disfluencias") {
+    StatsPanel(title = stringResource(R.string.disfluencies)) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -52,8 +54,8 @@ fun DisfluencyTypeCharts(analysisResults: AnalysisResults){
             )
 
             StatLabel(
-                title = "total",
-                subtitle = "disfluencias producidas por el paciente",
+                title = stringResource(R.string.total),
+                subtitle = stringResource(R.string.disfluencies_produced_by_patient),
                 number = analysisResults.totalDisfluencies
             ) {
                 Icon(

@@ -32,16 +32,16 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues).verticalScroll(rememberScrollState())) {
             assignment.value?.let {
-                ExerciseDetailScreen(exercise = it.exercise)
+                ExerciseDetailPanel(exercise = it.exercise)
 
                 ExercisePracticeList(
                     assignment = it,
-                    title = "Resoluciones",
+                    title = stringResource(R.string.resolutions_uc),
                     emptyListContent = {
                         ImageMessagePage(
                             imageResource = R.drawable.record_action,
                             imageSize = 80.dp,
-                            text = "El usuario no ha resuelto este ejercicio todavia"
+                            text = stringResource(R.string.user_has_not_resolved_this_exercise_yet)
                         )
                     }
                 )

@@ -36,7 +36,7 @@ import com.disfluency.model.exercise.ExerciseAssignment
 import com.disfluency.model.exercise.ExercisePractice
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
-import com.disfluency.screens.therapist.exercises.ExerciseDetailScreen
+import com.disfluency.screens.therapist.exercises.ExerciseDetailPanel
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDateAsWords
 import com.disfluency.utilities.format.formatLocalTime
@@ -115,11 +115,11 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
         ){
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 assignment.value?.let {
-                    ExerciseDetailScreen(exercise = it.exercise)
+                    ExerciseDetailPanel(exercise = it.exercise)
 
                     ExercisePracticeList(
                         assignment = it,
-                        title = "Mis resoluciones",
+                        title = stringResource(R.string.my_practices),
                         emptyListContent = { NoPracticesMessage() }
                     )
 

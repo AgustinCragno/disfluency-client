@@ -47,7 +47,7 @@ class AnalysisRepository {
 
     suspend fun saveSession(url: String, audio: File): ResponseBody {
         Log . i ("S3--------", url)
-        return DisfluencyAPI.exerciseService.uploadAudioToS3(
+        return DisfluencyAPI.audioUploadString.uploadAudioToS3(
             url,
             audio.asRequestBody("audio/mpeg".toMediaTypeOrNull())
         )
@@ -56,9 +56,6 @@ class AnalysisRepository {
     suspend fun createSession(patientId: String, sessionUrl: String): Analysis {
         Log.i("analysis", "Creating session for patient: $patientId")
         try {
-            /**
-             * TODO: implement
-             */
             val result = DisfluencyAPI.patientService.createSession(patientId, PracticeDTO(sessionUrl))
             Log.i("analysis", "Successfully created session of patient: $patientId")
             return result.asSession()

@@ -16,11 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.disfluency.R
 import com.disfluency.components.icon.IconMessage
 import com.disfluency.components.success.ConfirmationScreen
 import com.disfluency.navigation.routing.Route
@@ -67,7 +69,7 @@ private fun LoadingState(){
             color = Color.White
         )
         Text(
-            text = "Espere un momento mientras se da confirma el usuario",
+            text = stringResource(R.string.wait_while_user_is_confirmed),
             color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
@@ -83,7 +85,7 @@ private fun SuccessState(){
     IconMessage(
         imageVector = Icons.Filled.Done,
         color = Green40,
-        message = "Se confirmó el usuario correctamente, sera redirigido al inicio para iniciar sesion"
+        message = stringResource(R.string.user_was_confirmed_successfully_you_will_be_redirected_to_log_in)
     )
 }
 
@@ -92,6 +94,6 @@ private fun ErrorState(){
     IconMessage(
         imageVector = Icons.Filled.Close,
         color = Color.Red,
-        message = "Ocurrio un error al dar de alta al usuario"
+        message = stringResource(R.string.an_error_occurred_while_submitting_user)
     )
 }

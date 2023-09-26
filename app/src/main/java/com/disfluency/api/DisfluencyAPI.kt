@@ -6,6 +6,7 @@ import com.disfluency.api.service.ExerciseService
 import com.disfluency.api.service.FormService
 import com.disfluency.api.service.PatientService
 import com.disfluency.api.service.UserService
+import com.disfluency.api.service.*
 import com.disfluency.utilities.PropertiesReader
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -40,6 +41,7 @@ object DisfluencyAPI {
 
     val userService: UserService by lazy { retrofit.create(UserService::class.java) }
     val patientService: PatientService by lazy { retrofit.create(PatientService::class.java) }
+    val audioUploadString: AudioUploadService by lazy { retrofit.create(AudioUploadService::class.java) }
     val exerciseService: ExerciseService by lazy { retrofit.create(ExerciseService::class.java) }
     val formService: FormService by lazy { retrofit.create(FormService::class.java) }
     val analysisService: AnalysisService by lazy { retrofit.create(AnalysisService::class.java) }
