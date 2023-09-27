@@ -86,6 +86,7 @@ private fun ExerciseList(exercises: List<Exercise>, navController: NavHostContro
 private fun ExerciseListItem(exercise: Exercise, navController: NavHostController){
     ListItem(
         title = exercise.title,
+        subtitle = exercise.instruction,
         leadingContent = {
             TitleThumbnail(exercise.title)
         },

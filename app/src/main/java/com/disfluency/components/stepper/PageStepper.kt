@@ -40,7 +40,7 @@ fun PageStepper(steps: List<StepScreen>, onCancel: () -> Unit, onFinish: () -> U
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(all = 8.dp),
+            .padding(bottom = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -54,7 +54,11 @@ fun PageStepper(steps: List<StepScreen>, onCancel: () -> Unit, onFinish: () -> U
             unSelectedColor= MaterialTheme.colorScheme.onPrimaryContainer
         )
 
-        steps[currentStep.value - 1].content()
+        Box(
+            modifier = Modifier.weight(1f)
+        ) {
+            steps[currentStep.value - 1].content()
+        }
 
         StepperButtons(
             steps = steps,

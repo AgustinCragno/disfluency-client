@@ -3,20 +3,15 @@ package com.disfluency.viewmodel
 import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
-import com.disfluency.data.ExerciseRepository
 import com.disfluency.viewmodel.states.ConfirmationState
 import com.disfluency.worker.*
 import kotlinx.coroutines.launch
 import java.io.File
-import java.time.LocalTime
 
-class RecordExerciseViewModel(context: Context, private val lifecycleOwner: LifecycleOwner) : RecordAudioViewModel(context) {
+class RecordExerciseAssignmentViewModel(context: Context, private val lifecycleOwner: LifecycleOwner) : RecordAudioViewModel(context) {
 
     val uploadConfirmationState = mutableStateOf(ConfirmationState.DONE)
 

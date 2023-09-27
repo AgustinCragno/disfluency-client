@@ -8,7 +8,7 @@ import com.disfluency.audio.record.DisfluencyAudioRecorder
 import kotlinx.coroutines.launch
 import java.io.File
 
-private const val LOCAL_RECORD_FILE = "disfluency_exercise_recording.mp3"
+const val LOCAL_RECORD_FILE = "disfluency_exercise_recording.mp3"
 
 
 open class RecordAudioViewModel(context: Context) : ViewModel() {

@@ -35,6 +35,7 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
     val formsViewModel: FormsViewModel = viewModel()
     val recordViewModel = RecordSessionViewModel(LocalContext.current, LocalLifecycleOwner.current)
     val analysisViewModel: AnalysisViewModel = viewModel()
+    val recordExerciseExampleViewModel = RecordExerciseExampleViewModel(LocalContext.current, LocalLifecycleOwner.current)
 
     val navHostController = rememberNavController()
 
@@ -159,7 +160,7 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
             }
         }
         composable(Route.Therapist.NewExercise.path){
-            ExerciseCreationScreen(therapist = therapist, navController = navHostController, viewModel = exercisesViewModel)
+            ExerciseCreationScreen(therapist = therapist, navController = navHostController, viewModel = exercisesViewModel, recordViewModel = recordExerciseExampleViewModel)
         }
     }
 }

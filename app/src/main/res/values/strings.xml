@@ -221,4 +221,19 @@
     <string name="session_will_be_uploaded_in_background">Se guardará la sesion en segundo plano</string>
     <string name="analysis_will_be_available_in_a_few_moments">En unos momentos estara disponible el analisis sistematico de disfluencias</string>
     <string name="new_exercise">Nuevo Ejercicio</string>
+    <string name="title">Titulo</string>
+    <string name="exercise_title">Titulo del ejercicio</string>
+    <string name="exercise_instruction">Consigna del ejercicio</string>
+    <string name="instruction">Consigna</string>
+    <string name="exercise_phrase">Frase a repetir</string>
+    <string name="phrase">Frase</string>
+    <string name="example">Ejemplo</string>
+    <string name="record">Grabar</string>
+    <string name="enter_title">Ingrese un titulo</string>
+    <string name="enter_instruction">Ingrese una consigna</string>
+    <string name="enter_phrase">Ingrese una frase para repetir con la consigna</string>
+    <string name="phrase_optional">Frase (opcional)</string>
+    <string name="example_audio">Audio de ejemplo</string>
+    <string name="example_audio_desc">Genere una grabacion de ejemplo para el paciente, de manera que pueda tener una guia sobre como debe seguir la consigna</string>
+    <string name="phrase_desc">En caso de que la haya cargado, se le proporcionara la frase de ejemplo para que su grabacion consista de la misma frase</string>
 </resources>

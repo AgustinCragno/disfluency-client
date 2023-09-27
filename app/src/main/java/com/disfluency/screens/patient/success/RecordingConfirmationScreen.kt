@@ -24,7 +24,7 @@ import com.disfluency.R
 import com.disfluency.components.success.ConfirmationScreen
 import com.disfluency.navigation.routing.Route
 import com.disfluency.ui.theme.Green40
-import com.disfluency.viewmodel.RecordExerciseViewModel
+import com.disfluency.viewmodel.RecordExerciseAssignmentViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.delay
 
@@ -32,7 +32,7 @@ const val ON_SUCCESS_ANIMATION_TIME = 300
 
 
 @Composable
-fun RecordingConfirmationScreen(navController: NavHostController, viewModel: RecordExerciseViewModel){
+fun RecordingConfirmationScreen(navController: NavHostController, viewModel: RecordExerciseAssignmentViewModel){
     ConfirmationScreen(
         loadingState = viewModel.uploadConfirmationState,
         loadingContent = { LoadingState() },

@@ -75,7 +75,9 @@ fun ListItem(
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.labelMedium,
-                color = subtitleColor
+                color = subtitleColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         },
         leadingContent = leadingContent,

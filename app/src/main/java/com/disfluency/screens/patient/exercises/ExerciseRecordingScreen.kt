@@ -33,7 +33,8 @@ import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.viewmodel.ExercisesViewModel
-import com.disfluency.viewmodel.RecordExerciseViewModel
+import com.disfluency.viewmodel.RecordAudioViewModel
+import com.disfluency.viewmodel.RecordExerciseAssignmentViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import java.time.LocalDate
 
@@ -48,7 +49,7 @@ private const val BOTTOM_SHEET_REQUIRED_HEIGHT = 200
 @Composable
 fun RecordExercisePreview(){
     val exercisesViewModel = ExercisesViewModel()
-    val recordViewModel = RecordExerciseViewModel(LocalContext.current, LocalLifecycleOwner.current)
+    val recordViewModel = RecordExerciseAssignmentViewModel(LocalContext.current, LocalLifecycleOwner.current)
     
     val navHostController = rememberNavController()
 
@@ -87,7 +88,7 @@ fun RecordExerciseScreen(
     assignmentId: String,
     navController: NavHostController,
     exercisesViewModel: ExercisesViewModel,
-    recordViewModel: RecordExerciseViewModel
+    recordViewModel: RecordExerciseAssignmentViewModel
 ){
     val assignment = remember {
         mutableStateOf<ExerciseAssignment?>(null)
@@ -104,12 +105,15 @@ fun RecordExerciseScreen(
     }
 
     assignment.value?.let {
-        RecordExercise(
-            assignmentId = it.id,
-            exercise = it.exercise,
-            navController = navController,
-            recordViewModel = recordViewModel
-        )
+        BackNavigationScaffold(title = stringResource(R.string.practice), navController = navController) { paddingValues ->
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)) {
+                RecordExercisePanel(exercise = it.exercise, recordViewModel = recordViewModel) {
+                    recordViewModel.uploadRecording(it.id)
+                }
+            }
+        }
     }
 
     if (recordViewModel.uploadConfirmationState.value == ConfirmationState.LOADING) {
@@ -120,13 +124,13 @@ fun RecordExerciseScreen(
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RecordExercise(
-    assignmentId: String,
+fun RecordExercisePanel(
     exercise: Exercise,
-    navController: NavHostController,
-    recordViewModel: RecordExerciseViewModel
+    recordViewModel: RecordAudioViewModel,
+    onSubmit: () -> Unit
 ){
     val context = LocalContext.current
     val isMenuExtended = remember { mutableStateOf(false) }
@@ -138,67 +142,61 @@ private fun RecordExercise(
         derivedStateOf { BOTTOM_SHEET_TITLE_PADDING_OPEN }
     }
 
-    BackNavigationScaffold(title = stringResource(R.string.practice), navController = navController) { paddingValues ->
-        Box(
-            Modifier.fillMaxSize()
-        ) {
-            BottomSheetScaffold(
-                sheetContent = {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .padding(horizontal = 32.dp)
-                    ){
-                        ExerciseInstructionsPanel(
-                            exercise = exercise,
-                            animatePadding = animateTitlePadding
-                        )
-                    }
-                },
-                sheetContainerColor = MaterialTheme.colorScheme.secondary,
-                containerColor = Color.White,
-                sheetPeekHeight = BOTTOM_SHEET_PEEK_HEIGHT.dp,
-                sheetDragHandle = {},
-                scaffoldState = scaffoldState,
-                sheetSwipeEnabled = !isMenuExtended.value
-            ) { bottomSheetPaddingValues ->
-
-                ExercisePhrasePanel(
-                    exercise = exercise,
+    Box(
+        Modifier.fillMaxSize()
+    ) {
+        BottomSheetScaffold(
+            sheetContent = {
+                Box(
                     modifier = Modifier
-                        .padding(bottomSheetPaddingValues)
-                        .padding(paddingValues),
-                    viewModel = recordViewModel
-                )
-            }
-
-            RecordButton(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = (BOTTOM_SHEET_PEEK_HEIGHT.dp + 16.dp) / 2)
-                    .scale(animateButtonScale.value),
-                isMenuExtended = isMenuExtended,
-                viewModel = recordViewModel,
-                onPress = {
-                    recordViewModel.start(context)
-                },
-                onRelease = {
-                    recordViewModel.stop()
-                },
-                onDelete = {
-                    recordViewModel.delete()
-                },
-                onSend = {
-                    recordViewModel.uploadRecording(assignmentId)
-                },
-                onPlay = {
-                    recordViewModel.play()
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(horizontal = 32.dp)
+                ){
+                    ExerciseInstructionsPanel(
+                        exercise = exercise,
+                        animatePadding = animateTitlePadding
+                    )
                 }
+            },
+            sheetContainerColor = MaterialTheme.colorScheme.secondary,
+            containerColor = Color.White,
+            sheetPeekHeight = BOTTOM_SHEET_PEEK_HEIGHT.dp,
+            sheetDragHandle = {},
+            scaffoldState = scaffoldState,
+            sheetSwipeEnabled = !isMenuExtended.value
+        ) { bottomSheetPaddingValues ->
+
+            ExercisePhrasePanel(
+                exercise = exercise,
+                modifier = Modifier
+                    .padding(bottomSheetPaddingValues),
+                viewModel = recordViewModel
             )
         }
-    }
 
+        RecordButton(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = (BOTTOM_SHEET_PEEK_HEIGHT.dp + 16.dp) / 2)
+                .scale(animateButtonScale.value),
+            isMenuExtended = isMenuExtended,
+            viewModel = recordViewModel,
+            onPress = {
+                recordViewModel.start(context)
+            },
+            onRelease = {
+                recordViewModel.stop()
+            },
+            onDelete = {
+                recordViewModel.delete()
+            },
+            onSend = onSubmit,
+            onPlay = {
+                recordViewModel.play()
+            }
+        )
+    }
 
     val initialMeasure: MutableState<Float?> = remember { mutableStateOf(null) }
     LaunchedEffect(Unit){
@@ -263,46 +261,45 @@ private fun ExerciseInstructionsPanel(
 private fun AudioPlayerPanel(
     exercise: Exercise
 ){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    if (exercise.sampleRecordingUrl.isNotBlank()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        AudioPlayer(
-            url = exercise.sampleRecordingUrl,
-            type = AudioMediaType.URL,
-            modifier = Modifier.padding(horizontal = 24.dp)
-        )
+            AudioPlayer(
+                url = exercise.sampleRecordingUrl,
+                type = AudioMediaType.URL,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(32.dp))
+        }
     }
 }
 
 @Composable
-private fun ExercisePhrasePanel(
+fun ExercisePhrasePanel(
     exercise: Exercise,
-    modifier: Modifier,
-    viewModel: RecordExerciseViewModel
+    modifier: Modifier = Modifier.fillMaxSize(),
+    viewModel: RecordAudioViewModel
 ){
     Column(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        exercise.phrase?.let {
-            Text(
-                text = it,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-            )
-        }
+        Text(
+            text = exercise.phrase ?: exercise.instruction,
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp)
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -311,7 +308,7 @@ private fun ExercisePhrasePanel(
 }
 
 @Composable
-private fun RecordingVisualizer(viewModel: RecordExerciseViewModel){
+private fun RecordingVisualizer(viewModel: RecordAudioViewModel){
     val transitionLength = 800
 
     Box(
