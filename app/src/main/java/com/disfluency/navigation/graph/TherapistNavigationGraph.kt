@@ -147,7 +147,8 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                 ExerciseDetailScreen(
                     exerciseId = it,
                     therapist = therapist,
-                    navController = navHostController
+                    navController = navHostController,
+                    viewModel = patientsViewModel
                 )
             }
         }

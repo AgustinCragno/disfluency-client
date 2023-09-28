@@ -239,4 +239,6 @@
     <string name="wait_while_exercise_is_submitted">Espere un momento mientras se guarda el nuevo ejercicio</string>
     <string name="exercise_was_submitted_successfully">Se guardo el ejercicio correctamente</string>
     <string name="an_error_occurred_while_submitting_exercise">Ocurrio un error al guardar el ejercicio</string>
+    <string name="send">Enviar</string>
+    <string name="assign_to">Asignar a:</string>
 </resources>
