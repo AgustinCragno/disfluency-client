@@ -15,7 +15,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.disfluency.R
+import com.disfluency.components.button.SendAndCancelButtons
 import com.disfluency.components.dialogs.AnimatedDialog
+import com.disfluency.components.dialogs.AssignmentDialog
 import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.components.list.item.SelectablePatientListItem
 import com.disfluency.components.skeleton.SkeletonLoader
@@ -86,97 +88,43 @@ private fun ExerciseAssignmentButton(
     }
 
     if (openDialog){
+        val selectedPatients = remember { mutableStateListOf<Patient>() }
+
+        var send by remember { mutableStateOf(false) }
+
         AssignmentDialog(
-            exerciseId = exerciseId,
-            therapistId = therapistId,
-            navController = navController,
-            viewModel = viewModel,
-            assignmentsViewModel = assignmentsViewModel,
-            dismissAction = dismissAction
-        )
-    }
-}
-
-@Composable
-private fun AssignmentDialog(
-    exerciseId: String,
-    therapistId: String,
-    navController: NavHostController,
-    viewModel: PatientsViewModel,
-    assignmentsViewModel: AssignmentsViewModel,
-    dismissAction: () -> Unit
-){
-    LaunchedEffect(Unit){
-        if (viewModel.patients.value == null){
-            viewModel.getPatientsByTherapist(therapistId)
-        }
-    }
-
-    val selectedPatients = remember { mutableStateListOf<Patient>() }
-
-    var send by remember { mutableStateOf(false) }
-
-    AnimatedDialog(dismissAction = dismissAction) {
-        Surface(
-            modifier = Modifier
-                .fillMaxHeight(0.85f)
-                .fillMaxWidth()
-                .padding(vertical = 32.dp),
-            shape = MaterialTheme.shapes.large
-        ) {
-            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    text = stringResource(R.string.assign_to),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge
-                )
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(10f)
-                ) {
-                    SkeletonLoader(
-                        state = viewModel.patients,
-                        content = {
-                            viewModel.patients.value?.let {
-                                SelectablePatientList(
-                                    exerciseId = exerciseId,
-                                    patients = it,
-                                    selected = selectedPatients
-                                )
-                            }
-                        },
-                        skeleton = {
-                            PatientListSkeleton()
-                        }
+            contentState = viewModel.patients,
+            content = {
+                viewModel.patients.value?.let {
+                    SelectablePatientList(
+                        exerciseId = exerciseId,
+                        patients = it,
+                        selected = selectedPatients
                     )
                 }
-
-                SendAndCancelButtons(
-                    modifier = Modifier.weight(1f),
-                    onCancel = dismissAction,
-                    sendEnabled = selectedPatients.isNotEmpty(),
-                    onSend = {
-                        assignmentsViewModel.assignExercisesToPatients(
-                            exerciseIds = listOf(exerciseId),
-                            patientIds = selectedPatients.map { it.id }
-                        )
-                        send = true
-                    }
+            },
+            dismissAction = dismissAction,
+            onSend = {
+                assignmentsViewModel.assignExercisesToPatients(
+                    exerciseIds = listOf(exerciseId),
+                    patientIds = selectedPatients.map { it.id }
                 )
+                send = true
+            },
+            sendEnabled = selectedPatients.isNotEmpty(),
+            onLaunch = {
+                if (viewModel.patients.value == null){
+                    viewModel.getPatientsByTherapist(therapistId)
+                }
             }
-        }
-    }
+        )
 
-    if (send){
-        LaunchedEffect(Unit){
-            delay(200)
-            navController.popBackStack()
-            navController.navigate(Route.Therapist.ExerciseAssignmentConfirmation.path)
+        if (send){
+            LaunchedEffect(Unit){
+                delay(200)
+                dismissAction()
+                navController.navigate(Route.Therapist.ExerciseAssignmentConfirmation.path)
+            }
         }
     }
 }
@@ -203,36 +151,6 @@ private fun SelectablePatientList(
                 if (selected.contains(patient)) selected.remove(patient)
                 else selected.add(patient)
             }
-        }
-    }
-}
-
-@Composable
-private fun SendAndCancelButtons(
-    modifier: Modifier = Modifier,
-    sendEnabled: Boolean,
-    onCancel: () -> Unit,
-    onSend: () -> Unit
-){
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        TextButton(
-            modifier = Modifier
-                .weight(1f),
-            onClick = onCancel,
-        ) {
-            Text(text = stringResource(id = R.string.cancel))
-        }
-
-        TextButton(
-            modifier = Modifier
-                .weight(1f),
-            onClick = onSend,
-            enabled = sendEnabled
-        ) {
-            Text(text = stringResource(id = R.string.send))
         }
     }
 }
