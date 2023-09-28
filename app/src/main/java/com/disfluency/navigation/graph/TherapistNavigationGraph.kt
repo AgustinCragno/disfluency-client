@@ -20,6 +20,7 @@ import com.disfluency.screens.therapist.forms.*
 import com.disfluency.screens.therapist.patients.MyPatientsScreen
 import com.disfluency.screens.therapist.patients.NewPatientScreen
 import com.disfluency.screens.therapist.patients.PatientDetailScreen
+import com.disfluency.screens.therapist.success.NewExerciseConfirmationScreen
 import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.FormsViewModel
@@ -160,7 +161,19 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
             }
         }
         composable(Route.Therapist.NewExercise.path){
-            ExerciseCreationScreen(therapist = therapist, navController = navHostController, viewModel = exercisesViewModel, recordViewModel = recordExerciseExampleViewModel)
+            ExerciseCreationScreen(
+                therapist = therapist,
+                navController = navHostController,
+                viewModel = exercisesViewModel,
+                recordViewModel = recordExerciseExampleViewModel
+            )
+        }
+        composable(Route.Therapist.ConfirmationNewExercise.path){
+            NewExerciseConfirmationScreen(
+                therapist = therapist,
+                navController = navHostController,
+                recordViewModel = recordExerciseExampleViewModel
+            )
         }
     }
 }

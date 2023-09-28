@@ -31,13 +31,13 @@ class RecordExerciseAssignmentViewModel(context: Context, private val lifecycleO
             .putString(FILE_UPLOAD_PATH_KEY, file.path)
             .build()
 
-        val workRequest = OneTimeWorkRequestBuilder<ExerciseUploadWorker>()
+        val workRequest = OneTimeWorkRequestBuilder<ExercisePracticeUploadWorker>()
             .setInputData(inputData)
             .setConstraints(constraints)
             .build()
 
         Log.i("RecordExerciseViewModel", "Preparing exercise upload worker")
-        workManager.enqueueUniqueWork(ExerciseUploadWorker.WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
+        workManager.enqueueUniqueWork(ExercisePracticeUploadWorker.WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
         Log.i("RecordExerciseViewModel", "Enqueued exercise upload worker")
 
         workManager.getWorkInfoByIdLiveData(workRequest.id).observe(lifecycleOwner) { workInfo ->

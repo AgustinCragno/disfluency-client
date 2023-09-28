@@ -2,7 +2,10 @@ package com.disfluency.data
 
 import android.util.Log
 import com.disfluency.api.DisfluencyAPI
+import com.disfluency.api.dto.NewExerciseDTO
+import com.disfluency.api.error.ExerciseCreationException
 import com.disfluency.api.error.PatientNotFoundException
+import com.disfluency.model.exercise.Exercise
 import com.disfluency.model.exercise.ExerciseAssignment
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -31,5 +34,23 @@ class ExerciseRepository {
             url,
             audio.asRequestBody("audio/mpeg".toMediaTypeOrNull())
         )
+    }
+
+    suspend fun getExerciseSampleUrl(therapistId: String): String {
+        Log.i("exercises", "Retrieving pre-signed url for new exercise sample")
+        return DisfluencyAPI.exerciseService.getExerciseSamplePreSignedUrl(therapistId).recordingUrl
+    }
+
+    suspend fun createExercise(therapistId: String, newExercise: NewExerciseDTO): Exercise {
+        Log.i("exercises", "Creating new exercise of therapist: $therapistId")
+        try {
+            val dto = DisfluencyAPI.exerciseService.createExerciseOfTherapist(newExercise, therapistId)
+            Log.i("exercises", "Successfully created exercise ${dto.title} for therapist: $therapistId")
+            return dto.asExercise()
+        }
+        catch (e: HttpException){
+            Log.i("exercises", "An error occurred creating exercise ${newExercise.title}: $e")
+            throw ExerciseCreationException(newExercise)
+        }
     }
 }

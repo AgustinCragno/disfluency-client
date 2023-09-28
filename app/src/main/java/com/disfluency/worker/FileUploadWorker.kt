@@ -27,17 +27,14 @@ abstract class FileUploadWorker(private val appContext: Context, protected val p
         Log.d("FileUploadWorker", "File upload start time: ${LocalTime.now()}")
         return try {
             Log.i("FileUploadWorker", "uploading audio file")
-            upload()
-            Log.i("FileUploadWorker", "successfully uploaded audio file")
-            Log.d("FileUploadWorker", "File upload finish time: ${LocalTime.now()}")
-            Result.success()
+            return upload()
         } catch (e: Exception){
             Log.i("FileUploadWorker", "an error occurred when uploading audio file")
             Result.failure()
         }
     }
 
-    protected abstract suspend fun upload(): ResponseBody
+    protected abstract suspend fun upload(): Result
 
     private suspend fun startForegroundService(){
         setForeground(

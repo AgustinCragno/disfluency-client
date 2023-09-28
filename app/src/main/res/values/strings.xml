@@ -236,4 +236,7 @@
     <string name="example_audio">Audio de ejemplo</string>
     <string name="example_audio_desc">Genere una grabacion de ejemplo para el paciente, de manera que pueda tener una guia sobre como debe seguir la consigna</string>
     <string name="phrase_desc">En caso de que la haya cargado, se le proporcionara la frase de ejemplo para que su grabacion consista de la misma frase</string>
+    <string name="wait_while_exercise_is_submitted">Espere un momento mientras se guarda el nuevo ejercicio</string>
+    <string name="exercise_was_submitted_successfully">Se guardo el ejercicio correctamente</string>
+    <string name="an_error_occurred_while_submitting_exercise">Ocurrio un error al guardar el ejercicio</string>
 </resources>

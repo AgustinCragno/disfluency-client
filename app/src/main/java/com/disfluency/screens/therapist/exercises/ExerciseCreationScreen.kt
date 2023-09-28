@@ -5,10 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,18 +28,24 @@ import com.disfluency.components.stepper.PageStepper
 import com.disfluency.components.stepper.StepScreen
 import com.disfluency.model.exercise.Exercise
 import com.disfluency.model.user.Therapist
+import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.patient.exercises.ExercisePhrasePanel
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.LOCAL_RECORD_FILE
 import com.disfluency.viewmodel.RecordAudioViewModel
+import com.disfluency.viewmodel.RecordExerciseExampleViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun ExerciseCreationScreen(
     therapist: Therapist,
     navController: NavHostController,
     viewModel: ExercisesViewModel,
-    recordViewModel: RecordAudioViewModel
+    recordViewModel: RecordExerciseExampleViewModel
 ){
     BackNavigationScaffold(
         title = stringResource(R.string.new_exercise),
@@ -68,7 +71,7 @@ fun ExerciseCreationScreen(
 private fun ExerciseCreationStepper(
     therapist: Therapist,
     navController: NavHostController,
-    recordViewModel: RecordAudioViewModel
+    recordViewModel: RecordExerciseExampleViewModel
 ){
     val title = remember { mutableStateOf("") }
     val instruction = remember { mutableStateOf("") }
@@ -101,12 +104,24 @@ private fun ExerciseCreationStepper(
         }
     )
 
+    var submitted by remember { mutableStateOf(false) }
 
     PageStepper(
         steps = steps,
         onCancel = { navController.popBackStack() }
     ) {
-        //TODO: llamar view model
+        recordViewModel.uploadRecording(therapist.id, title.value, instruction.value, phrase.value.ifBlank { null })
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(200)
+            submitted = true
+        }
+    }
+
+    if (submitted){
+        LaunchedEffect(Unit){
+            navController.popBackStack()
+            navController.navigate(Route.Therapist.ConfirmationNewExercise.path)
+        }
     }
 }
 

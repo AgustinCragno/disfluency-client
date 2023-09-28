@@ -3,7 +3,7 @@ package com.disfluency.api.service
 import com.disfluency.api.dto.PatientDTO
 import com.disfluency.api.dto.PracticeDTO
 import com.disfluency.api.dto.SessionDTO
-import com.disfluency.api.dto.SessionPreSignedDTO
+import com.disfluency.api.dto.PreSignedUrlDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -18,7 +18,7 @@ sealed interface PatientService {
     suspend fun createPatientOfTherapist(@Body patient: PatientDTO, @Path("therapistId") therapistId: String): PatientDTO
 
     @GET("patient/{patientId}/presignedUrl")
-    suspend fun getSessionPreSignedUrl(@Path("patientId") patientId: String): SessionPreSignedDTO
+    suspend fun getSessionPreSignedUrl(@Path("patientId") patientId: String): PreSignedUrlDTO
 
     @POST("patient/{patientId}/sessions")
     suspend fun createSession(@Path("patientId") patientId: String, @Body url: PracticeDTO): SessionDTO
