@@ -1,4 +1,4 @@
-package com.disfluency.viewmodel
+package com.disfluency.viewmodel.record
 
 import android.content.Context
 import android.util.Log
@@ -11,7 +11,7 @@ import com.disfluency.worker.*
 import kotlinx.coroutines.launch
 import java.io.File
 
-class RecordExerciseAssignmentViewModel(context: Context, private val lifecycleOwner: LifecycleOwner) : RecordAudioViewModel(context) {
+class RecordSessionViewModel(context: Context, private val lifecycleOwner: LifecycleOwner) : RecordAudioViewModel(context) {
 
     val uploadConfirmationState = mutableStateOf(ConfirmationState.DONE)
 
@@ -31,14 +31,14 @@ class RecordExerciseAssignmentViewModel(context: Context, private val lifecycleO
             .putString(FILE_UPLOAD_PATH_KEY, file.path)
             .build()
 
-        val workRequest = OneTimeWorkRequestBuilder<ExercisePracticeUploadWorker>()
+        val workRequest = OneTimeWorkRequestBuilder<SessionUploadWorker>()
             .setInputData(inputData)
             .setConstraints(constraints)
             .build()
 
-        Log.i("RecordExerciseViewModel", "Preparing exercise upload worker")
-        workManager.enqueueUniqueWork(ExercisePracticeUploadWorker.WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
-        Log.i("RecordExerciseViewModel", "Enqueued exercise upload worker")
+        Log.i("RecordSessionViewModel", "Preparing session upload worker")
+        workManager.enqueueUniqueWork(SessionUploadWorker.WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
+        Log.i("RecordSessionViewModel", "Enqueued session upload worker")
 
         workManager.getWorkInfoByIdLiveData(workRequest.id).observe(lifecycleOwner) { workInfo ->
             uploadConfirmationState.value = workStateAsConfirmationState(workInfo.state)
@@ -56,7 +56,7 @@ class RecordExerciseAssignmentViewModel(context: Context, private val lifecycleO
         }
     }
 
-    fun uploadRecording(assignmentId: String) = viewModelScope.launch {
-        outputFile?.let { dispatchFileUploadWorker(assignmentId, it) }
+    fun uploadRecording(patientId: String) = viewModelScope.launch {
+        outputFile?.let { dispatchFileUploadWorker(patientId, it) }
     }
 }

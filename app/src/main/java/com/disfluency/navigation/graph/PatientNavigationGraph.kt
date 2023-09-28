@@ -21,7 +21,7 @@ import com.disfluency.screens.patient.success.RecordingConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.FormsViewModel
 import com.disfluency.viewmodel.LoggedUserViewModel
-import com.disfluency.viewmodel.RecordExerciseAssignmentViewModel
+import com.disfluency.viewmodel.record.RecordExerciseAssignmentViewModel
 
 @Composable
 fun PatientNavigationGraph(patient: Patient, loggedUserViewModel: LoggedUserViewModel){

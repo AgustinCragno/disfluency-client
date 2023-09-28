@@ -43,23 +43,6 @@ fun SessionRecordConfirmationScreen(patientId: String, navController: NavHostCon
 
 @Composable
 private fun LoadingState(){
-//    Column(
-//        modifier = Modifier.fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center
-//    ) {
-//        CircularProgressIndicator(
-//            modifier = Modifier.padding(16.dp),
-//            color = Color.White
-//        )
-//        Text(
-//            text = "Se subira la grabacion en segundo plano",
-//            color = Color.White,
-//            style = MaterialTheme.typography.bodyMedium,
-//            fontWeight = FontWeight.Bold
-//        )
-//    }
-
     IconMessage(
         imageVector = Icons.Filled.Backup,
         color = Color.Transparent,

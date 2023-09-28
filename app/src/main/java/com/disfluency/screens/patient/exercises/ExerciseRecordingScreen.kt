@@ -33,8 +33,8 @@ import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.viewmodel.ExercisesViewModel
-import com.disfluency.viewmodel.RecordAudioViewModel
-import com.disfluency.viewmodel.RecordExerciseAssignmentViewModel
+import com.disfluency.viewmodel.record.RecordAudioViewModel
+import com.disfluency.viewmodel.record.RecordExerciseAssignmentViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import java.time.LocalDate
 

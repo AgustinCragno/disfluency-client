@@ -241,4 +241,7 @@
     <string name="an_error_occurred_while_submitting_exercise">Ocurrio un error al guardar el ejercicio</string>
     <string name="send">Enviar</string>
     <string name="assign_to">Asignar a:</string>
+    <string name="wait_while_exercise_is_sent">Espere un momento mientras se envia el ejercicio</string>
+    <string name="exercise_was_sent_successfully">Se envio el ejercicio existosamente</string>
+    <string name="an_error_occurred_while_sending_exercise">Ocurrio un error al enviar el ejercicio</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.disfluency.screens.therapist.exercises
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,15 +14,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.audio.AudioMediaType
 import com.disfluency.components.audio.AudioPlayer
 import com.disfluency.components.button.RecordButtonSmall
 import com.disfluency.components.inputs.text.CleanLabeledTextField
-import com.disfluency.components.inputs.text.MandatoryTextInput
-import com.disfluency.components.inputs.text.MandatoryValidation
 import com.disfluency.components.stepper.PageStepper
 import com.disfluency.components.stepper.StepScreen
 import com.disfluency.model.exercise.Exercise
@@ -32,9 +28,9 @@ import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.patient.exercises.ExercisePhrasePanel
 import com.disfluency.viewmodel.ExercisesViewModel
-import com.disfluency.viewmodel.LOCAL_RECORD_FILE
-import com.disfluency.viewmodel.RecordAudioViewModel
-import com.disfluency.viewmodel.RecordExerciseExampleViewModel
+import com.disfluency.viewmodel.record.LOCAL_RECORD_FILE
+import com.disfluency.viewmodel.record.RecordAudioViewModel
+import com.disfluency.viewmodel.record.RecordExerciseExampleViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

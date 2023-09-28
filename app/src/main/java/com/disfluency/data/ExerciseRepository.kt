@@ -2,7 +2,9 @@ package com.disfluency.data
 
 import android.util.Log
 import com.disfluency.api.DisfluencyAPI
+import com.disfluency.api.dto.AssignExercisesDTO
 import com.disfluency.api.dto.NewExerciseDTO
+import com.disfluency.api.error.AssignExerciseException
 import com.disfluency.api.error.ExerciseCreationException
 import com.disfluency.api.error.PatientNotFoundException
 import com.disfluency.model.exercise.Exercise
@@ -51,6 +53,19 @@ class ExerciseRepository {
         catch (e: HttpException){
             Log.i("exercises", "An error occurred creating exercise ${newExercise.title}: $e")
             throw ExerciseCreationException(newExercise)
+        }
+    }
+
+    suspend fun assignExercisesToPatients(exerciseIds: List<String>, patientIds: List<String>) {
+        Log.i("exercises", "Assigning exercises $exerciseIds to patients $patientIds")
+        try {
+            val dto = AssignExercisesDTO(patientIds = patientIds, exerciseIds = exerciseIds)
+            DisfluencyAPI.exerciseService.assignExercisesToPatients(dto)
+            Log.i("exercises", "Successfully assigned exercises $exerciseIds to patients $patientIds")
+        }
+        catch (e: HttpException){
+            Log.i("exercises", "An error occurred assigning exercises $exerciseIds to patients $patientIds")
+            throw AssignExerciseException(exerciseIds, patientIds)
         }
     }
 }

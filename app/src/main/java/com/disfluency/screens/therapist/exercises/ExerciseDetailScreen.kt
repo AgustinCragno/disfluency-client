@@ -22,23 +22,21 @@ import com.disfluency.components.skeleton.SkeletonLoader
 import com.disfluency.components.skeleton.list.PatientListSkeleton
 import com.disfluency.model.user.Patient
 import com.disfluency.model.user.Therapist
+import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
+import com.disfluency.viewmodel.AssignmentsViewModel
 import com.disfluency.viewmodel.PatientsViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun ExerciseDetailScreen(
     exerciseId: String,
     therapist: Therapist,
     navController: NavHostController,
-    viewModel: PatientsViewModel
+    viewModel: PatientsViewModel,
+    assignmentsViewModel: AssignmentsViewModel
 ){
     val exercise = therapist.exercises.find { it.id == exerciseId }
-
-    LaunchedEffect(Unit){
-        if (viewModel.patients.value == null){
-            viewModel.getPatientsByTherapist(therapist.id)
-        }
-    }
 
     BackNavigationScaffold(
         title = stringResource(R.string.exercise),
@@ -48,14 +46,26 @@ fun ExerciseDetailScreen(
             exercise?.let {
                 ExerciseDetailPanelFixed(exercise = it)
 
-                ExerciseAssignmentButton(exerciseId = it.id, navController = navController, viewModel = viewModel)
+                ExerciseAssignmentButton(
+                    exerciseId = it.id,
+                    therapistId = therapist.id,
+                    navController = navController,
+                    viewModel = viewModel,
+                    assignmentsViewModel = assignmentsViewModel
+                )
             }
         }
     }
 }
 
 @Composable
-private fun ExerciseAssignmentButton(exerciseId: String, navController: NavHostController, viewModel: PatientsViewModel) {
+private fun ExerciseAssignmentButton(
+    exerciseId: String,
+    therapistId: String,
+    navController: NavHostController,
+    viewModel: PatientsViewModel,
+    assignmentsViewModel: AssignmentsViewModel
+) {
     var openDialog by remember { mutableStateOf(false) }
 
     val dismissAction = { openDialog = false }
@@ -78,8 +88,10 @@ private fun ExerciseAssignmentButton(exerciseId: String, navController: NavHostC
     if (openDialog){
         AssignmentDialog(
             exerciseId = exerciseId,
+            therapistId = therapistId,
             navController = navController,
             viewModel = viewModel,
+            assignmentsViewModel = assignmentsViewModel,
             dismissAction = dismissAction
         )
     }
@@ -88,13 +100,21 @@ private fun ExerciseAssignmentButton(exerciseId: String, navController: NavHostC
 @Composable
 private fun AssignmentDialog(
     exerciseId: String,
+    therapistId: String,
     navController: NavHostController,
     viewModel: PatientsViewModel,
+    assignmentsViewModel: AssignmentsViewModel,
     dismissAction: () -> Unit
 ){
-    val selectedPatients = remember {
-        mutableStateListOf<Patient>()
+    LaunchedEffect(Unit){
+        if (viewModel.patients.value == null){
+            viewModel.getPatientsByTherapist(therapistId)
+        }
     }
+
+    val selectedPatients = remember { mutableStateListOf<Patient>() }
+
+    var send by remember { mutableStateOf(false) }
 
     AnimatedDialog(dismissAction = dismissAction) {
         Surface(
@@ -141,10 +161,22 @@ private fun AssignmentDialog(
                     onCancel = dismissAction,
                     sendEnabled = selectedPatients.isNotEmpty(),
                     onSend = {
-                        //TODO: enviar
+                        assignmentsViewModel.assignExercisesToPatients(
+                            exerciseIds = listOf(exerciseId),
+                            patientIds = selectedPatients.map { it.id }
+                        )
+                        send = true
                     }
                 )
             }
+        }
+    }
+
+    if (send){
+        LaunchedEffect(Unit){
+            delay(200)
+            navController.popBackStack()
+            navController.navigate(Route.Therapist.ExerciseAssignmentConfirmation.path)
         }
     }
 }

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.disfluency.ui.theme.DisfluencyTheme
-import com.disfluency.viewmodel.RecordAudioViewModel
+import com.disfluency.viewmodel.record.RecordAudioViewModel
 
 /**
  * Design inspired from https://github.com/jurajkusnier/fluid-bottom-navigation

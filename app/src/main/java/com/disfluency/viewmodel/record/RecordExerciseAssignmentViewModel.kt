@@ -1,22 +1,17 @@
-package com.disfluency.viewmodel
+package com.disfluency.viewmodel.record
 
 import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import androidx.work.*
-import com.disfluency.data.ExerciseRepository
 import com.disfluency.viewmodel.states.ConfirmationState
 import com.disfluency.worker.*
 import kotlinx.coroutines.launch
 import java.io.File
-import java.time.LocalTime
 
-class RecordSessionViewModel(context: Context, private val lifecycleOwner: LifecycleOwner) : RecordAudioViewModel(context) {
+class RecordExerciseAssignmentViewModel(context: Context, private val lifecycleOwner: LifecycleOwner) : RecordAudioViewModel(context) {
 
     val uploadConfirmationState = mutableStateOf(ConfirmationState.DONE)
 
@@ -36,14 +31,14 @@ class RecordSessionViewModel(context: Context, private val lifecycleOwner: Lifec
             .putString(FILE_UPLOAD_PATH_KEY, file.path)
             .build()
 
-        val workRequest = OneTimeWorkRequestBuilder<SessionUploadWorker>()
+        val workRequest = OneTimeWorkRequestBuilder<ExercisePracticeUploadWorker>()
             .setInputData(inputData)
             .setConstraints(constraints)
             .build()
 
-        Log.i("RecordSessionViewModel", "Preparing session upload worker")
-        workManager.enqueueUniqueWork(SessionUploadWorker.WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
-        Log.i("RecordSessionViewModel", "Enqueued session upload worker")
+        Log.i("RecordExerciseViewModel", "Preparing exercise upload worker")
+        workManager.enqueueUniqueWork(ExercisePracticeUploadWorker.WORK_NAME, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest)
+        Log.i("RecordExerciseViewModel", "Enqueued exercise upload worker")
 
         workManager.getWorkInfoByIdLiveData(workRequest.id).observe(lifecycleOwner) { workInfo ->
             uploadConfirmationState.value = workStateAsConfirmationState(workInfo.state)
@@ -61,7 +56,7 @@ class RecordSessionViewModel(context: Context, private val lifecycleOwner: Lifec
         }
     }
 
-    fun uploadRecording(patientId: String) = viewModelScope.launch {
-        outputFile?.let { dispatchFileUploadWorker(patientId, it) }
+    fun uploadRecording(assignmentId: String) = viewModelScope.launch {
+        outputFile?.let { dispatchFileUploadWorker(assignmentId, it) }
     }
 }

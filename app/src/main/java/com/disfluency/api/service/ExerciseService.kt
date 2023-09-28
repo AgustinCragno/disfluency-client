@@ -19,4 +19,7 @@ sealed interface ExerciseService{
 
     @POST("therapist/{therapistId}/exercises")
     suspend fun createExerciseOfTherapist(@Body newExercise: NewExerciseDTO, @Path("therapistId") therapistId: String): ExerciseDTO
+
+    @POST("exercisesAssignments")
+    suspend fun assignExercisesToPatients(@Body assignExercisesDTO: AssignExercisesDTO)
 }

@@ -11,8 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +24,7 @@ import com.disfluency.components.success.ConfirmationScreen
 import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.ui.theme.Green40
-import com.disfluency.viewmodel.RecordExerciseExampleViewModel
+import com.disfluency.viewmodel.record.RecordExerciseExampleViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

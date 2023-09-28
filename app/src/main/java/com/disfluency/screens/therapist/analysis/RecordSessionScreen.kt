@@ -20,7 +20,7 @@ import com.disfluency.components.button.RecordButton
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.viewmodel.AnalysisViewModel
-import com.disfluency.viewmodel.RecordSessionViewModel
+import com.disfluency.viewmodel.record.RecordSessionViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 
 @Composable
