@@ -91,7 +91,6 @@ fun ExerciseDetailPanelFixed(exercise: Exercise){
 
     Card(
         modifier = Modifier
-            .fillMaxSize()
             .padding(16.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
@@ -137,7 +136,7 @@ private fun ExerciseBottomPanel(exercise: Exercise, audioPlayer: DisfluencyAudio
         )
 
         Box(
-            modifier = Modifier.fillMaxHeight(),
+//            modifier = Modifier.fillMaxHeight(),
             contentAlignment = Alignment.Center
         ){
             AudioPlayer(

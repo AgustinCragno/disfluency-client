@@ -50,7 +50,7 @@ private const val BOTTOM_SHEET_REQUIRED_HEIGHT = 200
 fun RecordExercisePreview(){
     val exercisesViewModel = ExercisesViewModel()
     val recordViewModel = RecordExerciseAssignmentViewModel(LocalContext.current, LocalLifecycleOwner.current)
-    
+
     val navHostController = rememberNavController()
 
     val assignmentId = "Id"
@@ -72,7 +72,7 @@ fun RecordExercisePreview(){
     )
 
     exercisesViewModel.assignments.value = listOf(assignment)
-    
+
     DisfluencyTheme() {
         RecordExerciseScreen(
             assignmentId = assignmentId,
@@ -105,15 +105,12 @@ fun RecordExerciseScreen(
     }
 
     assignment.value?.let {
-        BackNavigationScaffold(title = stringResource(R.string.practice), navController = navController) { paddingValues ->
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)) {
-                RecordExercisePanel(exercise = it.exercise, recordViewModel = recordViewModel) {
-                    recordViewModel.uploadRecording(it.id)
-                }
-            }
-        }
+        RecordExercise(
+            assignmentId = it.id,
+            exercise = it.exercise,
+            navController = navController,
+            recordViewModel = recordViewModel
+        )
     }
 
     if (recordViewModel.uploadConfirmationState.value == ConfirmationState.LOADING) {
@@ -124,13 +121,13 @@ fun RecordExerciseScreen(
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecordExercisePanel(
+private fun RecordExercise(
+    assignmentId: String,
     exercise: Exercise,
-    recordViewModel: RecordAudioViewModel,
-    onSubmit: () -> Unit
+    navController: NavHostController,
+    recordViewModel: RecordExerciseAssignmentViewModel
 ){
     val context = LocalContext.current
     val isMenuExtended = remember { mutableStateOf(false) }
@@ -142,61 +139,68 @@ fun RecordExercisePanel(
         derivedStateOf { BOTTOM_SHEET_TITLE_PADDING_OPEN }
     }
 
-    Box(
-        Modifier.fillMaxSize()
-    ) {
-        BottomSheetScaffold(
-            sheetContent = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(horizontal = 32.dp)
-                ){
-                    ExerciseInstructionsPanel(
-                        exercise = exercise,
-                        animatePadding = animateTitlePadding
-                    )
-                }
-            },
-            sheetContainerColor = MaterialTheme.colorScheme.secondary,
-            containerColor = Color.White,
-            sheetPeekHeight = BOTTOM_SHEET_PEEK_HEIGHT.dp,
-            sheetDragHandle = {},
-            scaffoldState = scaffoldState,
-            sheetSwipeEnabled = !isMenuExtended.value
-        ) { bottomSheetPaddingValues ->
+    BackNavigationScaffold(title = stringResource(R.string.practice), navController = navController) { paddingValues ->
+        Box(
+            Modifier.fillMaxSize()
+        ) {
+            BottomSheetScaffold(
+                sheetContent = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(horizontal = 32.dp)
+                    ){
+                        ExerciseInstructionsPanel(
+                            exercise = exercise,
+                            animatePadding = animateTitlePadding
+                        )
+                    }
+                },
+                sheetContainerColor = MaterialTheme.colorScheme.secondary,
+                containerColor = Color.White,
+                sheetPeekHeight = BOTTOM_SHEET_PEEK_HEIGHT.dp,
+                sheetDragHandle = {},
+                scaffoldState = scaffoldState,
+                sheetSwipeEnabled = !isMenuExtended.value
+            ) { bottomSheetPaddingValues ->
 
-            ExercisePhrasePanel(
-                exercise = exercise,
+                ExercisePhrasePanel(
+                    exercise = exercise,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottomSheetPaddingValues)
+                        .padding(paddingValues),
+                    viewModel = recordViewModel
+                )
+            }
+
+            RecordButton(
                 modifier = Modifier
-                    .padding(bottomSheetPaddingValues),
-                viewModel = recordViewModel
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = (BOTTOM_SHEET_PEEK_HEIGHT.dp + 16.dp) / 2)
+                    .scale(animateButtonScale.value),
+                isMenuExtended = isMenuExtended,
+                viewModel = recordViewModel,
+                onPress = {
+                    recordViewModel.start(context)
+                },
+                onRelease = {
+                    recordViewModel.stop()
+                },
+                onDelete = {
+                    recordViewModel.delete()
+                },
+                onSend = {
+                    recordViewModel.uploadRecording(assignmentId)
+                },
+                onPlay = {
+                    recordViewModel.play()
+                }
             )
         }
-
-        RecordButton(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = (BOTTOM_SHEET_PEEK_HEIGHT.dp + 16.dp) / 2)
-                .scale(animateButtonScale.value),
-            isMenuExtended = isMenuExtended,
-            viewModel = recordViewModel,
-            onPress = {
-                recordViewModel.start(context)
-            },
-            onRelease = {
-                recordViewModel.stop()
-            },
-            onDelete = {
-                recordViewModel.delete()
-            },
-            onSend = onSubmit,
-            onPlay = {
-                recordViewModel.play()
-            }
-        )
     }
+
 
     val initialMeasure: MutableState<Float?> = remember { mutableStateOf(null) }
     LaunchedEffect(Unit){
@@ -261,22 +265,20 @@ private fun ExerciseInstructionsPanel(
 private fun AudioPlayerPanel(
     exercise: Exercise
 ){
-    if (exercise.sampleRecordingUrl.isNotBlank()) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
-            AudioPlayer(
-                url = exercise.sampleRecordingUrl,
-                type = AudioMediaType.URL,
-                modifier = Modifier.padding(horizontal = 24.dp)
-            )
+        AudioPlayer(
+            url = exercise.sampleRecordingUrl,
+            type = AudioMediaType.URL,
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
 
-            Spacer(modifier = Modifier.height(32.dp))
-        }
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
