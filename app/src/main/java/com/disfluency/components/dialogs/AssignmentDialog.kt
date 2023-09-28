@@ -30,7 +30,7 @@ fun <T>AssignmentDialog(
     dismissAction: () -> Unit,
     onSend: () -> Unit,
     sendEnabled: Boolean = true,
-    onLaunch: () -> Unit
+    onLaunch: () -> Unit = {}
 ){
     LaunchedEffect(Unit){
         onLaunch()

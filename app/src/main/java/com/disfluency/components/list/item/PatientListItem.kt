@@ -116,7 +116,7 @@ fun SelectablePatientListItem(
 }
 
 
-private class SelectableListItemColors(
+class SelectableListItemColors(
     val background: Color,
     val icon: Color,
     val label: Color
