@@ -13,4 +13,10 @@ data class ExerciseDTO(
     fun asExercise(): Exercise {
         return Exercise(id, title, instruction, phrase, sampleRecordingUrl)
     }
+
+    companion object {
+        fun from(exercise: Exercise): ExerciseDTO {
+            return ExerciseDTO(exercise.id, exercise.title, exercise.instruction, exercise.phrase, exercise.sampleRecordingUrl)
+        }
+    }
 }

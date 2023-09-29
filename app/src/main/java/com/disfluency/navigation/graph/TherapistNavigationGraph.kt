@@ -20,6 +20,8 @@ import com.disfluency.screens.therapist.forms.*
 import com.disfluency.screens.therapist.patients.MyPatientsScreen
 import com.disfluency.screens.therapist.patients.NewPatientScreen
 import com.disfluency.screens.therapist.patients.PatientDetailScreen
+import com.disfluency.screens.therapist.success.ExerciseAssignmentConfirmationScreen
+import com.disfluency.screens.therapist.success.NewExerciseConfirmationScreen
 import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.FormsViewModel
@@ -27,6 +29,8 @@ import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.PatientsViewModel
 import com.disfluency.screens.therapist.success.SessionRecordConfirmationScreen
 import com.disfluency.viewmodel.*
+import com.disfluency.viewmodel.record.RecordExerciseExampleViewModel
+import com.disfluency.viewmodel.record.RecordSessionViewModel
 
 @Composable
 fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUserViewModel){
@@ -35,6 +39,8 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
     val formsViewModel: FormsViewModel = viewModel()
     val recordViewModel = RecordSessionViewModel(LocalContext.current, LocalLifecycleOwner.current)
     val analysisViewModel: AnalysisViewModel = viewModel()
+    val recordExerciseExampleViewModel = RecordExerciseExampleViewModel(LocalContext.current, LocalLifecycleOwner.current)
+    val assignmentsViewModel: AssignmentsViewModel = viewModel()
 
     val navHostController = rememberNavController()
 
@@ -61,7 +67,13 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
         }
         composable(Route.Therapist.PatientExercises.path, listOf(navArgument("id"){})){ backStackEntry ->
             backStackEntry.arguments?.getString("id")?.let {
-                PatientExerciseAssignmentsScreen(patientId = it, navController = navHostController, viewModel = exercisesViewModel)
+                PatientExerciseAssignmentsScreen(
+                    patientId = it,
+                    exercises = therapist.exercises,
+                    navController = navHostController,
+                    viewModel = exercisesViewModel,
+                    assignmentsViewModel = assignmentsViewModel
+                )
             }
         }
         composable(Route.Therapist.ExerciseAssignmentDetail.path, listOf(navArgument("id"){})){ backStackEntry ->
@@ -145,7 +157,9 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                 ExerciseDetailScreen(
                     exerciseId = it,
                     therapist = therapist,
-                    navController = navHostController
+                    navController = navHostController,
+                    viewModel = patientsViewModel,
+                    assignmentsViewModel = assignmentsViewModel
                 )
             }
         }
@@ -157,6 +171,27 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                     navController = navHostController
                 )
             }
+        }
+        composable(Route.Therapist.NewExercise.path){
+            ExerciseCreationScreen(
+                therapist = therapist,
+                navController = navHostController,
+                viewModel = exercisesViewModel,
+                recordViewModel = recordExerciseExampleViewModel
+            )
+        }
+        composable(Route.Therapist.ConfirmationNewExercise.path){
+            NewExerciseConfirmationScreen(
+                therapist = therapist,
+                navController = navHostController,
+                recordViewModel = recordExerciseExampleViewModel
+            )
+        }
+        composable(Route.Therapist.ExerciseAssignmentConfirmation.path){
+            ExerciseAssignmentConfirmationScreen(
+                navController = navHostController,
+                viewModel = assignmentsViewModel
+            )
         }
     }
 }

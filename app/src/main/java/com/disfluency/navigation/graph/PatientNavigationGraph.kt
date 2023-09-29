@@ -21,13 +21,13 @@ import com.disfluency.screens.patient.success.RecordingConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.FormsViewModel
 import com.disfluency.viewmodel.LoggedUserViewModel
-import com.disfluency.viewmodel.RecordExerciseViewModel
+import com.disfluency.viewmodel.record.RecordExerciseAssignmentViewModel
 
 @Composable
 fun PatientNavigationGraph(patient: Patient, loggedUserViewModel: LoggedUserViewModel){
     val exercisesViewModel: ExercisesViewModel = viewModel()
     val formsViewModel: FormsViewModel = viewModel()
-    val recordViewModel = RecordExerciseViewModel(LocalContext.current, LocalLifecycleOwner.current)
+    val recordViewModel = RecordExerciseAssignmentViewModel(LocalContext.current, LocalLifecycleOwner.current)
 
     val navHostController = rememberNavController()
 

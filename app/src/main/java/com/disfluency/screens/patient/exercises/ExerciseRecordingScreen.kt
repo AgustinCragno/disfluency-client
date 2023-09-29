@@ -33,7 +33,8 @@ import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.viewmodel.ExercisesViewModel
-import com.disfluency.viewmodel.RecordExerciseViewModel
+import com.disfluency.viewmodel.record.RecordAudioViewModel
+import com.disfluency.viewmodel.record.RecordExerciseAssignmentViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import java.time.LocalDate
 
@@ -48,8 +49,8 @@ private const val BOTTOM_SHEET_REQUIRED_HEIGHT = 200
 @Composable
 fun RecordExercisePreview(){
     val exercisesViewModel = ExercisesViewModel()
-    val recordViewModel = RecordExerciseViewModel(LocalContext.current, LocalLifecycleOwner.current)
-    
+    val recordViewModel = RecordExerciseAssignmentViewModel(LocalContext.current, LocalLifecycleOwner.current)
+
     val navHostController = rememberNavController()
 
     val assignmentId = "Id"
@@ -71,7 +72,7 @@ fun RecordExercisePreview(){
     )
 
     exercisesViewModel.assignments.value = listOf(assignment)
-    
+
     DisfluencyTheme() {
         RecordExerciseScreen(
             assignmentId = assignmentId,
@@ -87,7 +88,7 @@ fun RecordExerciseScreen(
     assignmentId: String,
     navController: NavHostController,
     exercisesViewModel: ExercisesViewModel,
-    recordViewModel: RecordExerciseViewModel
+    recordViewModel: RecordExerciseAssignmentViewModel
 ){
     val assignment = remember {
         mutableStateOf<ExerciseAssignment?>(null)
@@ -126,7 +127,7 @@ private fun RecordExercise(
     assignmentId: String,
     exercise: Exercise,
     navController: NavHostController,
-    recordViewModel: RecordExerciseViewModel
+    recordViewModel: RecordExerciseAssignmentViewModel
 ){
     val context = LocalContext.current
     val isMenuExtended = remember { mutableStateOf(false) }
@@ -167,6 +168,7 @@ private fun RecordExercise(
                 ExercisePhrasePanel(
                     exercise = exercise,
                     modifier = Modifier
+                        .fillMaxSize()
                         .padding(bottomSheetPaddingValues)
                         .padding(paddingValues),
                     viewModel = recordViewModel
@@ -281,28 +283,25 @@ private fun AudioPlayerPanel(
 }
 
 @Composable
-private fun ExercisePhrasePanel(
+fun ExercisePhrasePanel(
     exercise: Exercise,
-    modifier: Modifier,
-    viewModel: RecordExerciseViewModel
+    modifier: Modifier = Modifier.fillMaxSize(),
+    viewModel: RecordAudioViewModel
 ){
     Column(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        exercise.phrase?.let {
-            Text(
-                text = it,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-            )
-        }
+        Text(
+            text = exercise.phrase ?: exercise.instruction,
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp)
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -311,7 +310,7 @@ private fun ExercisePhrasePanel(
 }
 
 @Composable
-private fun RecordingVisualizer(viewModel: RecordExerciseViewModel){
+private fun RecordingVisualizer(viewModel: RecordAudioViewModel){
     val transitionLength = 800
 
     Box(

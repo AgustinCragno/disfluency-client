@@ -30,15 +30,21 @@ enum class AudioMediaType(val getPlayer: (Context) -> DisfluencyAudioPlayer){
 }
 
 @Composable
-fun AudioPlayer(url: String, type: AudioMediaType, modifier: Modifier = Modifier){
-    AudioPlayer(url = url, audioPlayer = type.getPlayer(LocalContext.current), modifier)
+fun AudioPlayer(
+    url: String,
+    type: AudioMediaType,
+    modifier: Modifier = Modifier,
+    playButtonColor: Color = MaterialTheme.colorScheme.secondaryContainer
+){
+    AudioPlayer(url = url, audioPlayer = type.getPlayer(LocalContext.current), modifier, playButtonColor)
 }
 
 @Composable
 fun AudioPlayer(
     url: String,
     audioPlayer: DisfluencyAudioPlayer,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    playButtonColor: Color = MaterialTheme.colorScheme.secondaryContainer
 ){
     LaunchedEffect(Unit){
         audioPlayer.load(url)
@@ -50,11 +56,15 @@ fun AudioPlayer(
         }
     }
 
-    AudioPlayer(audioPlayer = audioPlayer, modifier = modifier)
+    AudioPlayer(audioPlayer = audioPlayer, modifier = modifier, playButtonColor = playButtonColor)
 }
 
 @Composable
-fun AudioPlayer(audioPlayer: DisfluencyAudioPlayer, modifier: Modifier = Modifier){
+fun AudioPlayer(
+    audioPlayer: DisfluencyAudioPlayer,
+    modifier: Modifier = Modifier,
+    playButtonColor: Color = MaterialTheme.colorScheme.secondaryContainer
+){
     Column(
         modifier = modifier
             .fillMaxWidth(),
@@ -91,7 +101,7 @@ fun AudioPlayer(audioPlayer: DisfluencyAudioPlayer, modifier: Modifier = Modifie
             Button(
                 modifier = Modifier.size(40.dp),
                 contentPadding = PaddingValues(1.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                colors = ButtonDefaults.buttonColors(containerColor = playButtonColor),
                 onClick = {
                     if (!audioPlayer.isPlaying()){
                         audioPlayer.play()

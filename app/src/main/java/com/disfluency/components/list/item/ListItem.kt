@@ -16,6 +16,7 @@ fun ListItem(
     supportingContent: @Composable () -> Unit = {},
     leadingContent: @Composable () -> Unit = {},
     trailingContent: @Composable () -> Unit = {},
+    colors: ListItemColors = ListItemDefaults.colors(Color.Transparent),
     onClick: () -> Unit = {}
 ){
     Card(
@@ -30,7 +31,7 @@ fun ListItem(
             supportingContent = supportingContent,
             leadingContent = leadingContent,
             trailingContent = trailingContent,
-            colors = ListItemDefaults.colors(Color.Transparent)
+            colors = colors
         )
     }
 }
@@ -41,6 +42,7 @@ fun ListItem(
     supportingContent: @Composable () -> Unit = {},
     leadingContent: @Composable () -> Unit = {},
     trailingContent: @Composable () -> Unit = {},
+    colors: ListItemColors = ListItemDefaults.colors(Color.Transparent),
     onClick: () -> Unit = {}
 ){
     ListItem(
@@ -56,6 +58,7 @@ fun ListItem(
         supportingContent = supportingContent,
         leadingContent = leadingContent,
         trailingContent = trailingContent,
+        colors = colors,
         onClick = onClick
     )
 }
@@ -67,6 +70,7 @@ fun ListItem(
     subtitleColor: Color = Color.Gray,
     leadingContent: @Composable () -> Unit = {},
     trailingContent: @Composable () -> Unit = {},
+    colors: ListItemColors = ListItemDefaults.colors(Color.Transparent),
     onClick: () -> Unit = {}
 ){
     ListItem(
@@ -75,11 +79,14 @@ fun ListItem(
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.labelMedium,
-                color = subtitleColor
+                color = subtitleColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         },
         leadingContent = leadingContent,
         trailingContent = trailingContent,
+        colors = colors,
         onClick = onClick
     )
 }

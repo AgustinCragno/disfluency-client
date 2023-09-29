@@ -21,10 +21,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.disfluency.ui.theme.DisfluencyTheme
-import com.disfluency.viewmodel.RecordAudioViewModel
+import com.disfluency.viewmodel.record.RecordAudioViewModel
 
 /**
  * Design inspired from https://github.com/jurajkusnier/fluid-bottom-navigation
@@ -126,6 +127,72 @@ fun RecordButton(
     }
 }
 
+@Composable
+fun RecordButtonSmall(
+    modifier: Modifier,
+    isMenuExtended: MutableState<Boolean>,
+    viewModel: RecordAudioViewModel,
+    onPress: () -> Unit = {},
+    onRelease: () -> Unit = {},
+    onDelete: () -> Unit = {},
+    onPlay: () -> Unit = {}
+){
+    val animationProgress by animateFloatAsState(
+        targetValue = if (isMenuExtended.value) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 550,
+            easing = LinearEasing
+        )
+    )
+
+    val startedRecording = remember { mutableStateOf(false) }
+
+    Box(
+        modifier
+            .fillMaxWidth(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+
+        AnimatedFab(
+            icon = Icons.Outlined.Delete,
+            modifier = Modifier
+                .padding(
+                    PaddingValues(
+                        end = 210.dp
+                    ) * FastOutSlowInEasing.transform(0f, 0.8f, animationProgress)
+                ),
+            opacity = LinearEasing.transform(0.2f, 0.7f, animationProgress),
+            backgroundColor = MaterialTheme.colorScheme.primary,
+            onClick = {
+                isMenuExtended.value = false
+                startedRecording.value = false
+                onDelete()
+            }
+        )
+
+        AnimatedFab(
+            icon = if (viewModel.audioPlayer.isPlaying()) Icons.Default.Pause else Icons.Default.PlayArrow,
+            modifier = Modifier.padding(
+                PaddingValues(
+                    start = 210.dp
+                ) * FastOutSlowInEasing.transform(0.2f, 1.0f, animationProgress)
+            ),
+            opacity = LinearEasing.transform(0.4f, 0.9f, animationProgress),
+            backgroundColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            enabled = viewModel.isPlaybackReady(),
+            onClick = onPlay
+        )
+
+        MicButton(
+            animationProgress = animationProgress,
+            isMenuExtended = isMenuExtended,
+            startedRecording = startedRecording,
+            border = 0.dp,
+            onPress = onPress,
+            onRelease = onRelease
+        )
+    }
+}
 
 @Composable
 private fun AnimatedFab(
@@ -163,6 +230,7 @@ private fun MicButton(
     animationProgress: Float = 0f,
     isMenuExtended: MutableState<Boolean>,
     startedRecording: MutableState<Boolean>,
+    border: Dp = 3.dp,
     onPress: () -> Unit,
     onRelease: () -> Unit
 ){
@@ -192,7 +260,7 @@ private fun MicButton(
         modifier = Modifier
             .size(56.dp)
             .scale(animateSize.value)
-            .border(3.dp, Color.White, CircleShape)
+            .border(border, Color.White, CircleShape)
             .rotate(
                 225 * FastOutSlowInEasing
                     .transform(0.35f, 0.65f, animationProgress)

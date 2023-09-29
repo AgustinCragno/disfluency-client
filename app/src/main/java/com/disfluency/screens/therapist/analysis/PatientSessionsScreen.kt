@@ -29,7 +29,7 @@ import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDate
 import com.disfluency.viewmodel.AnalysisViewModel
-import com.disfluency.viewmodel.RecordSessionViewModel
+import com.disfluency.viewmodel.record.RecordSessionViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import java.time.LocalDate
 

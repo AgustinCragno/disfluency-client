@@ -19,6 +19,7 @@ import com.disfluency.R
 
 @Composable
 fun ValidatedTextInput(
+    modifier: Modifier = Modifier,
     state: MutableState<String>,
     label: String,
     keyboardOptions: KeyboardOptions,
@@ -43,7 +44,7 @@ fun ValidatedTextInput(
     }
 
     OutlinedTextField(
-        modifier = Modifier
+        modifier = modifier
             .padding(2.dp)
             .height(58.dp),
         value = state.value,

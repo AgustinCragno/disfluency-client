@@ -1,7 +1,6 @@
 package com.disfluency.api.service
 
-import com.disfluency.api.dto.ExerciseAssignmentDTO
-import com.disfluency.api.dto.PracticeDTO
+import com.disfluency.api.dto.*
 import com.disfluency.api.interceptor.NOT_SEND_AUTH_HEADER
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -14,4 +13,13 @@ sealed interface ExerciseService{
 
     @POST("exercisesAssignments/{exerciseAssignmentId}/practices")
     suspend fun createPracticeInAssignment(@Path("exerciseAssignmentId") exerciseAssignmentId: String): PracticeDTO
+
+    @GET("therapist/{therapistId}/exercises/presigned")
+    suspend fun getExerciseSamplePreSignedUrl(@Path("therapistId") therapistId: String): PreSignedUrlDTO
+
+    @POST("therapist/{therapistId}/exercises")
+    suspend fun createExerciseOfTherapist(@Body newExercise: NewExerciseDTO, @Path("therapistId") therapistId: String): ExerciseDTO
+
+    @POST("exercisesAssignments")
+    suspend fun assignExercisesToPatients(@Body assignExercisesDTO: AssignExercisesDTO)
 }

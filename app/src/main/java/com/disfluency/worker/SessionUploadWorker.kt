@@ -12,7 +12,7 @@ class SessionUploadWorker(appContext: Context, params: WorkerParameters) : FileU
 
     private val analysisRepository = AnalysisRepository()
 
-    override suspend fun upload(): ResponseBody {
+    override suspend fun upload(): Result {
         val patientId = params.inputData.getString(FILE_UPLOAD_ASSIGNMENT_KEY)
         val filePath = params.inputData.getString(FILE_UPLOAD_PATH_KEY)
 
@@ -22,7 +22,7 @@ class SessionUploadWorker(appContext: Context, params: WorkerParameters) : FileU
                 val url = analysisRepository.getSessionUrl(patientId)
                 val response = analysisRepository.saveSession(url, file)
                 analysisRepository.createSession(patientId, url)
-                return EMPTY_RESPONSE
+                return Result.success()
             }
         }
 

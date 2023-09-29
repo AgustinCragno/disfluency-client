@@ -3,11 +3,16 @@ package com.disfluency.screens.therapist.exercises
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -45,6 +50,8 @@ fun MyExercisesScreen(
 
                 ExerciseList(exercises = therapist.exercises, navController = navController, filter = filterQuery.value)
             }
+
+            ExerciseCreationButton(navController = navController)
         }
     }
 }
@@ -79,6 +86,7 @@ private fun ExerciseList(exercises: List<Exercise>, navController: NavHostContro
 private fun ExerciseListItem(exercise: Exercise, navController: NavHostController){
     ListItem(
         title = exercise.title,
+        subtitle = exercise.instruction,
         leadingContent = {
             TitleThumbnail(exercise.title)
         },
@@ -88,4 +96,22 @@ private fun ExerciseListItem(exercise: Exercise, navController: NavHostControlle
             )
         }
     )
+}
+
+@Composable
+private fun ExerciseCreationButton(navController: NavHostController) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        FloatingActionButton(
+            onClick = {
+                navController.navigate(Route.Therapist.NewExercise.path)
+            },
+            modifier = Modifier.padding(16.dp),
+            containerColor = MaterialTheme.colorScheme.secondary
+        ) {
+            Icon(Icons.Filled.Add, stringResource(id = R.string.create))
+        }
+    }
 }
