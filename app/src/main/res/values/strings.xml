@@ -256,4 +256,7 @@
     <string name="wait_while_form_is_submitted">Espere un momento mientras se guarda el nuevo cuestionario</string>
     <string name="form_was_submitted_successfully">Se guardo el cuestionario correctamente</string>
     <string name="an_error_occurred_while_submitting_form">Ocurrio un error al guardar el cuestionario</string>
+    <string name="wait_while_form_is_sent">Espere un momento mientras se envia el cuestionario</string>
+    <string name="form_was_sent_successfully">Se envio el cuestionario existosamente</string>
+    <string name="an_error_occurred_while_sending_form">Ocurrio un error al enviar el cuestionario</string>
 </resources>

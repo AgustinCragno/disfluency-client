@@ -61,5 +61,6 @@ sealed class Route(val path: String, private vararg val params: String) {
 
         object NewForm: Route("forms/new")
         object ConfirmationNewForm: Route("forms/new/confirmation")
+        object FormAssignmentConfirmation: Route("forms/assign-confirmation")
     }
 }

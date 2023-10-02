@@ -87,8 +87,10 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
             backStackEntry.arguments?.getString("id")?.let {
                 PatientFormAssignmentsScreen(
                     patientId = it,
+                    forms = therapist.forms,
                     navController = navHostController,
-                    viewModel = formsViewModel
+                    viewModel = formsViewModel,
+                    assignmentsViewModel = assignmentsViewModel
                 )
             }
         }
@@ -166,7 +168,9 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                 FormDetailScreen(
                     formId = it,
                     therapist = therapist,
-                    navController = navHostController
+                    navController = navHostController,
+                    patientsViewModel = patientsViewModel,
+                    assignmentsViewModel = assignmentsViewModel
                 )
             }
         }
@@ -202,6 +206,12 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
             NewFormConfirmationScreen(
                 navController = navHostController,
                 viewModel = formCreationViewModel
+            )
+        }
+        composable(Route.Therapist.FormAssignmentConfirmation.path){
+            FormAssignmentConfirmationScreen(
+                navController = navHostController,
+                viewModel = assignmentsViewModel
             )
         }
     }

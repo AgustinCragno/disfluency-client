@@ -23,33 +23,31 @@ import com.disfluency.R
 import com.disfluency.components.icon.IconMessage
 import com.disfluency.components.success.ConfirmationScreen
 import com.disfluency.ui.theme.Green40
-import com.disfluency.viewmodel.FormCreationViewModel
+import com.disfluency.viewmodel.AssignmentsViewModel
 import com.disfluency.viewmodel.states.ConfirmationState
 import kotlinx.coroutines.delay
 
 
 @Composable
-fun NewFormConfirmationScreen(
+fun FormAssignmentConfirmationScreen(
     navController: NavHostController,
-    viewModel: FormCreationViewModel
+    viewModel: AssignmentsViewModel
 ){
     ConfirmationScreen(
-        loadingState = viewModel.creationConfirmationState,
+        loadingState = viewModel.assignmentConfirmationState,
         loadingContent = { LoadingState() },
         successContent = { SuccessState() },
         errorContent = { ErrorState() }
     )
 
-    if (viewModel.creationConfirmationState.value > ConfirmationState.LOADING){
+    if (viewModel.assignmentConfirmationState.value > ConfirmationState.LOADING){
         LaunchedEffect(Unit){
             delay(2000)
-            viewModel.creationConfirmationState.value = ConfirmationState.DONE
+            viewModel.assignmentConfirmationState.value = ConfirmationState.DONE
             navController.popBackStack()
         }
     }
 }
-
-//TODO: generalizar estas pantallas
 
 @Composable
 private fun LoadingState(){
@@ -63,7 +61,7 @@ private fun LoadingState(){
             color = Color.White
         )
         Text(
-            text = stringResource(R.string.wait_while_form_is_submitted),
+            text = stringResource(R.string.wait_while_form_is_sent),
             color = Color.White,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold
@@ -76,7 +74,7 @@ private fun SuccessState(){
     IconMessage(
         imageVector = Icons.Filled.Done,
         color = Green40,
-        message = stringResource(R.string.form_was_submitted_successfully)
+        message = stringResource(R.string.form_was_sent_successfully)
     )
 }
 
@@ -85,6 +83,6 @@ private fun ErrorState(){
     IconMessage(
         imageVector = Icons.Filled.Close,
         color = Color.Red,
-        message = stringResource(R.string.an_error_occurred_while_submitting_form)
+        message = stringResource(R.string.an_error_occurred_while_sending_form)
     )
 }
