@@ -20,14 +20,11 @@ import com.disfluency.screens.therapist.forms.*
 import com.disfluency.screens.therapist.patients.MyPatientsScreen
 import com.disfluency.screens.therapist.patients.NewPatientScreen
 import com.disfluency.screens.therapist.patients.PatientDetailScreen
-import com.disfluency.screens.therapist.success.ExerciseAssignmentConfirmationScreen
-import com.disfluency.screens.therapist.success.NewExerciseConfirmationScreen
-import com.disfluency.screens.therapist.success.NewPatientConfirmationScreen
+import com.disfluency.screens.therapist.success.*
 import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.FormsViewModel
 import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.PatientsViewModel
-import com.disfluency.screens.therapist.success.SessionRecordConfirmationScreen
 import com.disfluency.viewmodel.*
 import com.disfluency.viewmodel.record.RecordExerciseExampleViewModel
 import com.disfluency.viewmodel.record.RecordSessionViewModel
@@ -41,6 +38,7 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
     val analysisViewModel: AnalysisViewModel = viewModel()
     val recordExerciseExampleViewModel = RecordExerciseExampleViewModel(LocalContext.current, LocalLifecycleOwner.current)
     val assignmentsViewModel: AssignmentsViewModel = viewModel()
+    val formCreationViewModel: FormCreationViewModel = viewModel()
 
     val navHostController = rememberNavController()
 
@@ -191,6 +189,19 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
             ExerciseAssignmentConfirmationScreen(
                 navController = navHostController,
                 viewModel = assignmentsViewModel
+            )
+        }
+        composable(Route.Therapist.NewForm.path){
+            FormCreationScreen(
+                therapist = therapist,
+                navController = navHostController,
+                viewModel = formCreationViewModel
+            )
+        }
+        composable(Route.Therapist.ConfirmationNewForm.path){
+            NewFormConfirmationScreen(
+                navController = navHostController,
+                viewModel = formCreationViewModel
             )
         }
     }
