@@ -10,12 +10,5 @@ import java.time.LocalDate
 
 data class SessionDTO(
     @JsonProperty("id") val id: String,
-    @JsonProperty("date") @JsonDeserialize(using = LocalDateDeserializer::class) @JsonSerialize(using = LocalDateSerializer::class) val date: LocalDate,
-    @JsonProperty("recordingUrl") val recordingUrl: String,
-    @JsonProperty("transcription") val transcription: List<AnalysedWordDTO>
-) {
-    fun asSession(): Analysis {
-        val analyzedWords = transcription.map { it.asAnalysedWord() }
-        return Analysis(id, recordingUrl, date, analyzedWords)
-    }
-}
+    @JsonProperty("analysis") val analysis: AnalysisDTO,
+) {}
