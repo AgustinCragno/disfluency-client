@@ -26,16 +26,17 @@ data class PatientDTO(
     @JsonProperty("profilePictureUrl") val profilePictureUrl: Int,
     @JsonProperty("weeklyTurn") @JsonDeserialize(using = DayOfWeekDeserializer::class) @JsonSerialize(using = DayOfWeekSerializer::class) val weeklyTurn: List<DayOfWeek>,
     @JsonProperty("weeklyHour") @JsonDeserialize(using = LocalTimeDeserializer::class) @JsonSerialize(using = LocalTimeSerializer::class) val weeklyHour: LocalTime,
-    @JsonProperty("exercises") val exercises: List<ExerciseAssignmentDTO>
+    @JsonProperty("exercises") val exercises: List<ExerciseAssignmentDTO>,
+    @JsonProperty("forms") val forms: List<FormAssignmentDTO>
 ) {
 
     fun asPatient(): Patient {
-        return Patient(id, name, lastName, dateOfBirth, email, joinedSince, profilePictureUrl, weeklyTurn, weeklyHour, exercises.map { it.asAssignment() })
+        return Patient(id, name, lastName, dateOfBirth, email, joinedSince, profilePictureUrl, weeklyTurn, weeklyHour, exercises.map { it.asAssignment() }, forms.map { it.asAssignment() })
     }
 
     companion object {
         fun fromPatient(patient: Patient): PatientDTO {
-            return PatientDTO(patient.id, patient.name, patient.lastName, patient.dateOfBirth, patient.email, patient.joinedSince, patient.avatarIndex, patient.weeklyTurn, patient.weeklyHour, listOf())
+            return PatientDTO(patient.id, patient.name, patient.lastName, patient.dateOfBirth, patient.email, patient.joinedSince, patient.avatarIndex, patient.weeklyTurn, patient.weeklyHour, listOf(), listOf())
         }
     }
 }

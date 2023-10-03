@@ -244,4 +244,19 @@
     <string name="wait_while_exercise_is_sent">Espere un momento mientras se envia el ejercicio</string>
     <string name="exercise_was_sent_successfully">Se envio el ejercicio existosamente</string>
     <string name="an_error_occurred_while_sending_exercise">Ocurrio un error al enviar el ejercicio</string>
+    <string name="new_form">Nuevo Formulario</string>
+    <string name="question">Pregunta</string>
+    <string name="enter_scale_question">Ingrese una pregunta de escala</string>
+    <string name="scale_start">Escala principio</string>
+    <string name="scale_end">Escala fin</string>
+    <string name="start">Principio</string>
+    <string name="end">Fin</string>
+    <string name="follow_up_question">Pregunta de seguimiento</string>
+    <string name="enter_follow_up_question">Ingrese una pregunta complementaria para responder luego de completar la escala</string>
+    <string name="wait_while_form_is_submitted">Espere un momento mientras se guarda el nuevo cuestionario</string>
+    <string name="form_was_submitted_successfully">Se guardo el cuestionario correctamente</string>
+    <string name="an_error_occurred_while_submitting_form">Ocurrio un error al guardar el cuestionario</string>
+    <string name="wait_while_form_is_sent">Espere un momento mientras se envia el cuestionario</string>
+    <string name="form_was_sent_successfully">Se envio el cuestionario existosamente</string>
+    <string name="an_error_occurred_while_sending_form">Ocurrio un error al enviar el cuestionario</string>
 </resources>

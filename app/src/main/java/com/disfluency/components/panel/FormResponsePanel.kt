@@ -18,11 +18,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.disfluency.components.text.WidthWrappedText
 import com.disfluency.model.form.FormCompletionEntry
+import com.disfluency.model.form.FormQuestion
 import com.disfluency.model.form.FormQuestionResponse
+import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.color.darken
 import com.smarttoolfactory.bubble.ArrowAlignment
 import com.smarttoolfactory.bubble.bubble
@@ -96,52 +99,9 @@ private fun ScaleIndicator(questionResponse: FormQuestionResponse){
             modifier = Modifier.padding(end = 8.dp)
         )
 
-        Box(
-            modifier = Modifier.weight(10f),
-            contentAlignment = Alignment.Center
-        ){
-            val percentage = (questionResponse.scaleResponse.toFloat() - 1F) / 4F
+        val percentage = (questionResponse.scaleResponse.toFloat() - 1F) / 4F
 
-            var state by remember(percentage) {
-                mutableStateOf(false)
-            }
-
-            if (!state){
-                state = true
-            }
-
-            val animatedPercentage by animateFloatAsState(
-                targetValue = if (!state) 0.5f else percentage,
-                animationSpec = tween(400, easing = EaseIn)
-            )
-
-            LinearProgressIndicator(
-                progress = animatedPercentage,
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                strokeCap = StrokeCap.Round
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(animatedPercentage + 0.025f)
-                    .align(Alignment.CenterStart)
-            ){
-                val height = 14.dp
-
-                Box(
-                    modifier = Modifier
-                        .size(6.dp, height)
-                        .clip(RoundedCornerShape(32.dp))
-                        .background(MaterialTheme.colorScheme.primary.darken(0.1f))
-                        .border(1.dp, Color.White.copy(alpha = 0.5f))
-                        .align(Alignment.CenterEnd)
-                        .offset(y = -height / 2)
-                )
-            }
-
-        }
-
+        AnimatedProgressIndicator(percentage = percentage, modifier = Modifier.weight(10f))
 
         Text(
             text = questionResponse.question.maxValue,
@@ -150,6 +110,54 @@ private fun ScaleIndicator(questionResponse: FormQuestionResponse){
         )
     }
 }
+
+@Composable
+private fun AnimatedProgressIndicator(modifier: Modifier = Modifier, percentage: Float){
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+
+        var state by remember(percentage) {
+            mutableStateOf(false)
+        }
+
+        if (!state) {
+            state = true
+        }
+
+        val animatedPercentage by animateFloatAsState(
+            targetValue = if (!state) 0.5f else percentage,
+            animationSpec = tween(400, easing = EaseIn)
+        )
+
+        LinearProgressIndicator(
+            progress = animatedPercentage,
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            strokeCap = StrokeCap.Round
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(animatedPercentage + 0.025f)
+                .align(Alignment.CenterStart)
+        ) {
+            val height = 14.dp
+
+            Box(
+                modifier = Modifier
+                    .size(6.dp, height)
+                    .clip(RoundedCornerShape(32.dp))
+                    .background(MaterialTheme.colorScheme.primary.darken(0.1f))
+                    .border(1.dp, Color.White.copy(alpha = 0.5f))
+                    .align(Alignment.CenterEnd)
+                    .offset(y = -height / 2)
+            )
+        }
+    }
+}
+
 
 @Composable
 private fun BubbleLayout(
