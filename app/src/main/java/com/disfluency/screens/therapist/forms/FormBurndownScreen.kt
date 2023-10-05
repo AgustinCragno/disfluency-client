@@ -2,11 +2,16 @@ package com.disfluency.screens.therapist.forms
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRightAlt
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -20,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.disfluency.components.charts.rememberChartStyle
 import com.disfluency.components.charts.rememberMarker
+import com.disfluency.model.form.FormQuestion
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.color.darken
 import com.disfluency.utilities.color.lighten
@@ -38,17 +44,26 @@ import com.patrykandpatrick.vico.core.entry.entryModelOf
 import com.patrykandpatrick.vico.core.entry.entryOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Random
 
 @Preview
 @Composable
 private fun FormBurnDownPreview(){
     DisfluencyTheme {
-        FormBurnDownScreenOld()
+        FormBurnDownScreen()
     }
 }
 
 @Composable
-fun FormBurnDownScreenOld(){
+private fun FormBurnDownScreen(){
+
+    val question = FormQuestion(
+        id = "",
+        scaleQuestion = "Cuando tengo una duda en clase, levanto la mano y le pregunto al profesor",
+        followUpQuestion = "",
+        minValue = "Nunca",
+        maxValue = "Siempre"
+    )
 
     val data = listOf(
         "2022-09-03" to 2,
@@ -69,50 +84,92 @@ fun FormBurnDownScreenOld(){
         LocalDate.parse(dateString) to yValue
     }
 
-    val scrollState = rememberChartScrollState()
+    val colors = listOf(Color.Blue, Color.Magenta, Color.Red, Color.Green.darken(), Color.Cyan.darken(0.5f))
+
+    val list = (0..5)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.Center
+            .verticalScroll(rememberScrollState())
     ) {
+        list.forEach {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                elevation = CardDefaults.cardElevation(4.dp),
+                colors = CardDefaults.cardColors(Color.Transparent)
+            ) {
+                FormQuestionResponseBurnDown(
+                    formQuestion = question,
+                    questionNumber = it,
+                    data = data,
+                    color = colors.random()
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+    }
+}
+
+@Composable
+fun FormQuestionResponseBurnDown(
+    formQuestion: FormQuestion,
+    questionNumber: Int,
+    data: Map<LocalDate, Int>,
+    color: Color = Color.Magenta
+){
+    val scrollState = rememberChartScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+    ) {
+        Text(
+            text = formQuestion.scaleQuestion,
+            style = MaterialTheme.typography.displayMedium,
+            fontSize = 20.sp,
+            lineHeight = 20.sp,
+            color = Color.Black,
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp)
-        ){
+                .height(220.dp)
+                .padding(horizontal = 16.dp)
+        ) {
             QuestionResponsesTimelyChart(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 32.dp),
                 data = data,
-                scrollState = scrollState
+                scrollState = scrollState,
+                color = color.lighten(0.7f)
             )
 
             TextTag(
                 modifier = Modifier.align(Alignment.TopStart),
-                text = "Siempre",
-                color = Color.Magenta.lighten(0.2f)
+                text = formQuestion.maxValue,
+                color = color.lighten(0.2f)
             )
 
             TextTag(
                 modifier = Modifier.align(Alignment.BottomStart),
-                text = "Nunca",
-                color = Color.Magenta.darken(0.2f)
+                text = formQuestion.minValue,
+                color = color.darken(0.2f)
             )
 
-            if (scrollState.value < scrollState.maxValue - 32.dp.value){
-                Icon(
-                    imageVector = Icons.Filled.ArrowRightAlt,
-                    contentDescription = null,
-                    tint = Color.Blue.copy(alpha = 0.15f),
-                    modifier = Modifier
-                        .height(40.dp)
-                        .width(80.dp)
-                        .align(Alignment.BottomEnd)
-                )
-            }
+            ScrollIndicatorArrow(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                scrollState = scrollState
+            )
         }
     }
 }
@@ -121,7 +178,8 @@ fun FormBurnDownScreenOld(){
 private fun QuestionResponsesTimelyChart(
     modifier: Modifier = Modifier,
     data: Map<LocalDate, Int>,
-    scrollState: ChartScrollState
+    scrollState: ChartScrollState,
+    color: Color = Color(COLOR_4_CODE)
 ){
     val dataByIndex = (0 until data.size).zip(data.values)
     val chartEntryModel = entryModelOf(dataByIndex.map { entryOf(it.first.toFloat(), it.second) })
@@ -130,7 +188,7 @@ private fun QuestionResponsesTimelyChart(
 
     val marker = rememberMarker()
 
-    ProvideChartStyle(rememberChartStyle(columnChartColors, lineChartColors)) {
+    ProvideChartStyle(rememberChartStyle(emptyList(), listOf(color))) {
         val defaultLines = currentChartStyle.lineChart.lines
 
         val lineChart = lineChart(
@@ -162,18 +220,8 @@ private fun QuestionResponsesTimelyChart(
     }
 }
 
-
-private const val COLOR_1_CODE = 0xff916cda
-private const val COLOR_2_CODE = 0xffd877d8
-private const val COLOR_3_CODE = 0xfff094bb
 private const val COLOR_4_CODE = 0xfffdc8c4
 
-private val color1 = Color(COLOR_1_CODE)
-private val color2 = Color(COLOR_2_CODE)
-private val color3 = Color(COLOR_3_CODE)
-private val color4 = Color(COLOR_4_CODE)
-private val columnChartColors = listOf(color1, color2, color3)
-private val lineChartColors = listOf(color4)
 private val pointConnector = DefaultPointConnector(cubicStrength = 0f)
 private val axisValueOverrider =
     AxisValuesOverrider.fixed(minY = 1f, maxY = 5f)
@@ -187,7 +235,7 @@ private fun TextTag(
 ){
     Box(
         modifier = modifier
-            .width(52.dp)
+            .wrapContentWidth()
             .height(24.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(color)
@@ -199,8 +247,26 @@ private fun TextTag(
             textAlign = TextAlign.Center,
             fontSize = 11.sp,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxHeight()
+                .padding(horizontal = 8.dp)
                 .offset(y = 3.dp)
+        )
+    }
+}
+
+@Composable
+private fun ScrollIndicatorArrow(
+    modifier: Modifier = Modifier,
+    scrollState: ChartScrollState
+){
+    if (scrollState.value < scrollState.maxValue - 32.dp.value){
+        Icon(
+            imageVector = Icons.Filled.ArrowRightAlt,
+            contentDescription = null,
+            tint = Color.Blue.copy(alpha = 0.1f),
+            modifier = modifier
+                .height(40.dp)
+                .width(80.dp)
         )
     }
 }
