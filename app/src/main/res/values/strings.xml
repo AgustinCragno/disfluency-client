@@ -259,4 +259,6 @@
     <string name="wait_while_form_is_sent">Espere un momento mientras se envia el cuestionario</string>
     <string name="form_was_sent_successfully">Se envio el cuestionario existosamente</string>
     <string name="an_error_occurred_while_sending_form">Ocurrio un error al enviar el cuestionario</string>
+    <string name="responses">Respuestas</string>
+    <string name="timely">Historico</string>
 </resources>

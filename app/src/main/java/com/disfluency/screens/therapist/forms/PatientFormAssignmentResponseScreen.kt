@@ -6,6 +6,8 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Assignment
+import androidx.compose.material.icons.filled.Timeline
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,8 +21,12 @@ import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.panel.FormResponsePanel
+import com.disfluency.components.tab.TabItem
+import com.disfluency.components.tab.TabScreen
 import com.disfluency.model.form.*
 import com.disfluency.navigation.structure.BackNavigationScaffold
+import com.disfluency.screens.therapist.forms.burndown.FormBurnDownScreen
+import com.disfluency.screens.therapist.forms.burndown.generateResponsesReport
 import com.disfluency.utilities.color.mix
 import com.disfluency.utilities.format.formatLocalDateAsWords
 import com.disfluency.viewmodel.FormsViewModel
@@ -34,6 +40,28 @@ fun PatientFormAssignmentResponseScreen(
     viewModel: FormsViewModel
 ){
     val assignment = viewModel.getAssignmentById(assignmentId)
+    val report = generateResponsesReport(
+        questions = assignment.form.questions,
+        responses = assignment.completionEntries
+    )
+
+    val tabs = listOf(
+        TabItem(
+            title = stringResource(id = R.string.responses),
+            iconOn = Icons.Filled.Assignment,
+            iconOff = Icons.Outlined.Assignment,
+            numberBadge = assignment.completionEntries.size
+        ){
+            FormAssignmentPanel(formAssignment = assignment)
+        },
+        TabItem(
+            title = stringResource(id = R.string.timely),
+            iconOn = Icons.Filled.Timeline,
+            iconOff = Icons.Outlined.Timeline
+        ){
+            FormBurnDownScreen(report)
+        }
+    )
 
     BackNavigationScaffold(
         title = assignment.form.title,
@@ -44,58 +72,8 @@ fun PatientFormAssignmentResponseScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Divider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                thickness = 2.dp,
-                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
-            )
-
-            FormAssignmentPanel(formAssignment = assignment)
+            TabScreen(tabs = tabs)
         }
-    }
-}
-
-@Composable
-private fun EntrySelector(
-    entries: List<FormCompletionEntry>,
-    selectedIndex: MutableState<Int>
-){
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        CountIndicator(count = entries.size)
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        DateSelector(entries = entries, selectedIndex = selectedIndex)
-    }
-
-}
-
-@Composable
-private fun CountIndicator(count: Int){
-    Card(
-        modifier = Modifier.wrapContentWidth(),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.mix(color = Color.White)
-        ),
-        elevation = CardDefaults.cardElevation(8.dp)
-    ) {
-        IconLabeled(
-            modifier = Modifier
-                .wrapContentWidth()
-                .padding(8.dp),
-            icon = Icons.Outlined.Refresh,
-            label = count.toString(),
-            iconColor = Color.White,
-            labelColor = Color.White
-        )
     }
 }
 
@@ -111,7 +89,8 @@ private fun DateSelector(
 
     Card(
         modifier = Modifier
-            .width(256.dp)
+            .padding(horizontal = 40.dp, vertical = 16.dp)
+            .width(320.dp)
             .clickable { },
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer//.mix(color = Color.Red)
@@ -126,6 +105,7 @@ private fun DateSelector(
                 date = entries[selectedIndex.value].date,
                 trailingIcon = Icons.Default.ArrowDropDown,
                 modifier = Modifier
+                    .width(320.dp)
                     .padding(8.dp)
                     .menuAnchor()
             )
@@ -134,7 +114,7 @@ private fun DateSelector(
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded = false },
                 modifier = Modifier
-                    .width(256.dp)
+                    .width(280.dp)
                     .background(MaterialTheme.colorScheme.onPrimaryContainer)
             ) {
                 entries.forEachIndexed { i, it ->
@@ -167,8 +147,7 @@ private fun DateDisplay(
     val dateAsText = formatLocalDateAsWords(date, stringResource(id = R.string.locale))
 
     Row(
-        modifier = modifier
-            .width(240.dp),
+        modifier = modifier,
         verticalAlignment = CenterVertically
     ) {
         Icon(
@@ -184,7 +163,7 @@ private fun DateDisplay(
             modifier = Modifier
                 .padding(horizontal = 4.dp)
                 .height(20.dp)
-                .width(184.dp)
+                .weight(1f)
                 .wrapContentHeight()
         )
         trailingIcon?.let {
@@ -213,7 +192,7 @@ private fun FormAssignmentPanel(formAssignment: FormAssignment){
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
-        EntrySelector(entries = formAssignment.completionEntries, selectedIndex = entry)
+        DateSelector(entries = formAssignment.completionEntries, selectedIndex = entry)
 
         Spacer(modifier = Modifier.height(16.dp))
 

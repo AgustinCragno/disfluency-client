@@ -21,6 +21,7 @@ import com.patrykandpatrick.vico.core.component.shape.cornered.MarkerCorneredSha
 import com.patrykandpatrick.vico.core.context.DrawContext
 import com.patrykandpatrick.vico.core.extension.half
 import com.patrykandpatrick.vico.core.marker.Marker
+import com.patrykandpatrick.vico.core.model.Point
 
 @Composable
 internal fun rememberMarker(): Marker {
@@ -89,9 +90,7 @@ internal fun rememberMarker(): Marker {
 private const val LABEL_BACKGROUND_SHADOW_RADIUS = 4f
 private const val LABEL_BACKGROUND_SHADOW_DY = 2f
 private const val LABEL_LINE_COUNT = 1
-private const val GUIDELINE_ALPHA = .2f
-private const val INDICATOR_SIZE_DP = 36f
-private const val SHADOW_RADIUS_MULTIPLIER = 1.1f
+const val INDICATOR_SIZE_DP = 36f
 
 private val labelBackgroundShape = MarkerCorneredShape(Corner.FullyRounded)
 private val labelHorizontalPaddingValue = 8.dp

@@ -1,34 +1,48 @@
-package com.disfluency.screens.therapist.forms
+package com.disfluency.screens.therapist.forms.burndown
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRightAlt
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.material.icons.filled.Assignment
+import androidx.compose.material.icons.filled.ShowChart
+import androidx.compose.material.icons.filled.Timeline
+import androidx.compose.material.icons.outlined.Assignment
+import androidx.compose.material.icons.outlined.ShowChart
+import androidx.compose.material.icons.outlined.Timeline
+import androidx.compose.material.icons.outlined.ViewTimeline
+import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.disfluency.components.charts.rememberChartStyle
 import com.disfluency.components.charts.rememberMarker
+import com.disfluency.components.icon.TextTag
+import com.disfluency.components.tab.TabItem
+import com.disfluency.components.tab.TabScreen
+import com.disfluency.model.form.FormCompletionEntry
 import com.disfluency.model.form.FormQuestion
+import com.disfluency.navigation.structure.BackNavigationScaffold
+import com.disfluency.screens.therapist.forms.burndown.FormQuestionReport
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.color.darken
 import com.disfluency.utilities.color.lighten
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
@@ -44,67 +58,31 @@ import com.patrykandpatrick.vico.core.entry.entryModelOf
 import com.patrykandpatrick.vico.core.entry.entryOf
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Random
 
-@Preview
-@Composable
-private fun FormBurnDownPreview(){
-    DisfluencyTheme {
-        FormBurnDownScreen()
-    }
-}
 
 @Composable
-private fun FormBurnDownScreen(){
-
-    val question = FormQuestion(
-        id = "",
-        scaleQuestion = "Cuando tengo una duda en clase, levanto la mano y le pregunto al profesor",
-        followUpQuestion = "",
-        minValue = "Nunca",
-        maxValue = "Siempre"
-    )
-
-    val data = listOf(
-        "2022-09-03" to 2,
-        "2022-10-03" to 2,
-        "2022-10-10" to 1,
-        "2022-10-17" to 4,
-        "2022-10-24" to 3,
-        "2022-10-31" to 3,
-        "2022-11-07" to 4,
-        "2022-11-14" to 5,
-        "2022-11-21" to 3,
-        "2022-11-28" to 5,
-        "2022-12-10" to 2,
-        "2022-12-17" to 4,
-        "2022-12-24" to 3,
-        "2022-12-31" to 3,
-    ).associate { (dateString, yValue) ->
-        LocalDate.parse(dateString) to yValue
-    }
-
+fun FormBurnDownScreen(
+    reports: List<FormQuestionReport>
+){
     val colors = listOf(Color.Blue, Color.Magenta, Color.Red, Color.Green.darken(), Color.Cyan.darken(0.5f))
-
-    val list = (0..5)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        list.forEach {
+        reports.forEachIndexed { index, it ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 elevation = CardDefaults.cardElevation(4.dp),
-                colors = CardDefaults.cardColors(Color.Transparent)
+                colors = CardDefaults.cardColors(Color.White)
             ) {
                 FormQuestionResponseBurnDown(
-                    formQuestion = question,
-                    questionNumber = it,
-                    data = data,
+                    formQuestion = it.question,
+                    questionNumber = index,
+                    data = it.scoresByAssignmentDate,
                     color = colors.random()
                 )
             }
@@ -122,6 +100,9 @@ fun FormQuestionResponseBurnDown(
     color: Color = Color.Magenta
 ){
     val scrollState = rememberChartScrollState()
+
+    //TODO: ver si se puede agregar un onclick a los markers
+    // y que al tocar te muestre la follow up en un globito
 
     Column(
         modifier = Modifier
@@ -187,6 +168,10 @@ private fun QuestionResponsesTimelyChart(
     val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM")
 
     val marker = rememberMarker()
+//
+//    val selectedItem = remember {
+//        mutableStateOf<Marker.EntryModel?>(null)
+//    }
 
     ProvideChartStyle(rememberChartStyle(emptyList(), listOf(color))) {
         val defaultLines = currentChartStyle.lineChart.lines
@@ -201,7 +186,36 @@ private fun QuestionResponsesTimelyChart(
         )
 
         Chart(
-            modifier = modifier,
+            modifier = modifier
+//                .pointerInput(Unit) {
+//                    detectTapGestures { offset ->
+//                        val indicatorSize = INDICATOR_SIZE_DP
+//                        val visiblePoints = lineChart.entryLocationMap.values.flatten()
+//
+//                        val intersection = visiblePoints.firstOrNull {
+//                            val p = it.location
+//                            (offset.x > p.x - indicatorSize / 2) && (offset.x < p.x + indicatorSize / 2) &&
+//                                    (offset.y > p.y - indicatorSize / 2) && (offset.y < p.y + indicatorSize / 2)
+//                        }
+//
+//                        selectedItem.value = intersection
+//                    }
+//                }
+//                .drawWithContent {
+//                    drawContent()
+//
+//                    selectedItem.value?.let {
+//                        val height = 300f
+//                        val width = 500f
+//
+//                        drawRect(
+//                            color = Color.Green,
+//                            topLeft = Offset(it.location.x - width / 2, it.location.y - height),
+//                            size = Size(width, height)
+//                        )
+//                    }
+//                }
+            ,
             chart = lineChart,
             model = chartEntryModel,
             startAxis = startAxis(
@@ -218,6 +232,17 @@ private fun QuestionResponsesTimelyChart(
             chartScrollState = scrollState
         )
     }
+
+//    selectedItem.value?.let {
+//        Surface(
+//            modifier = Modifier.size(50.dp)
+//                .background(Color.Green)
+//                .offset(x = it.location.x.dp, y = it.location.y.dp),
+//            color = Color.Green,
+//            shape = RoundedCornerShape(8.dp)
+//        ){}
+//    }
+
 }
 
 private const val COLOR_4_CODE = 0xfffdc8c4
@@ -226,33 +251,6 @@ private val pointConnector = DefaultPointConnector(cubicStrength = 0f)
 private val axisValueOverrider =
     AxisValuesOverrider.fixed(minY = 1f, maxY = 5f)
 
-
-@Composable
-private fun TextTag(
-    modifier: Modifier = Modifier,
-    text: String,
-    color: Color
-){
-    Box(
-        modifier = modifier
-            .wrapContentWidth()
-            .height(24.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(color)
-    ) {
-        Text(
-            text = text,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            fontSize = 11.sp,
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 8.dp)
-                .offset(y = 3.dp)
-        )
-    }
-}
 
 @Composable
 private fun ScrollIndicatorArrow(
