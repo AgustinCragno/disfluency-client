@@ -64,7 +64,6 @@ import java.time.format.DateTimeFormatter
 fun FormBurnDownScreen(
     reports: List<FormQuestionReport>
 ){
-    val colors = listOf(Color.Blue, Color.Magenta, Color.Red, Color.Green.darken(), Color.Cyan.darken(0.5f))
 
     Column(
         modifier = Modifier
@@ -83,7 +82,7 @@ fun FormBurnDownScreen(
                     formQuestion = it.question,
                     questionNumber = index,
                     data = it.scoresByAssignmentDate,
-                    color = colors.random()
+                    color = it.chartColor
                 )
             }
         }
