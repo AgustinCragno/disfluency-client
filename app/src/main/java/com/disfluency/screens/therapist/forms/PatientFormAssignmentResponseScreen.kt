@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.disfluency.R
+import com.disfluency.components.audio.fillToSize
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.panel.FormResponsePanel
 import com.disfluency.components.tab.TabItem
@@ -26,6 +27,7 @@ import com.disfluency.components.tab.TabScreen
 import com.disfluency.model.form.*
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.therapist.forms.burndown.FormBurnDownScreen
+import com.disfluency.screens.therapist.forms.burndown.OnlyOneResponseMessageScreen
 import com.disfluency.screens.therapist.forms.burndown.generateResponsesReport
 import com.disfluency.utilities.color.mix
 import com.disfluency.utilities.format.formatLocalDateAsWords
@@ -59,7 +61,10 @@ fun PatientFormAssignmentResponseScreen(
             iconOn = Icons.Filled.Timeline,
             iconOff = Icons.Outlined.Timeline
         ){
-            FormBurnDownScreen(report)
+            if (report.size > 1)
+                FormBurnDownScreen(report)
+            else
+                OnlyOneResponseMessageScreen()
         }
     )
 

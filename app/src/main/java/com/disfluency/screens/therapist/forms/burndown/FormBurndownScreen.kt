@@ -2,53 +2,35 @@ package com.disfluency.screens.therapist.forms.burndown
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRightAlt
-import androidx.compose.material.icons.filled.Assignment
-import androidx.compose.material.icons.filled.ShowChart
-import androidx.compose.material.icons.filled.Timeline
-import androidx.compose.material.icons.outlined.Assignment
-import androidx.compose.material.icons.outlined.ShowChart
-import androidx.compose.material.icons.outlined.Timeline
-import androidx.compose.material.icons.outlined.ViewTimeline
 import androidx.compose.material3.*
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
+import com.disfluency.R
 import com.disfluency.components.charts.rememberChartStyle
 import com.disfluency.components.charts.rememberMarker
-import com.disfluency.components.icon.TextTag
-import com.disfluency.components.tab.TabItem
-import com.disfluency.components.tab.TabScreen
-import com.disfluency.model.form.FormCompletionEntry
+import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.model.form.FormQuestion
-import com.disfluency.navigation.structure.BackNavigationScaffold
-import com.disfluency.screens.therapist.forms.burndown.FormQuestionReport
-import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.color.darken
 import com.disfluency.utilities.color.lighten
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.line.lineChart
 import com.patrykandpatrick.vico.compose.chart.scroll.ChartScrollState
 import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollState
+import com.patrykandpatrick.vico.compose.component.textComponent
+import com.patrykandpatrick.vico.compose.dimensions.dimensionsOf
 import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
 import com.patrykandpatrick.vico.compose.style.currentChartStyle
 import com.patrykandpatrick.vico.core.chart.DefaultPointConnector
@@ -64,7 +46,6 @@ import java.time.format.DateTimeFormatter
 fun FormBurnDownScreen(
     reports: List<FormQuestionReport>
 ){
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -128,20 +109,29 @@ fun FormQuestionResponseBurnDown(
             QuestionResponsesTimelyChart(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 32.dp),
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 28.dp,
+                        top = 8.dp
+                    ),
                 data = data,
                 scrollState = scrollState,
                 color = color.lighten(0.7f)
             )
 
-            TextTag(
-                modifier = Modifier.align(Alignment.TopStart),
+            ChartScaleText(
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(bottom = 175.dp),
                 text = formQuestion.maxValue,
                 color = color.lighten(0.2f)
             )
 
-            TextTag(
-                modifier = Modifier.align(Alignment.BottomStart),
+            ChartScaleText(
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(top = 145.dp),
                 text = formQuestion.minValue,
                 color = color.darken(0.2f)
             )
@@ -152,6 +142,22 @@ fun FormQuestionResponseBurnDown(
             )
         }
     }
+}
+
+@Composable
+private fun ChartScaleText(
+    modifier: Modifier = Modifier,
+    text: String,
+    color: Color
+){
+    Text(
+        text = text,
+        color = color,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        fontSize = 11.sp,
+        modifier = modifier.width(40.dp)
+    )
 }
 
 @Composable
@@ -167,10 +173,6 @@ private fun QuestionResponsesTimelyChart(
     val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM")
 
     val marker = rememberMarker()
-//
-//    val selectedItem = remember {
-//        mutableStateOf<Marker.EntryModel?>(null)
-//    }
 
     ProvideChartStyle(rememberChartStyle(emptyList(), listOf(color))) {
         val defaultLines = currentChartStyle.lineChart.lines
@@ -185,41 +187,13 @@ private fun QuestionResponsesTimelyChart(
         )
 
         Chart(
-            modifier = modifier
-//                .pointerInput(Unit) {
-//                    detectTapGestures { offset ->
-//                        val indicatorSize = INDICATOR_SIZE_DP
-//                        val visiblePoints = lineChart.entryLocationMap.values.flatten()
-//
-//                        val intersection = visiblePoints.firstOrNull {
-//                            val p = it.location
-//                            (offset.x > p.x - indicatorSize / 2) && (offset.x < p.x + indicatorSize / 2) &&
-//                                    (offset.y > p.y - indicatorSize / 2) && (offset.y < p.y + indicatorSize / 2)
-//                        }
-//
-//                        selectedItem.value = intersection
-//                    }
-//                }
-//                .drawWithContent {
-//                    drawContent()
-//
-//                    selectedItem.value?.let {
-//                        val height = 300f
-//                        val width = 500f
-//
-//                        drawRect(
-//                            color = Color.Green,
-//                            topLeft = Offset(it.location.x - width / 2, it.location.y - height),
-//                            size = Size(width, height)
-//                        )
-//                    }
-//                }
-            ,
+            modifier = modifier,
             chart = lineChart,
             model = chartEntryModel,
             startAxis = startAxis(
                 maxLabelCount = 5,
-                guideline = null
+                guideline = null,
+                label = textComponent(padding = dimensionsOf(end = 32.dp))
             ),
             bottomAxis = bottomAxis(
                 valueFormatter = { value, _ ->
@@ -231,17 +205,6 @@ private fun QuestionResponsesTimelyChart(
             chartScrollState = scrollState
         )
     }
-
-//    selectedItem.value?.let {
-//        Surface(
-//            modifier = Modifier.size(50.dp)
-//                .background(Color.Green)
-//                .offset(x = it.location.x.dp, y = it.location.y.dp),
-//            color = Color.Green,
-//            shape = RoundedCornerShape(8.dp)
-//        ){}
-//    }
-
 }
 
 private const val COLOR_4_CODE = 0xfffdc8c4
@@ -266,4 +229,15 @@ private fun ScrollIndicatorArrow(
                 .width(80.dp)
         )
     }
+}
+
+@Composable
+fun OnlyOneResponseMessageScreen(){
+    ImageMessagePage(
+        imageResource = R.drawable.chart,
+        text = stringResource(id = R.string.form_has_only_one_response),
+        fontSize = 15.sp,
+        lineHeight = 15.sp,
+        modifier = Modifier.width(300.dp)
+    )
 }

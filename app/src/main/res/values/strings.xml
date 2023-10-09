@@ -261,4 +261,5 @@
     <string name="an_error_occurred_while_sending_form">Ocurrio un error al enviar el cuestionario</string>
     <string name="responses">Respuestas</string>
     <string name="timely">Historico</string>
+    <string name="form_has_only_one_response">El cuestionario presenta una unica respuesta hasta el momento \n\nUna vez que el paciente haya respondido multiples veces podra ver los graficos historicos con sus respuestas</string>
 </resources>
