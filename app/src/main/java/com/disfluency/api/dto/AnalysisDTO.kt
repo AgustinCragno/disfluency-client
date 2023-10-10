@@ -14,7 +14,7 @@ data class AnalysisDTO(
     @JsonProperty("recordingUrl") val recordingUrl: String,
     @JsonProperty("transcription") val transcription: List<AnalysedWordDTO>
 ) {
-    fun asSession(): Analysis {
+    fun asAnalysis(): Analysis {
         val analyzedWords = transcription.map { it.asAnalysedWord() }
         return Analysis(id, recordingUrl, date, analyzedWords)
     }

@@ -4,9 +4,11 @@ import android.util.Log
 import com.disfluency.api.DisfluencyAPI
 import com.disfluency.api.dto.AssignExercisesDTO
 import com.disfluency.api.dto.NewExerciseDTO
+import com.disfluency.api.error.AnalysisNotFoundException
 import com.disfluency.api.error.AssignExerciseException
 import com.disfluency.api.error.ExerciseCreationException
 import com.disfluency.api.error.PatientNotFoundException
+import com.disfluency.model.analysis.Analysis
 import com.disfluency.model.exercise.Exercise
 import com.disfluency.model.exercise.ExerciseAssignment
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -53,6 +55,19 @@ class ExerciseRepository {
         catch (e: HttpException){
             Log.i("exercises", "An error occurred creating exercise ${newExercise.title}: $e")
             throw ExerciseCreationException(newExercise)
+        }
+    }
+
+    suspend fun getAnalysisByExercisePracticeId(practiceId: String): Analysis {
+        Log.i("Analysis", "Getting analysis from exercise id: $practiceId")
+        try {
+            val dto = DisfluencyAPI.exerciseService.getAnalysisByExercisePracticeId(practiceId)
+            Log.i("Analysis", "Successfully retrieved analysis ${dto.id} from exercise practice: $practiceId")
+            return dto.asAnalysis()
+        }
+        catch (e: HttpException){
+            Log.i("Analysis", "An error occurred retrieving analysis: $e")
+            throw AnalysisNotFoundException(practiceId)
         }
     }
 

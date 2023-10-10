@@ -6,6 +6,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.QueryStats
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -26,6 +28,7 @@ import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDateAsMonthInWords
 import com.disfluency.viewmodel.AnalysisViewModel
+import com.disfluency.viewmodel.ExercisesViewModel
 import java.time.LocalDate
 
 @Preview
@@ -35,7 +38,7 @@ private fun AnalysisScreenPreview(){
     analysisViewModel.patientAnalysis.value = listOf(MockedData.longAnalysis)
 
     DisfluencyTheme() {
-        AnalysisTranscriptionScreen(
+        SessionTranscriptionScreen(
             "1",
             navController = rememberNavController(),
             analysisViewModel
@@ -44,18 +47,43 @@ private fun AnalysisScreenPreview(){
 }
 
 @Composable
-fun AnalysisTranscriptionScreen(
+fun ExerciseTranscriptionScreen(
+    practiceId: String,
+    navController: NavHostController,
+    viewModel: ExercisesViewModel
+) {
+    LaunchedEffect(Unit){
+        viewModel.getAnalysisByExercisePracticeId(practiceId)
+    }
+    var title = "Ejercicio"
+    viewModel.analysis.value?.let {
+        AnalysisTranscription(analysis = it, title = title, navController = navController)
+    }
+        ?:
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            CircularProgressIndicator()
+        }
+}
+
+@Composable
+fun SessionTranscriptionScreen(
     analysisId: String,
     navController: NavHostController,
     viewModel: AnalysisViewModel
-){
+) {
     val analysis = viewModel.getAnalysis(analysisId)
     val index = viewModel.getSessionIndex(analysis)
-//    val disfluencyAudioPlayer = DisfluencyAudioUrlPlayer(LocalContext.current)
+    var title = "Sesión #$index"
 
-//    BackHandler() {
-//        viewModel.analysisResults.value = null
-//    }
+    AnalysisTranscription(analysis = analysis, title = title, navController = navController)
+}
+
+@Composable
+fun AnalysisTranscription(
+    analysis: Analysis,
+    title: String,
+    navController: NavHostController
+){
 
     BackNavigationScaffold(
         title = stringResource(R.string.disfluency_analisis),
@@ -72,7 +100,7 @@ fun AnalysisTranscriptionScreen(
         ) {
             TranscriptionPanel(
                 analysis = analysis,
-                index = index,
+                title = title,
 //                disfluencyAudioPlayer = disfluencyAudioPlayer,
                 modifier = Modifier.weight(11f)
             )
@@ -127,7 +155,7 @@ private fun SessionPlayerPanel(
 @Composable
 private fun TranscriptionPanel(
     analysis: Analysis,
-    index: Int,
+    title: String,
 //    disfluencyAudioPlayer: DisfluencyAudioPlayer,
     modifier: Modifier = Modifier
 ) {
@@ -151,7 +179,7 @@ private fun TranscriptionPanel(
                 val padding = 12.dp
 
                 Text(
-                    text = "Sesión #$index",
+                    text = title,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = fontSize,
