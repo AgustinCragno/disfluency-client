@@ -80,33 +80,33 @@ fun HomePatientScreen(patient: Patient, navController: NavHostController, viewMo
         ) {
             HomeTopAppBar(navController = navController, viewModel = viewModel)
 
-            HomeScreenContent()
+            HomeScreenContent(patient = patient)
         }
     }
 }
 
 @Composable
-private fun HomeScreenContent(){
+private fun HomeScreenContent(patient: Patient){
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        WelcomeBackCarousel()
+        WelcomeBackCarousel(patient)
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun WelcomeBackCarousel(){
+private fun WelcomeBackCarousel(patient: Patient){
 
     val pagerState = rememberPagerState()
     val autoScrollDuration = 5000L
 
     val items = listOf<@Composable () -> Unit>(
         { PatientWelcomePanel() },
-        { PendingAssignmentsPanel() },
-        { LastTwoWeeksRecapPanel() }
+        { PendingAssignmentsPanel(patient = patient) },
+        { LastTwoWeeksRecapPanel(patient = patient) }
     )
 
     val pageCount = items.size

@@ -9,3 +9,10 @@ fun verticalGradient(color: Color) = Brush.verticalGradient(
     .5F to color.copy(alpha = 0.5F),
     1F to color.copy(alpha = 0.8F)
 )
+
+fun verticalGradientStrong(color: Color) = Brush.verticalGradient(
+    0F to color.copy(alpha = 0.2F),
+    .25F to color.copy(alpha = 0.5F),
+    .5F to color.copy(alpha = 0.7F),
+    1F to color.copy(alpha = 0.95F)
+)
