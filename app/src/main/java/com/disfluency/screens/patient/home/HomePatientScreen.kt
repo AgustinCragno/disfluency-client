@@ -1,6 +1,5 @@
 package com.disfluency.screens.patient.home
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.*
@@ -9,17 +8,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.components.bar.HomeTopAppBar
@@ -93,6 +93,10 @@ private fun HomeScreenContent(patient: Patient){
             .verticalScroll(rememberScrollState())
     ) {
         WelcomeBackCarousel(patient)
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        News()
     }
 }
 
@@ -185,4 +189,34 @@ fun Modifier.carouselTransition(page: Int, pagerState: PagerState) =
 
 fun lerp(start: Float, stop: Float, fraction: Float): Float {
     return start * (1 - fraction) + stop * fraction
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun News(){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+    ) {
+        Text(
+            text = "Novedades",
+            style = MaterialTheme.typography.displayMedium,
+            color = Color.Black,
+            fontSize = 24.sp
+        )
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp),
+            colors = CardDefaults.cardColors(Color.White),
+            elevation = CardDefaults.cardElevation(4.dp)
+        ) {
+
+        }
+    }
+
 }
