@@ -1,16 +1,20 @@
 package com.disfluency.screens.therapist.analysis
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.QueryStats
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -53,10 +57,6 @@ fun AnalysisTranscriptionScreen(
     val index = viewModel.getSessionIndex(analysis)
 //    val disfluencyAudioPlayer = DisfluencyAudioUrlPlayer(LocalContext.current)
 
-//    BackHandler() {
-//        viewModel.analysisResults.value = null
-//    }
-
     BackNavigationScaffold(
         title = stringResource(R.string.disfluency_analisis),
         navController = navController,
@@ -73,6 +73,7 @@ fun AnalysisTranscriptionScreen(
             TranscriptionPanel(
                 analysis = analysis,
                 index = index,
+                viewModel = viewModel,
 //                disfluencyAudioPlayer = disfluencyAudioPlayer,
                 modifier = Modifier.weight(11f)
             )
@@ -128,9 +129,11 @@ private fun SessionPlayerPanel(
 private fun TranscriptionPanel(
     analysis: Analysis,
     index: Int,
+    viewModel: AnalysisViewModel,
 //    disfluencyAudioPlayer: DisfluencyAudioPlayer,
     modifier: Modifier = Modifier
 ) {
+    var editing by remember { mutableStateOf(false) }
 
     Card(
         modifier = modifier
@@ -144,29 +147,53 @@ private fun TranscriptionPanel(
         ) {
             Row(
                 modifier = Modifier
-                    .background(Color.LightGray.copy(alpha = 0.15f))
+                    .background(
+                        if (editing) MaterialTheme.colorScheme.surface else Color.LightGray.copy(
+                            alpha = 0.15f
+                        )
+                    )
                     .fillMaxWidth()
             ) {
                 val fontSize = 18.sp
                 val padding = 12.dp
 
-                Text(
-                    text = "Sesión #$index",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = fontSize,
-                    modifier = Modifier.padding(padding)
-                )
+                if (editing) {
+                    Box(Modifier.fillMaxWidth()) {
+                        IconButton(onClick = {
+                            editing = false
+                            viewModel.updateAnalysis(analysis) }, modifier = Modifier.align(Alignment.CenterStart)) {
+                            Icon(
+                                imageVector = Icons.Filled.Done,
+                                contentDescription = "Back"
+                            )
+                        }
 
-                Text(
-                    text = formatLocalDateAsMonthInWords(LocalDate.now(), stringResource(id = R.string.locale)),
-                    color = Color.Gray,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = fontSize,
-                    modifier = Modifier.padding(vertical = padding)
-                )
+                        Text(
+                            text = "Editor manual",
+                            color = Color.Gray,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = fontSize,
+                            modifier = Modifier.align(Alignment.Center).padding(vertical = padding)
+                        )
+                    }
+                } else {
+                    Text(
+                        text = "Sesión #$index",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = fontSize,
+                        modifier = Modifier.padding(padding)
+                    )
+
+                    Text(
+                        text = formatLocalDateAsMonthInWords(LocalDate.now(), stringResource(id = R.string.locale)),
+                        color = Color.Gray,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = fontSize,
+                        modifier = Modifier.padding(vertical = padding)
+                    )
+                }
             }
-
 
             Divider(
                 modifier = Modifier.fillMaxWidth(),
@@ -176,16 +203,19 @@ private fun TranscriptionPanel(
 
             Transcription(
                 analysis = analysis,
+                updateEditing = { editing = it }
 //                audioPlayer = disfluencyAudioPlayer
             )
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class
+)
 @Composable
 private fun Transcription(
     analysis: Analysis,
+    updateEditing: (Boolean) -> Unit = {}
 //    audioPlayer: DisfluencyAudioPlayer
 ){
     //TODO: auto-scroll on play
@@ -209,6 +239,7 @@ private fun Transcription(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.Center
         ) {
+
             analysis.analysedWords?.forEach { word ->
                 Column(
                     modifier = Modifier.wrapContentWidth()
@@ -219,13 +250,25 @@ private fun Transcription(
 //                        targetValue = if (word.isTimeInBetween(audioPlayer.position().toInt())) MaterialTheme.colorScheme.primary else Color.Black,
 //                        animationSpec = tween(50, 0, LinearEasing)
 //                    )
+                    var expanded by remember { mutableStateOf(false) }
+                    var nestedExpanded by remember { mutableStateOf(false) }
 
-                    Text(
-                        text = word.word + " ",
-                        fontSize = 18.sp,
+                    Box {
+                        Text(
+                            text = word.word + " ",
+                            fontSize = 18.sp,
 //                        modifier = Modifier.clickable { audioPlayer.seekTo(word.startTime.toFloat()) },
-                        color = /*bgColor*/ Color.Black
-                    )
+                            color = /*bgColor*/ Color.Black,
+                            modifier = Modifier
+                                .combinedClickable(
+                                    onClick = {  },
+                                    onLongClick = { expanded = true },
+                                )
+                        )
+                        DisfluencySelectionMainMenu(expanded, word, updateEditing, { nestedExpanded = it }, { expanded = it })
+                        DisfluencySelectionNestedMenu(nestedExpanded, word, updateEditing) { nestedExpanded = it }
+                    }
+
 
                     // Se arregla en androidx.compose.foundation:foundation-layout:1.5.0 que agrega al FlowRow un VerticalArrangement
 //                    Spacer(modifier = Modifier.height(2.dp))
@@ -233,6 +276,106 @@ private fun Transcription(
             }
         }
     }
+}
+
+@Composable
+private fun DisfluencySelectionNestedMenu(
+    expanded: Boolean,
+    word: AnalysedWord,
+    updateEditing: (Boolean) -> Unit,
+    updateExpanded: (Boolean) -> Unit
+) {
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { updateExpanded(false) },
+    ) {
+        DisfluencyType.values().forEach {
+            DropdownMenuItem(
+                text = { Text(it.fullName) },
+                onClick = {
+                    handleDisfluencyClick(word, it)
+                    updateExpanded(false)
+                    updateEditing(true)
+                },
+                leadingIcon = {
+                    Text(
+                        text = it.name,
+                        color = it.color,
+                    )
+                },
+                modifier = Modifier.background(
+                    if (word.hasDisfluency(it)) Color.LightGray else Color.Unspecified
+                )
+            )
+        }
+    }
+}
+
+@Composable
+private fun DisfluencySelectionMainMenu(
+    expanded: Boolean,
+    word: AnalysedWord,
+    updateEditing: (Boolean) -> Unit,
+    updateNestedExpanded: (Boolean) -> Unit,
+    updateExpanded: (Boolean) -> Unit
+) {
+    DropdownMenu(expanded = expanded, onDismissRequest = { updateExpanded(false) }) {
+        DisfluencyType.values().forEach {
+            DropdownMenuItem(
+                text = { Text(it.fullName) },
+                onClick = {
+                    handleDisfluencyClick(word, it)
+                    updateExpanded(false)
+                    updateEditing(true)
+                },
+                leadingIcon = {
+                    Text(
+                        text = it.name,
+                        color = it.color,
+                    )
+                },
+                modifier = Modifier.background(
+                    if (word.hasDisfluency(it)) Color.LightGray else Color.Unspecified
+                )
+            )
+        }
+        Divider()
+        DropdownMenuItem(
+            text = { Text("Cuantitativas") },
+            onClick = {
+                updateNestedExpanded(true)
+                updateExpanded(false)
+                      },
+            leadingIcon = {
+                Icon(
+                    Icons.Outlined.Edit,
+                    contentDescription = null
+                )
+            },
+            trailingIcon = {
+                Icon(
+                    Icons.Outlined.ArrowRight,
+                    contentDescription = null
+                )
+            }
+        )
+        DropdownMenuItem(
+            text = { Text("Editar palabra") },
+            onClick = { /*  */ },
+            leadingIcon = {
+                Icon(
+                    Icons.Outlined.Edit,
+                    contentDescription = null
+                )
+            })
+    }
+}
+
+private fun handleDisfluencyClick(
+    word: AnalysedWord,
+    it: DisfluencyType
+) {
+    if (word.hasDisfluency(it)) word.removeDisfluency(it) else word.addDisfluency(it)
 
 }
 

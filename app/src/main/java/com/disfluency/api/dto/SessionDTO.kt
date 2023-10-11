@@ -19,3 +19,7 @@ data class SessionDTO(
         return Analysis(id, recordingUrl, date, analyzedWords)
     }
 }
+
+data class UpdatedAnalysisDTO(
+    @JsonProperty("updatedAnalysis") val updatedAnalysis: List<AnalysedWordDTO>
+)

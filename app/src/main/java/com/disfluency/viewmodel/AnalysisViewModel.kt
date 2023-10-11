@@ -34,4 +34,8 @@ class AnalysisViewModel : ViewModel() {
     fun getResults(id: String) = viewModelScope.launch {
         analysisResults.value = analysisRepository.getAnalysisResultsById(id)
     }
+
+    fun updateAnalysis(analysis: Analysis) = viewModelScope.launch {
+        analysisRepository.updateAnalysis(analysis)
+    }
 }

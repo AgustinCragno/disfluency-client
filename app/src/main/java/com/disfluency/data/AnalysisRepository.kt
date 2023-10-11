@@ -5,6 +5,7 @@ import com.disfluency.api.DisfluencyAPI
 import com.disfluency.api.dto.PracticeDTO
 import com.disfluency.api.error.AnalysisNotFoundException
 import com.disfluency.api.error.PatientNotFoundException
+import com.disfluency.data.mock.MockedData
 import com.disfluency.model.analysis.Analysis
 import com.disfluency.model.analysis.AnalysisResults
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -16,6 +17,7 @@ import java.io.File
 class AnalysisRepository {
 
     suspend fun getAnalysisListByPatient(patientId: String): List<Analysis>{
+        return listOf(MockedData.longAnalysis)
         Log.i("analysis", "Retrieving analysis of patient: $patientId")
         try {
             val sessionList = DisfluencyAPI.patientService.getSessionsByPatientId(patientId)
@@ -27,6 +29,11 @@ class AnalysisRepository {
         } catch (e: HttpException) {
             throw PatientNotFoundException(patientId)
         }
+    }
+
+    suspend fun updateAnalysis(analysis: Analysis) {
+        Log.i("analysis", "Updating analysis: $analysis")
+        DisfluencyAPI.analysisService.updateAnalysis(analysis.id, analysis.asUpdatedAnalysisDTO())
     }
 
     suspend fun getAnalysisResultsById(sessionId: String): AnalysisResults {
