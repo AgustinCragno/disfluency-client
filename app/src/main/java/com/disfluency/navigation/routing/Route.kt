@@ -49,6 +49,7 @@ sealed class Route(val path: String, private vararg val params: String) {
         object FormAssignmentDetail: Route("form-assignments/{id}", "id")
 
         object AnalysisTranscription: Route("analysis/{id}/transcription", "id")
+        object ExerciseAnalysisTranscription: Route("exerciseAnalysis/{id}/transcription", "id")
         object AnalysisResults: Route("analysis/{id}/results", "id")
         object NewSession: Route("patients/{id}/sessions/new", "id")
         object NewSessionConfirmation: Route("patients/{id}/sessions/record-confirmation", "id")
@@ -58,5 +59,9 @@ sealed class Route(val path: String, private vararg val params: String) {
         object NewExercise: Route("exercises/new")
         object ConfirmationNewExercise: Route("exercises/new/confirmation")
         object ExerciseAssignmentConfirmation: Route("exercises/assign-confirmation")
+
+        object NewForm: Route("forms/new")
+        object ConfirmationNewForm: Route("forms/new/confirmation")
+        object FormAssignmentConfirmation: Route("forms/assign-confirmation")
     }
 }

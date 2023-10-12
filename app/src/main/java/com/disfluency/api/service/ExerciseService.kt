@@ -22,4 +22,7 @@ sealed interface ExerciseService{
 
     @POST("exercisesAssignments")
     suspend fun assignExercisesToPatients(@Body assignExercisesDTO: AssignExercisesDTO)
+
+    @GET("exercisesPractices/{practiceId}/analysis")
+    suspend fun getAnalysisByExercisePracticeId(@Path("practiceId") practiceId: String): AnalysisDTO
 }

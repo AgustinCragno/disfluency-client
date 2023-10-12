@@ -3,11 +3,16 @@ package com.disfluency.screens.therapist.forms
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -45,6 +50,8 @@ fun MyFormsScreen(
 
                 FormList(forms = therapist.forms, navController = navController, filter = filterQuery.value)
             }
+
+            FormCreationButton(navController = navController)
         }
     }
 }
@@ -85,4 +92,22 @@ private fun FormListItem(form: Form, navController: NavHostController){
 @Composable
 private fun NoFormsMessage(){
     ImageMessagePage(imageResource = R.drawable.form_fill, text = stringResource(R.string.doesnt_have_forms_in_system))
+}
+
+@Composable
+private fun FormCreationButton(navController: NavHostController) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        FloatingActionButton(
+            onClick = {
+                navController.navigate(Route.Therapist.NewForm.path)
+            },
+            modifier = Modifier.padding(16.dp),
+            containerColor = MaterialTheme.colorScheme.secondary
+        ) {
+            Icon(Icons.Filled.Add, stringResource(id = R.string.create))
+        }
+    }
 }
