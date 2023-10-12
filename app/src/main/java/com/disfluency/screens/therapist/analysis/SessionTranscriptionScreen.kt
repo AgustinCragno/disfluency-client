@@ -1,8 +1,14 @@
 package com.disfluency.screens.therapist.analysis
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.outlined.ArrowRight
 import androidx.compose.material.icons.outlined.Edit
@@ -10,11 +16,19 @@ import androidx.compose.material.icons.outlined.QueryStats
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -24,15 +38,19 @@ import com.disfluency.components.audio.AudioMediaType
 import com.disfluency.components.audio.CompactAudioPlayer
 import com.disfluency.components.scroll.verticalFadingEdge
 import com.disfluency.data.mock.MockedData
-import com.disfluency.model.analysis.*
+import com.disfluency.model.analysis.AnalysedWord
+import com.disfluency.model.analysis.Analysis
 import com.disfluency.model.analysis.DisfluencyCategory.QUALITATIVE
 import com.disfluency.model.analysis.DisfluencyCategory.QUANTITATIVE
+import com.disfluency.model.analysis.DisfluencyType
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
+import com.disfluency.utilities.color.lighten
 import com.disfluency.utilities.format.formatLocalDateAsMonthInWords
 import com.disfluency.viewmodel.AnalysisViewModel
 import com.disfluency.viewmodel.ExercisesViewModel
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 
 @Preview
@@ -83,6 +101,7 @@ fun SessionTranscriptionScreen(
     AnalysisTranscription(analysis = analysis, title = title, navController = navController, viewModel = viewModel)
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AnalysisTranscription(
     analysis: Analysis,
@@ -90,6 +109,24 @@ fun AnalysisTranscription(
     navController: NavHostController,
     viewModel: AnalysisViewModel
 ){
+    val focusRequester = remember { FocusRequester() }
+    val keyboard = LocalSoftwareKeyboardController.current
+
+    val isInEditMode = remember {
+        mutableStateOf(false)
+    }
+
+    var isInWordEditMode by remember { mutableStateOf(false) }
+    val wordForEdit = remember {
+        mutableStateOf<AnalysedWord?>(null)
+    }
+
+    LaunchedEffect(!isInWordEditMode){
+        if (wordForEdit.value != null){
+            focusRequester.freeFocus()
+            keyboard?.hide()
+        }
+    }
 
     BackNavigationScaffold(
         title = stringResource(R.string.disfluency_analisis),
@@ -98,27 +135,78 @@ fun AnalysisTranscription(
             ViewResultsAction(analysis = analysis, navController = navController)
         }
     ) { paddingValues ->
-
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-        ) {
-            TranscriptionPanel(
-                analysis = analysis,
-                title = title,
-                viewModel = viewModel,
+        ){
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                TranscriptionPanel(
+                    analysis = analysis,
+                    title = title,
+                    viewModel = viewModel,
 //                disfluencyAudioPlayer = disfluencyAudioPlayer,
-                modifier = Modifier.weight(11f)
-            )
+                    modifier = Modifier.weight(11f),
+                    onWordEdit = {
+                        wordForEdit.value = it
+                        isInWordEditMode = true
+                    },
+                    editing = isInEditMode
+                )
 
-            SessionPlayerPanel(
-                audioUrl = analysis.audioUrl,
+                SessionPlayerPanel(
+                    audioUrl = analysis.audioUrl,
 //                audioPlayer = disfluencyAudioPlayer,
-                modifier = Modifier.weight(2f)
-            )
-        }
+                    modifier = Modifier.weight(2f)
+                )
+            }
 
+            val animationTime = 500
+
+            AnimatedVisibility(
+                visible = isInWordEditMode,
+                enter = fadeIn(tween(animationTime)),
+                exit = fadeOut(tween(animationTime))
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.2f))
+                        .clickable(false) { }
+                )
+            }
+
+            AnimatedVisibility(
+                visible = isInWordEditMode,
+                enter = slideInVertically(tween(animationTime)) { it + 200 },
+                exit = slideOutVertically(tween(animationTime, animationTime / 2)) { it + 200 }
+            ) {
+                Box(modifier = Modifier.fillMaxSize()){
+                    WordEditTexField(
+                        word = wordForEdit.value!!.word,
+                        focusRequester = focusRequester,
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        onSubmit = {
+                            isInWordEditMode = false
+
+                            if (it != wordForEdit.value!!.word){
+                                isInEditMode.value = true
+                                wordForEdit.value!!.word = it
+                            }
+                        }
+                    )
+
+                    LaunchedEffect(Unit){
+                        delay((animationTime * 0.3).toLong())
+                        focusRequester.requestFocus()
+                        delay(100)
+                        keyboard?.show()
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -165,10 +253,10 @@ private fun TranscriptionPanel(
     title: String,
     viewModel: AnalysisViewModel,
 //    disfluencyAudioPlayer: DisfluencyAudioPlayer,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    editing: MutableState<Boolean>,
+    onWordEdit: (AnalysedWord) -> Unit = {}
 ) {
-    var editing by remember { mutableStateOf(false) }
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -182,7 +270,7 @@ private fun TranscriptionPanel(
             Row(
                 modifier = Modifier
                     .background(
-                        if (editing) MaterialTheme.colorScheme.surface else Color.LightGray.copy(
+                        if (editing.value) MaterialTheme.colorScheme.surface else Color.LightGray.copy(
                             alpha = 0.15f
                         )
                     )
@@ -191,11 +279,11 @@ private fun TranscriptionPanel(
                 val fontSize = 18.sp
                 val padding = 12.dp
 
-                if (editing) {
+                if (editing.value) {
                     Box(Modifier.fillMaxWidth()) {
                         IconButton(
                             onClick = {
-                                editing = false
+                                editing.value = false
                                 viewModel.updateAnalysis(analysis)
                             },
                             modifier = Modifier.align(Alignment.CenterStart)) {
@@ -210,7 +298,9 @@ private fun TranscriptionPanel(
                             color = Color.Gray,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = fontSize,
-                            modifier = Modifier.align(Alignment.Center).padding(vertical = padding)
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(vertical = padding)
                         )
                     }
                 } else {
@@ -240,7 +330,8 @@ private fun TranscriptionPanel(
 
             Transcription(
                 analysis = analysis,
-                updateEditing = { editing = it }
+                updateEditing = { editing.value = it },
+                onWordEdit = onWordEdit
 //                audioPlayer = disfluencyAudioPlayer
             )
         }
@@ -252,7 +343,8 @@ private fun TranscriptionPanel(
 @Composable
 private fun Transcription(
     analysis: Analysis,
-    updateEditing: (Boolean) -> Unit = {}
+    updateEditing: (Boolean) -> Unit = {},
+    onWordEdit: (AnalysedWord) -> Unit = {},
 //    audioPlayer: DisfluencyAudioPlayer
 ){
     //TODO: auto-scroll on play
@@ -302,7 +394,14 @@ private fun Transcription(
                                     onLongClick = { expanded = true },
                                 )
                         )
-                        DisfluencySelectionMainMenu(expanded, word, updateEditing, { nestedExpanded = it }, { expanded = it })
+                        DisfluencySelectionMainMenu(
+                            expanded = expanded,
+                            word = word,
+                            updateEditing = updateEditing,
+                            updateNestedExpanded = { nestedExpanded = it },
+                            updateExpanded = { expanded = it },
+                            onWordEdit = onWordEdit
+                        )
                         DisfluencySelectionNestedMenu(nestedExpanded, word, updateEditing) { nestedExpanded = it }
                     }
 
@@ -326,7 +425,7 @@ private fun DisfluencySelectionNestedMenu(
         expanded = expanded,
         onDismissRequest = { updateExpanded(false) },
     ) {
-        DisfluencyType.values().filter { d -> d.category == QUANTITATIVE }.forEach {
+        DisfluencyType.values().filter { d -> d.category == QUALITATIVE }.forEach {
             DropdownMenuItem(
                 text = { Text(it.fullName) },
                 onClick = {
@@ -354,10 +453,11 @@ private fun DisfluencySelectionMainMenu(
     word: AnalysedWord,
     updateEditing: (Boolean) -> Unit,
     updateNestedExpanded: (Boolean) -> Unit,
-    updateExpanded: (Boolean) -> Unit
+    updateExpanded: (Boolean) -> Unit,
+    onWordEdit: (AnalysedWord) -> Unit
 ) {
     DropdownMenu(expanded = expanded, onDismissRequest = { updateExpanded(false) }) {
-        DisfluencyType.values().filter { d -> d.category == QUALITATIVE }.forEach {
+        DisfluencyType.values().filter { d -> d.category == QUANTITATIVE }.forEach {
             DropdownMenuItem(
                 text = { Text(it.fullName) },
                 onClick = {
@@ -378,7 +478,7 @@ private fun DisfluencySelectionMainMenu(
         }
         Divider()
         DropdownMenuItem(
-            text = { Text("Cuantitativas") },
+            text = { Text("Cualitativas") },
             onClick = {
                 updateNestedExpanded(true)
                 updateExpanded(false)
@@ -398,7 +498,10 @@ private fun DisfluencySelectionMainMenu(
         )
         DropdownMenuItem(
             text = { Text("Editar palabra") },
-            onClick = { /*  */ },
+            onClick = {
+                onWordEdit.invoke(word)
+                updateExpanded(false)
+            },
             leadingIcon = {
                 Icon(
                     Icons.Outlined.Edit,
@@ -476,4 +579,70 @@ private fun WordDisfluencyDisplay(word: AnalysedWord){
 
     }
     ?: DisfluencyDisplayText(letter = "", color = Color.Transparent)
+}
+
+@Composable
+private fun WordEditTexField(
+    modifier: Modifier = Modifier,
+    word: String,
+    focusRequester: FocusRequester,
+    onSubmit: (String) -> Unit
+){
+    var state by remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = word,
+                selection = TextRange(word.length)
+            )
+        )
+    }
+
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(70.dp)
+            .padding(horizontal = 0.dp),
+        colors = CardDefaults.cardColors(Color.White),
+        shape = RoundedCornerShape(
+            bottomStart = 0.dp,
+            bottomEnd = 0.dp,
+            topStart = 8.dp,
+            topEnd = 8.dp
+        ),
+        elevation = CardDefaults.elevatedCardElevation(4.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                value = state,
+                onValueChange = { state = it },
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .focusRequester(focusRequester)
+                    .weight(1f),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            IconButton(
+                onClick = { onSubmit.invoke(state.text) },
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary
+                ),
+                modifier = modifier
+                    .size(40.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+        }
+    }
 }
