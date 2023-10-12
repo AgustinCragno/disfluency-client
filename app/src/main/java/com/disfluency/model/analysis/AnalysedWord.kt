@@ -1,6 +1,7 @@
 package com.disfluency.model.analysis
 
 import com.disfluency.api.dto.AnalysedWordDTO
+import com.disfluency.api.dto.AnalysedWordOutputDTO
 import com.disfluency.api.dto.WordTimeStampDTO
 
 data class AnalysedWord(val word: String, val startTime: Float, val endTime: Float, var disfluency: List<DisfluencyType>? = null) {
@@ -22,7 +23,7 @@ data class AnalysedWord(val word: String, val startTime: Float, val endTime: Flo
         disfluency = disfluency?.plus(newDisfluency) ?: listOf(newDisfluency)
     }
 
-    fun asAnalysedWordDTO(): AnalysedWordDTO {
-        return AnalysedWordDTO(word, WordTimeStampDTO(startTime, endTime), disfluency.orEmpty())
+    fun asAnalysedWordOutputDTO(): AnalysedWordOutputDTO {
+        return AnalysedWordOutputDTO(word, WordTimeStampDTO(startTime, endTime), disfluency.orEmpty().map { it.name })
     }
 }

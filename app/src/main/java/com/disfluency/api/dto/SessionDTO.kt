@@ -8,5 +8,11 @@ data class SessionDTO(
 ) {}
 
 data class UpdatedAnalysisDTO(
-    @JsonProperty("updatedAnalysis") val updatedAnalysis: List<AnalysedWordDTO>
+    @JsonProperty("updatedAnalysis") val updatedAnalysis: List<AnalysedWordOutputDTO>
+)
+
+data class AnalysedWordOutputDTO(
+    @JsonProperty("text") val text: String,
+    @JsonProperty("timestamp") val timestamp: WordTimeStampDTO,
+    @JsonProperty("disfluency") val disfluency: List<String>
 )
