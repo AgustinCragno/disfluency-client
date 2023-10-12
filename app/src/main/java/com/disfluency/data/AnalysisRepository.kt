@@ -5,7 +5,6 @@ import com.disfluency.api.DisfluencyAPI
 import com.disfluency.api.dto.PracticeDTO
 import com.disfluency.api.error.AnalysisNotFoundException
 import com.disfluency.api.error.PatientNotFoundException
-import com.disfluency.data.mock.MockedData
 import com.disfluency.model.analysis.Analysis
 import com.disfluency.model.analysis.AnalysisResults
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -17,7 +16,6 @@ import java.io.File
 class AnalysisRepository {
 
     suspend fun getAnalysisListByPatient(patientId: String): List<Analysis>{
-        return listOf(MockedData.longAnalysis)
         Log.i("analysis", "Retrieving analysis of patient: $patientId")
         try {
             val sessionList = DisfluencyAPI.patientService.getSessionsByPatientId(patientId)
@@ -25,7 +23,7 @@ class AnalysisRepository {
                 "analysis",
                 "Successfully retrieved ${sessionList.size} analysis of patient: $patientId"
             )
-            return sessionList.map { it.asSession() }
+            return sessionList.map { it.analysis.asAnalysis() }
         } catch (e: HttpException) {
             throw PatientNotFoundException(patientId)
         }
@@ -36,15 +34,15 @@ class AnalysisRepository {
         DisfluencyAPI.analysisService.updateAnalysis(analysis.id, analysis.asUpdatedAnalysisDTO())
     }
 
-    suspend fun getAnalysisResultsById(sessionId: String): AnalysisResults {
-        Log.i("analysis", "Retrieving results of analysis: $sessionId")
+    suspend fun getAnalysisResultsById(analysisId: String): AnalysisResults {
+        Log.i("analysis", "Retrieving results of analysis: $analysisId")
         try {
-            val results = DisfluencyAPI.analysisService.getResultsBySessionId(sessionId)
-            Log.i("analysis", "Successfully retrieved results of analysis: $sessionId"
+            val results = DisfluencyAPI.analysisService.getResultsById(analysisId)
+            Log.i("analysis", "Successfully retrieved results of analysis: $analysisId"
             )
             return results.asAnalysisResults()
         } catch (e: HttpException) {
-            throw AnalysisNotFoundException(sessionId)
+            throw AnalysisNotFoundException(analysisId)
         }
     }
 
@@ -65,7 +63,7 @@ class AnalysisRepository {
         try {
             val result = DisfluencyAPI.patientService.createSession(patientId, PracticeDTO(sessionUrl))
             Log.i("analysis", "Successfully created session of patient: $patientId")
-            return result.asSession()
+            return result.analysis.asAnalysis()
         } catch (e: HttpException){
             throw PatientNotFoundException(patientId)
         }

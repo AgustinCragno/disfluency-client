@@ -11,14 +11,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun ImageMessagePage(
+    modifier: Modifier = Modifier.width(160.dp),
     imageResource: Int,
     imageSize: Dp = 120.dp,
-    text: String
+    text: String,
+    fontSize: TextUnit = 15.sp,
+    lineHeight: TextUnit = TextUnit.Unspecified
 ){
     Box(
         modifier = Modifier
@@ -35,10 +39,11 @@ fun ImageMessagePage(
             )
 
             Text(
-                modifier = Modifier.padding(16.dp).width(160.dp),
+                modifier = modifier.padding(16.dp),
                 text = text,
                 fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
+                fontSize = fontSize,
+                lineHeight = lineHeight,
                 textAlign = TextAlign.Center,
                 color = Color.Gray.copy(alpha = 0.7f)
             )

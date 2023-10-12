@@ -1,11 +1,12 @@
 package com.disfluency.screens.therapist.analysis
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.ArrowRight
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.QueryStats
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -32,6 +32,7 @@ import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.format.formatLocalDateAsMonthInWords
 import com.disfluency.viewmodel.AnalysisViewModel
+import com.disfluency.viewmodel.ExercisesViewModel
 import java.time.LocalDate
 
 @Preview
@@ -41,7 +42,7 @@ private fun AnalysisScreenPreview(){
     analysisViewModel.patientAnalysis.value = listOf(MockedData.longAnalysis)
 
     DisfluencyTheme() {
-        AnalysisTranscriptionScreen(
+        SessionTranscriptionScreen(
             "1",
             navController = rememberNavController(),
             analysisViewModel
@@ -50,14 +51,45 @@ private fun AnalysisScreenPreview(){
 }
 
 @Composable
-fun AnalysisTranscriptionScreen(
+fun ExerciseTranscriptionScreen(
+    practiceId: String,
+    navController: NavHostController,
+    viewModel: ExercisesViewModel,
+    analysisViewModel: AnalysisViewModel
+) {
+    LaunchedEffect(Unit){
+        viewModel.getAnalysisByExercisePracticeId(practiceId)
+    }
+    var title = "Ejercicio"
+    viewModel.analysis.value?.let {
+        AnalysisTranscription(analysis = it, title = title, navController = navController, viewModel = analysisViewModel)
+    }
+        ?:
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            CircularProgressIndicator()
+        }
+}
+
+@Composable
+fun SessionTranscriptionScreen(
     analysisId: String,
     navController: NavHostController,
     viewModel: AnalysisViewModel
-){
+) {
     val analysis = viewModel.getAnalysis(analysisId)
     val index = viewModel.getSessionIndex(analysis)
-//    val disfluencyAudioPlayer = DisfluencyAudioUrlPlayer(LocalContext.current)
+    var title = "Sesión #$index"
+
+    AnalysisTranscription(analysis = analysis, title = title, navController = navController, viewModel = viewModel)
+}
+
+@Composable
+fun AnalysisTranscription(
+    analysis: Analysis,
+    title: String,
+    navController: NavHostController,
+    viewModel: AnalysisViewModel
+){
 
     BackNavigationScaffold(
         title = stringResource(R.string.disfluency_analisis),
@@ -74,7 +106,7 @@ fun AnalysisTranscriptionScreen(
         ) {
             TranscriptionPanel(
                 analysis = analysis,
-                index = index,
+                title = title,
                 viewModel = viewModel,
 //                disfluencyAudioPlayer = disfluencyAudioPlayer,
                 modifier = Modifier.weight(11f)
@@ -130,7 +162,7 @@ private fun SessionPlayerPanel(
 @Composable
 private fun TranscriptionPanel(
     analysis: Analysis,
-    index: Int,
+    title: String,
     viewModel: AnalysisViewModel,
 //    disfluencyAudioPlayer: DisfluencyAudioPlayer,
     modifier: Modifier = Modifier
@@ -161,9 +193,12 @@ private fun TranscriptionPanel(
 
                 if (editing) {
                     Box(Modifier.fillMaxWidth()) {
-                        IconButton(onClick = {
-                            editing = false
-                            viewModel.updateAnalysis(analysis) }, modifier = Modifier.align(Alignment.CenterStart)) {
+                        IconButton(
+                            onClick = {
+                                editing = false
+                                viewModel.updateAnalysis(analysis)
+                            },
+                            modifier = Modifier.align(Alignment.CenterStart)) {
                             Icon(
                                 imageVector = Icons.Filled.Done,
                                 contentDescription = "Back"
@@ -180,7 +215,7 @@ private fun TranscriptionPanel(
                     }
                 } else {
                     Text(
-                        text = "Sesión #$index",
+                        text = title,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
                         fontSize = fontSize,

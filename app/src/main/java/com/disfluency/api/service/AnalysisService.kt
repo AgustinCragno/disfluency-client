@@ -14,4 +14,7 @@ interface AnalysisService {
 
     @PUT("/session/{sessionId}")
     suspend fun updateAnalysis(@Path("sessionId") sessionId: String, @Body updatedAnalysisDTO: UpdatedAnalysisDTO)
+
+    @GET("/analysis/{analysisId}/result")
+    suspend fun getResultsById(@Path("analysisId") analysisId: String): AnalysisResultsDTO
 }

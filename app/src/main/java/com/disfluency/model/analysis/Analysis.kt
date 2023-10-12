@@ -11,6 +11,6 @@ data class Analysis(
     val results: AnalysisResults? = null
 ) {
     fun asUpdatedAnalysisDTO(): UpdatedAnalysisDTO {
-        return UpdatedAnalysisDTO(analysedWords.orEmpty().map { it.asAnalysedWordDTO() })
+        return UpdatedAnalysisDTO(analysedWords.orEmpty().map { it.asAnalysedWordOutputDTO() })
     }
 }

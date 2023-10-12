@@ -27,7 +27,6 @@ import com.disfluency.components.slider.CustomSlider
 import com.disfluency.components.slider.CustomSliderDefaults
 import com.disfluency.components.slider.progress
 import com.disfluency.components.slider.track
-import com.disfluency.components.stepper.PageStepper
 import com.disfluency.components.stepper.PageStepperCompact
 import com.disfluency.components.stepper.StepScreen
 import com.disfluency.model.form.FormAssignment
@@ -38,7 +37,6 @@ import com.disfluency.utilities.color.darken
 import com.disfluency.utilities.color.lighten
 import com.disfluency.viewmodel.FormsViewModel
 import com.smarttoolfactory.bubble.ArrowAlignment
-import com.smarttoolfactory.bubble.ArrowShape
 import com.smarttoolfactory.bubble.bubble
 import com.smarttoolfactory.bubble.rememberBubbleState
 
@@ -232,16 +230,16 @@ private fun QuestionSlider(
             Text(text = questionPage.maxValue, modifier = Modifier.align(Alignment.TopEnd))
         }
 
-        ScaleSlider(response = response)
+        ScaleSlider(state = response.scaleResponse)
     }
 }
 
 @Composable
-private fun ScaleSlider(response: QuestionResponse){
+fun ScaleSlider(state: MutableState<Float>){
     CustomSlider(
         modifier = Modifier.fillMaxWidth(),
-        value = response.scaleResponse.value,
-        onValueChange = { response.scaleResponse.value = it },
+        value = state.value,
+        onValueChange = { state.value = it },
         thumb = { thumbValue ->
             CustomSliderDefaults.Thumb(
                 thumbValue = "$thumbValue",
