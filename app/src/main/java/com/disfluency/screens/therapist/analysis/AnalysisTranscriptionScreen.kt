@@ -25,6 +25,8 @@ import com.disfluency.components.audio.CompactAudioPlayer
 import com.disfluency.components.scroll.verticalFadingEdge
 import com.disfluency.data.mock.MockedData
 import com.disfluency.model.analysis.*
+import com.disfluency.model.analysis.DisfluencyCategory.QUALITATIVE
+import com.disfluency.model.analysis.DisfluencyCategory.QUANTITATIVE
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
@@ -289,7 +291,7 @@ private fun DisfluencySelectionNestedMenu(
         expanded = expanded,
         onDismissRequest = { updateExpanded(false) },
     ) {
-        DisfluencyType.values().forEach {
+        DisfluencyType.values().filter { d -> d.category == QUANTITATIVE }.forEach {
             DropdownMenuItem(
                 text = { Text(it.fullName) },
                 onClick = {
@@ -320,7 +322,7 @@ private fun DisfluencySelectionMainMenu(
     updateExpanded: (Boolean) -> Unit
 ) {
     DropdownMenu(expanded = expanded, onDismissRequest = { updateExpanded(false) }) {
-        DisfluencyType.values().forEach {
+        DisfluencyType.values().filter { d -> d.category == QUALITATIVE }.forEach {
             DropdownMenuItem(
                 text = { Text(it.fullName) },
                 onClick = {
