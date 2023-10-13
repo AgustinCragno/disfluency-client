@@ -11,10 +11,7 @@ import androidx.navigation.navArgument
 import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.screens.therapist.*
-import com.disfluency.screens.therapist.analysis.AnalysisResultsScreen
-import com.disfluency.screens.therapist.analysis.AnalysisTranscriptionScreen
-import com.disfluency.screens.therapist.analysis.PatientSessionsScreen
-import com.disfluency.screens.therapist.analysis.RecordSessionScreen
+import com.disfluency.screens.therapist.analysis.*
 import com.disfluency.screens.therapist.exercises.*
 import com.disfluency.screens.therapist.forms.*
 import com.disfluency.screens.therapist.patients.MyPatientsScreen
@@ -136,10 +133,19 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
 
         composable(Route.Therapist.AnalysisTranscription.path, listOf(navArgument("id"){})){ backStackEntry ->
             backStackEntry.arguments?.getString("id")?.let {
-                AnalysisTranscriptionScreen(
+                SessionTranscriptionScreen(
                     analysisId = it,
                     navController = navHostController,
                     viewModel = analysisViewModel
+                )
+            }
+        }
+        composable(Route.Therapist.ExerciseAnalysisTranscription.path, listOf(navArgument("id"){})){ backStackEntry ->
+            backStackEntry.arguments?.getString("id")?.let {
+                ExerciseTranscriptionScreen(
+                    practiceId = it,
+                    navController = navHostController,
+                    viewModel = exercisesViewModel
                 )
             }
         }

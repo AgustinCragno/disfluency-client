@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.outlined.AccessTime
+import androidx.compose.material.icons.outlined.QueryStats
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,6 +32,7 @@ import com.disfluency.components.audio.AudioMediaType
 import com.disfluency.components.audio.AudioPlayer
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.icon.ImageMessagePage
+import com.disfluency.model.analysis.Analysis
 import com.disfluency.model.exercise.Exercise
 import com.disfluency.model.exercise.ExerciseAssignment
 import com.disfluency.model.exercise.ExercisePractice
@@ -44,59 +46,6 @@ import com.disfluency.viewmodel.ExercisesViewModel
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-@Preview
-@Composable
-private fun AssignmentDetailPreview(){
-    val exercisesViewModel = ExercisesViewModel()
-    val navHostController = rememberNavController()
-
-    val assignmentId = "Id"
-
-    val exercise = Exercise(
-        "12345678",
-        "Velocidad cómoda y fluida",
-        "Controlar la velocidad de manera que me sea cómodo, tratar de mantenerla ajustándola a mi comodidad. Hablá a una velocidad cómoda y constante a lo largo de las palabras; y de las frases; bajá un poco la velocidad cuando notás un poco de tensión en tu máquina de hablar",
-        "La usabilidad es la capacidad del producto software para ser entendido, aprendido, usado y resultar atractivo para el usuario, cuando se usa bajo determinadas condiciones",
-        "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3"
-    )
-
-    val practice1 = ExercisePractice(
-        "1",
-        LocalDateTime.now(),
-        "https://pf5302.s3.us-east-2.amazonaws.com/audios/iniciosuave.mp3"
-    )
-
-    val practice2 = ExercisePractice(
-        "1",
-        LocalDateTime.now(),
-        "https://pf5302.s3.us-east-2.amazonaws.com/audios/toquesligeros.mp3"
-    )
-
-    val practice3 = ExercisePractice(
-        "1",
-        LocalDateTime.now(),
-        "https://pf5302.s3.us-east-2.amazonaws.com/audios/fonacion.mp3"
-    )
-
-    val assignment = ExerciseAssignment(
-        id = assignmentId,
-        exercise = exercise,
-        dateOfAssignment = LocalDate.now(),
-        practiceAttempts = mutableListOf(practice1, practice2, practice3),
-//        practiceAttempts = mutableListOf()
-    )
-
-    exercisesViewModel.assignments.value = listOf(assignment)
-
-    DisfluencyTheme() {
-
-        ExerciseAssignmentDetailScreen(
-            assignmentId = assignmentId,
-            navController = navHostController,
-            viewModel = exercisesViewModel
-        )
-    }
-}
 
 @Composable
 fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostController, viewModel: ExercisesViewModel){
@@ -110,8 +59,8 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
     BackNavigationScaffold(title = stringResource(R.string.exercises), navController = navController) { paddingValues ->
         Box(
             modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
+                .fillMaxSize()
+                .padding(paddingValues)
         ){
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 assignment.value?.let {
@@ -120,7 +69,8 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
                     ExercisePracticeList(
                         assignment = it,
                         title = stringResource(R.string.my_practices),
-                        emptyListContent = { NoPracticesMessage() }
+                        emptyListContent = { NoPracticesMessage() },
+                        navController = navController
                     )
 
                     Spacer(modifier = Modifier.height(64.dp))
@@ -136,7 +86,9 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
 fun ExercisePracticeList(
     assignment: ExerciseAssignment,
     title: String,
-    emptyListContent: @Composable () -> Unit
+    emptyListContent: @Composable () -> Unit,
+    navController: NavHostController,
+    analysisEnabled: Boolean = false
 ){
     Card(
         modifier = Modifier
@@ -168,7 +120,12 @@ fun ExercisePracticeList(
             if (assignment.practiceAttempts.isNotEmpty()){
                 assignment.practiceAttempts.forEachIndexed { index, practice ->
                     if (index != 0) Divider()
-                    ExercisePracticeItem(practice = practice, index = index)
+                    ExercisePracticeItem(
+                        practice = practice,
+                        index = index,
+                        navController = navController,
+                        analysisEnabled = analysisEnabled
+                    )
                 }
             } else{
                 emptyListContent()
@@ -178,7 +135,7 @@ fun ExercisePracticeList(
 }
 
 @Composable
-fun ExercisePracticeItem(practice: ExercisePractice, index: Int){
+fun ExercisePracticeItem(practice: ExercisePractice, index: Int, navController: NavHostController, analysisEnabled: Boolean = false){
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -234,13 +191,18 @@ fun ExercisePracticeItem(practice: ExercisePractice, index: Int){
                     label = formatLocalTime(practice.date.toLocalTime()),
                     labelColor = Color.Gray
                 )
+
+                if (analysisEnabled){
+                    ViewAnalysisAction(exercisePracticeId = practice.id, navController = navController)
+                }
+
             }
 
             AnimatedVisibility(
                 visible = expanded,
                 exit = fadeOut(tween(200)) + shrinkVertically(tween(400))
             ) {
-                Column() {
+                Column {
                     Spacer(modifier = Modifier.height(16.dp))
 
 //                AudioPlayer(audioPlayer = audioPlayer)
@@ -252,6 +214,76 @@ fun ExercisePracticeItem(practice: ExercisePractice, index: Int){
         }
     }
 }
+
+@Composable
+private fun ViewAnalysisAction(exercisePracticeId: String, navController: NavHostController){
+    IconButton(
+        onClick = {
+            navController.navigate(Route.Therapist.ExerciseAnalysisTranscription.routeTo(exercisePracticeId))
+        },
+    )
+    {
+        Icon(
+            imageVector = Icons.Outlined.QueryStats,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AssignmentDetailPreview(){
+    val exercisesViewModel = ExercisesViewModel()
+    val navHostController = rememberNavController()
+
+    val assignmentId = "Id"
+
+    val exercise = Exercise(
+        "12345678",
+        "Velocidad cómoda y fluida",
+        "Controlar la velocidad de manera que me sea cómodo, tratar de mantenerla ajustándola a mi comodidad. Hablá a una velocidad cómoda y constante a lo largo de las palabras; y de las frases; bajá un poco la velocidad cuando notás un poco de tensión en tu máquina de hablar",
+        "La usabilidad es la capacidad del producto software para ser entendido, aprendido, usado y resultar atractivo para el usuario, cuando se usa bajo determinadas condiciones",
+        "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3"
+    )
+
+    val practice1 = ExercisePractice(
+        "1",
+        LocalDateTime.now(),
+        "https://pf5302.s3.us-east-2.amazonaws.com/audios/iniciosuave.mp3",
+        null
+    )
+
+    val practice2 = ExercisePractice(
+        "1",
+        LocalDateTime.now(),
+        "https://pf5302.s3.us-east-2.amazonaws.com/audios/toquesligeros.mp3",
+        null
+    )
+
+    val practice3 = ExercisePractice(
+        "1",
+        LocalDateTime.now(),
+        "https://pf5302.s3.us-east-2.amazonaws.com/audios/fonacion.mp3",
+        null
+    )
+
+    val assignment = ExerciseAssignment(
+        id = assignmentId,
+        exercise = exercise,
+        dateOfAssignment = LocalDate.now(),
+        practiceAttempts = mutableListOf(practice1, practice2, practice3),
+//        practiceAttempts = mutableListOf()
+    )
+
+    exercisesViewModel.assignments.value = listOf(assignment)
+
+    DisfluencyTheme{
+
+        ExercisePracticeItem(practice2, 1, navHostController);
+    }
+}
+
 
 @Composable
 private fun NoPracticesMessage(){

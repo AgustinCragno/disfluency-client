@@ -268,4 +268,7 @@
     <string name="exercises_completed_in_last_two_weeks">ejercicios completados en los ultimos 15 dias</string>
     <string name="last_two_weeks_good_work">¡Buen trabajo! Continua tu progreso practicando ejercicios semanalmante... ¡Y por que no diariamente!</string>
     <string name="last_two_weeks_lets_get_to_work">¿Que paso? Al parecer no estuviste practicando tanto como deberias... ¡A mejorar! La practica hace al maestro</string>
+    <string name="responses">Respuestas</string>
+    <string name="timely">Historico</string>
+    <string name="form_has_only_one_response">El cuestionario presenta una unica respuesta hasta el momento \n\nUna vez que el paciente haya respondido multiples veces podra ver los graficos historicos con sus respuestas</string>
 </resources>

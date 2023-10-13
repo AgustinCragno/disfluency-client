@@ -43,7 +43,9 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
                             imageSize = 80.dp,
                             text = stringResource(R.string.user_has_not_resolved_this_exercise_yet)
                         )
-                    }
+                    },
+                    navController = navController,
+                    analysisEnabled = true
                 )
             }
         }
