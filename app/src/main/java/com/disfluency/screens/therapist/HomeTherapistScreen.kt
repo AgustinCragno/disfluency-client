@@ -1,5 +1,6 @@
 package com.disfluency.screens.therapist
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +19,7 @@ import com.disfluency.viewmodel.LoggedUserViewModel
 
 @Composable
 fun HomeTherapistScreen(therapist: Therapist, navController: NavHostController, viewModel: LoggedUserViewModel){
-
+    Log.v("Therapist: ", therapist.toString())
     BottomNavigationScaffold(
         bottomNavigationItems = BottomNavigationItem.Therapist.items(),
         navController = navController

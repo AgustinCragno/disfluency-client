@@ -5,6 +5,9 @@ import com.disfluency.model.form.Form
 
 data class Therapist(
     val id: String,
+    val name: String,
+    val lastName: String,
+    val todayPatients: List<Patient> = mutableListOf(),
     val exercises: MutableList<Exercise> = mutableListOf(),
     val forms: MutableList<Form> = mutableListOf()
 ) : UserRole {
