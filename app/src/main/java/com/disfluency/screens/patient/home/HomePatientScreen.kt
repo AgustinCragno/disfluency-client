@@ -442,18 +442,32 @@ private fun Progress(patient: Patient){
             elevation = CardDefaults.cardElevation(4.dp),
             colors = CardDefaults.cardColors(Color.White)
         ) {
-            Box(modifier = Modifier.fillMaxWidth()){
+            if (data.size > 1)
+                ProgressChart(data = data)
+            else
                 Text(
-                    text = "Cantidad de ejercicios resueltos y cuestionarios repondidos por semana",
-                    fontSize = 14.sp,
-                    lineHeight = 15.sp,
-                    color = MaterialTheme.colorScheme.secondary.darken(),
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    text = "¡Bienvenido! A partir de la proxima semana podras ver el progreso de tus prácticas",
+                    fontSize = 13.sp,
+                    lineHeight = 14.sp,
+                    color = Color.Gray,
+                    modifier = Modifier.padding(24.dp)
                 )
-
-                WeeklyProgressChart(weeklyProgress = data)
-            }
         }
+    }
+}
+
+@Composable
+private fun ProgressChart(data: Map<LocalDate, Int>){
+    Box(modifier = Modifier.fillMaxWidth()){
+        Text(
+            text = "Cantidad de ejercicios resueltos y cuestionarios repondidos por semana",
+            fontSize = 14.sp,
+            lineHeight = 15.sp,
+            color = MaterialTheme.colorScheme.secondary.darken(),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+
+        WeeklyProgressChart(weeklyProgress = data)
     }
 }
 
