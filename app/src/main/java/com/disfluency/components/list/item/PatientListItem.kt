@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.AccessTime
+import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -18,14 +19,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.model.user.Patient
+import com.disfluency.navigation.routing.Route
+import com.disfluency.screens.therapist.patients.ActivityButton
 import com.disfluency.utilities.format.formatWeeklyTurn
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun PatientListItem(patient: Patient, onClick: () -> Unit = {}, leadingContentPrefix: @Composable () -> Unit = {}) {
+fun PatientListItem(patient: Patient, onClick: () -> Unit = {}, leadingContentPrefix: @Composable () -> Unit = {}, sessionShortcut: Boolean = false, navController: NavHostController? = null) {
     ListItem(
         title = patient.fullNameFormal(),
         subtitle = formatWeeklyTurn(patient.weeklyTurn),
@@ -44,13 +48,22 @@ fun PatientListItem(patient: Patient, onClick: () -> Unit = {}, leadingContentPr
             }
         },
         trailingContent = {
-            IconLabeled(
-                icon = Icons.Outlined.AccessTime,
-                label = patient.weeklyHour.format(
-                    DateTimeFormatter.ofPattern(
-                        stringResource(R.string.time_format)
-                    ))
-            )
+            if (sessionShortcut){
+                ActivityButton(
+                    title = stringResource(R.string.sessions),
+                    icon = Icons.Outlined.Mic,
+                    onClick = {
+                        navController?.navigate(Route.Therapist.PatientSessions.routeTo(patient.id))
+                    })
+            }else{
+                IconLabeled(
+                    icon = Icons.Outlined.AccessTime,
+                    label = patient.weeklyHour.format(
+                        DateTimeFormatter.ofPattern(
+                            stringResource(R.string.time_format)
+                        ))
+                )
+            }
         },
         onClick = onClick
     )

@@ -19,6 +19,6 @@ class TherapistDTO(
 ) : RoleDTO {
 
     override fun toRole(): UserRole {
-        return Therapist(id, name, lastName, todayPatients.map { it.asPatient() } ,exercises.map { it.asExercise() }.toMutableList(), forms.map { it.asForm() }.toMutableList())
+        return Therapist(id, name, lastName, profilePictureUrl, todayPatients.map { it.asPatient() } ,exercises.map { it.asExercise() }.toMutableList(), forms.map { it.asForm() }.toMutableList())
     }
 }
