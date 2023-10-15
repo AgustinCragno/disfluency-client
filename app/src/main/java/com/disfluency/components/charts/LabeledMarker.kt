@@ -1,6 +1,5 @@
 package com.disfluency.components.charts
 
-import android.graphics.RectF
 import android.graphics.Typeface
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -12,20 +11,20 @@ import com.patrykandpatrick.vico.compose.component.overlayingComponent
 import com.patrykandpatrick.vico.compose.component.shapeComponent
 import com.patrykandpatrick.vico.compose.component.textComponent
 import com.patrykandpatrick.vico.compose.dimensions.dimensionsOf
-import com.patrykandpatrick.vico.core.chart.values.ChartValuesProvider
-import com.patrykandpatrick.vico.core.component.marker.MarkerComponent
+import com.patrykandpatrick.vico.core.chart.dimensions.HorizontalDimensions
+import com.patrykandpatrick.vico.core.chart.insets.Insets
 import com.patrykandpatrick.vico.core.component.shape.ShapeComponent
 import com.patrykandpatrick.vico.core.component.shape.Shapes
 import com.patrykandpatrick.vico.core.component.shape.cornered.Corner
 import com.patrykandpatrick.vico.core.component.shape.cornered.MarkerCorneredShape
-import com.patrykandpatrick.vico.core.context.DrawContext
-import com.patrykandpatrick.vico.core.extension.half
+import com.patrykandpatrick.vico.core.context.MeasureContext
 import com.patrykandpatrick.vico.core.marker.Marker
-import com.patrykandpatrick.vico.core.model.Point
 
 @Composable
-internal fun rememberMarker(): Marker {
-    val labelBackgroundColor = Color.Transparent
+internal fun rememberMarkerLabeled(
+    labelColor: Color = Color.Black,
+    labelBackgroundColor: Color = MaterialTheme.colorScheme.surface
+): Marker {
     val labelBackground = remember(labelBackgroundColor) {
         ShapeComponent(labelBackgroundShape, labelBackgroundColor.toArgb()).setShadow(
             radius = LABEL_BACKGROUND_SHADOW_RADIUS,
@@ -34,7 +33,7 @@ internal fun rememberMarker(): Marker {
         )
     }
     val label = textComponent(
-        color = Color.Transparent,
+        color = labelColor,
         background = labelBackground,
         lineCount = LABEL_LINE_COUNT,
         padding = labelPadding,
@@ -53,7 +52,7 @@ internal fun rememberMarker(): Marker {
         innerPaddingAll = indicatorCenterAndOuterComponentPaddingValue,
     )
 
-    return remember(indicator) {
+    return remember(label, indicator) {
         object : MarkerComponent(label, indicator, null) {
             init {
                 indicatorSizeDp = INDICATOR_SIZE_DP
@@ -64,24 +63,13 @@ internal fun rememberMarker(): Marker {
                 }
             }
 
-            override fun draw(
-                context: DrawContext,
-                bounds: RectF,
-                markedEntries: List<Marker.EntryModel>,
-                chartValuesProvider: ChartValuesProvider,
-            ): Unit = with(context) {
-                val halfIndicatorSize = indicatorSizeDp.half.pixels
-
-                markedEntries.forEachIndexed { _, model ->
-                    onApplyEntryColor?.invoke(model.color)
-                    indicator?.draw(
-                        context,
-                        model.location.x - halfIndicatorSize,
-                        model.location.y - halfIndicatorSize,
-                        model.location.x + halfIndicatorSize,
-                        model.location.y + halfIndicatorSize,
-                    )
-                }
+            override fun getInsets(
+                context: MeasureContext,
+                outInsets: Insets,
+                horizontalDimensions: HorizontalDimensions,
+            ) = with(context) {
+                outInsets.top = label.getHeight(context) + labelBackgroundShape.tickSizeDp.pixels -
+                        LABEL_BACKGROUND_SHADOW_DY.pixels
             }
         }
     }

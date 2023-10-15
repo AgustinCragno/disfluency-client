@@ -16,6 +16,7 @@ import com.disfluency.screens.patient.exercises.RecordExerciseScreen
 import com.disfluency.screens.patient.forms.FormCompletionScreen
 import com.disfluency.screens.patient.forms.FormEntryVisualizationScreen
 import com.disfluency.screens.patient.forms.MyFormsScreen
+import com.disfluency.screens.patient.home.HomePatientScreen
 import com.disfluency.screens.patient.success.FormResponseConfirmationScreen
 import com.disfluency.screens.patient.success.RecordingConfirmationScreen
 import com.disfluency.viewmodel.ExercisesViewModel

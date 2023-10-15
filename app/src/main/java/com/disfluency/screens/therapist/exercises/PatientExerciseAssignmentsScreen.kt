@@ -9,6 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.outlined.Assignment
+import androidx.compose.material.icons.outlined.RecordVoiceOver
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -36,6 +38,7 @@ import com.disfluency.model.exercise.ExerciseAssignment
 import com.disfluency.model.user.Patient
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
+import com.disfluency.utilities.color.stringToRGB
 import com.disfluency.utilities.format.formatLocalDate
 import com.disfluency.viewmodel.AssignmentsViewModel
 import com.disfluency.viewmodel.ExercisesViewModel
@@ -113,7 +116,13 @@ fun ExerciseAssignmentListItem(exerciseAssignment: ExerciseAssignment, navContro
         title = exerciseAssignment.exercise.title,
         subtitle = formatLocalDate(exerciseAssignment.dateOfAssignment),
         leadingContent = {
-            TitleThumbnail(exerciseAssignment.exercise.title)
+//            TitleThumbnail(exerciseAssignment.exercise.title)
+            Icon(
+                imageVector = Icons.Outlined.RecordVoiceOver,
+                contentDescription = null,
+                modifier = Modifier.size(25.dp),
+                tint = stringToRGB(exerciseAssignment.exercise.title)
+            )
         },
         trailingContent = {
             val color = if (exerciseAssignment.attemptsCount() > 0) MaterialTheme.colorScheme.primary else Color.Gray

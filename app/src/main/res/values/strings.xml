@@ -60,6 +60,7 @@
     <string name="skip">Saltar</string>
     <string name="next">Siguiente</string>
     <string name="welcome">¡Bienvenido!</string>
+    <string name="welcome_plain">Bienvenido</string>
     <string name="onboarding_introduction_1">Disfluency ofrece acceso gratis a los usuarios paciente, sin embargo el medio para registrarse en la aplicación difiere levemente para este tipo de usuarios</string>
     <string name="onboarding_introduction_2">A continuación, un diagrama de cómo puede acceder a Disfluency</string>
     <string name="our_vision">Nuestra visión</string>
@@ -259,6 +260,14 @@
     <string name="wait_while_form_is_sent">Espere un momento mientras se envia el cuestionario</string>
     <string name="form_was_sent_successfully">Se envio el cuestionario existosamente</string>
     <string name="an_error_occurred_while_sending_form">Ocurrio un error al enviar el cuestionario</string>
+    <string name="patient_welcome_message">¡Facilita el tratamiento de la disfluencia completando tus ejercicios y cuestionarios diarios!</string>
+    <string name="done_for_today">Listo por hoy</string>
+    <string name="you_have_completed_all_assignments_today">Completaste todos los cuestionarios y ejercicios asignados por hoy, pero no te procupes ¡podes seguir practicando!</string>
+    <string name="lets_get_to_work">¡A trabajar!</string>
+    <string name="lets_get_to_work_description">Tenes material de terapia por completar: practica ejercicios foneticos y completa cuestionarios de autopercepcion</string>
+    <string name="exercises_completed_in_last_two_weeks">ejercicios completados en los ultimos 15 dias</string>
+    <string name="last_two_weeks_good_work">¡Buen trabajo! Continua tu progreso practicando ejercicios semanalmante... ¡Y por que no diariamente!</string>
+    <string name="last_two_weeks_lets_get_to_work">¿Que paso? Al parecer no estuviste practicando tanto como deberias... ¡A mejorar! La practica hace al maestro</string>
     <string name="responses">Respuestas</string>
     <string name="timely">Historico</string>
     <string name="form_has_only_one_response">El cuestionario presenta una unica respuesta hasta el momento \n\nUna vez que el paciente haya respondido multiples veces podra ver los graficos historicos con sus respuestas</string>
