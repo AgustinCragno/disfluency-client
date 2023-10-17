@@ -1,18 +1,21 @@
 package com.disfluency.components.list.item
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.outlined.AccessTime
 import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -29,10 +32,16 @@ import com.disfluency.utilities.format.formatWeeklyTurn
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun PatientListItem(patient: Patient, onClick: () -> Unit = {}, leadingContentPrefix: @Composable () -> Unit = {}, sessionShortcut: Boolean = false, navController: NavHostController? = null) {
+fun PatientListItem(
+    patient: Patient,
+    subtitle: String = formatWeeklyTurn(weeklyTurn = patient.weeklyTurn),
+    onClick: () -> Unit = {},
+    leadingContentPrefix: @Composable () -> Unit = {},
+    trailingContent: @Composable () -> Unit = {},
+) {
     ListItem(
         title = patient.fullNameFormal(),
-        subtitle = formatWeeklyTurn(patient.weeklyTurn),
+        subtitle = subtitle,
         subtitleColor = MaterialTheme.colorScheme.primary,
         leadingContent = {
             Row {
@@ -47,25 +56,59 @@ fun PatientListItem(patient: Patient, onClick: () -> Unit = {}, leadingContentPr
                 )
             }
         },
-        trailingContent = {
-            if (sessionShortcut){
-                ActivityButton(
-                    title = stringResource(R.string.sessions),
-                    icon = Icons.Outlined.Mic,
-                    onClick = {
-                        navController?.navigate(Route.Therapist.PatientSessions.routeTo(patient.id))
-                    })
-            }else{
-                IconLabeled(
-                    icon = Icons.Outlined.AccessTime,
-                    label = patient.weeklyHour.format(
-                        DateTimeFormatter.ofPattern(
-                            stringResource(R.string.time_format)
-                        ))
-                )
-            }
-        },
+        trailingContent = trailingContent,
         onClick = onClick
+    )
+}
+
+@Composable
+fun PatientListItem(
+    patient: Patient,
+    onClick: () -> Unit = {},
+    leadingContentPrefix: @Composable () -> Unit = {}
+) {
+    PatientListItem(
+        patient = patient,
+        onClick = onClick,
+        leadingContentPrefix = leadingContentPrefix,
+        trailingContent = {
+            IconLabeled(
+                icon = Icons.Outlined.AccessTime,
+                label = patient.weeklyHour.format(
+                    DateTimeFormatter.ofPattern(
+                        stringResource(R.string.time_format)
+                    ))
+            )
+        }
+    )
+}
+
+@Composable
+fun PatientListItem(
+    patient: Patient,
+    onClick: () -> Unit = {},
+    leadingContentPrefix: @Composable () -> Unit = {},
+    navController: NavHostController? = null
+) {
+    PatientListItem(
+        patient = patient,
+        subtitle = patient.weeklyHour.format(
+            DateTimeFormatter.ofPattern(
+                stringResource(R.string.time_format)
+            )
+        ),
+        onClick = onClick,
+        leadingContentPrefix = leadingContentPrefix,
+        trailingContent = {
+            IconButton(
+                modifier = Modifier.width(22.dp),
+                onClick = {
+                    navController?.navigate(Route.Therapist.PatientSessions.routeTo(patient.id))
+                }
+            ) {
+                Icon(imageVector = Icons.Filled.Mic, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+            }
+        }
     )
 }
 

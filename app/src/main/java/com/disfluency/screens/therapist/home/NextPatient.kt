@@ -22,23 +22,32 @@ fun NextPatients(therapist: Therapist, navController: NavHostController) {
             .padding(horizontal = 20.dp)
     ) {
         Text(
-            text = "Próximos pacientes",
+            text = "Pacientes de hoy",
             style = MaterialTheme.typography.displayMedium,
             color = Color.Black,
             fontSize = 24.sp
         )
 
+        Text(
+            text = "Hoy tienes ${therapist.todayPatients.size} pacientes en la agenda",
+            color = Color.Gray,
+            fontSize = 13.sp,
+            lineHeight = 14.sp
+        )
+
         Spacer(modifier = Modifier.height(8.dp))
 
-        therapist.todayPatients.maxByOrNull { it.weeklyHour }?.let {
+        val nextPatients = therapist.todayPatients.sortedBy { it.weeklyHour }
+
+        nextPatients.forEach { patient ->
             PatientListItem(
-                patient = it,
-                onClick = { navController.navigate(Route.Therapist.PatientDetail.routeTo(it.id)) },
-                sessionShortcut = true,
+                patient = patient,
+                onClick = { navController.navigate(Route.Therapist.PatientDetail.routeTo(patient.id)) },
                 navController = navController
             )
         }
-        if (therapist.getNextPatients().isEmpty()){
+
+        if (nextPatients.isEmpty()){
             Text(
                 text = "No tienes mas pacientes por hoy. ¡Gran trabajo!",
                 color = Color.Gray,

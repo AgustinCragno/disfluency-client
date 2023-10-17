@@ -1,36 +1,23 @@
-package com.disfluency.screens.therapist
+package com.disfluency.screens.therapist.home
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Assignment
-import androidx.compose.material.icons.filled.RecordVoiceOver
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.bar.HomeTopAppBar
-import com.disfluency.model.user.Patient
 import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BottomNavigationScaffold
-import com.disfluency.screens.therapist.home.NextPatients
-import com.disfluency.screens.therapist.home.WelcomeBack
 import com.disfluency.viewmodel.LoggedUserViewModel
 
 @Composable
@@ -62,7 +49,7 @@ private fun HomeScreenContent(therapist: Therapist, navController: NavHostContro
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        WelcomeBack(therapist = therapist)
+        WelcomeBackCarousel(therapist = therapist)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -72,6 +59,7 @@ private fun HomeScreenContent(therapist: Therapist, navController: NavHostContro
 
         NextPatients(therapist = therapist, navController = navController)
 
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
@@ -83,7 +71,7 @@ fun Shortcuts(navController: NavHostController) {
             .padding(horizontal = 20.dp)
     ) {
         Text(
-            text = "Crea un nuevo...",
+            text = "Atajos",
             style = MaterialTheme.typography.displayMedium,
             color = Color.Black,
             fontSize = 24.sp
@@ -92,36 +80,16 @@ fun Shortcuts(navController: NavHostController) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(
-            horizontalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxWidth()
         ){
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(Route.Therapist.NewForm.path)
-                },
-                modifier = Modifier.padding(16.dp),
-                containerColor = MaterialTheme.colorScheme.secondary
-            ) {
-                Row{
-                    Icon(Icons.Filled.Assignment, stringResource(id = R.string.create))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Cuestionario")
-                }
+            ShortcutButton(modifier = Modifier.weight(10f), title = "Ejercicios", background = R.drawable.session_banner_2) {
+                navController.navigate(Route.Therapist.NewExercise.path)
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp).weight(1f))
 
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(Route.Therapist.NewExercise.path)
-                },
-                modifier = Modifier.padding(16.dp),
-                containerColor = MaterialTheme.colorScheme.secondary
-            ) {
-                Row{
-                    Icon(Icons.Filled.RecordVoiceOver, stringResource(id = R.string.create))
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = "Ejercicio")
-                }
+            ShortcutButton(modifier = Modifier.weight(10f), title = "Cuestionarios", background = R.drawable.form_banner_2) {
+                navController.navigate(Route.Therapist.NewForm.path)
             }
         }
     }
