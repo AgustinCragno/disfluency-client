@@ -30,13 +30,7 @@ fun FormAssignmentListItem(
         title = formAssignment.form.title,
         subtitle = formatLocalDate(formAssignment.date),
         leadingContent = {
-//            TitleThumbnail(formAssignment.form.title)
-            Icon(
-                imageVector = Icons.Outlined.Assignment,
-                contentDescription = null,
-                modifier = Modifier.size(25.dp),
-                tint = stringToRGB(formAssignment.form.title)
-            )
+            TitleThumbnail(formAssignment.form.title)
         },
         trailingContent = {
             val color = if (formAssignment.completionEntries.isNotEmpty()) MaterialTheme.colorScheme.primary else Color.Gray

@@ -6,10 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Repeat
+import androidx.compose.material.icons.outlined.Assignment
+import androidx.compose.material.icons.outlined.RecordVoiceOver
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -25,7 +26,10 @@ import androidx.navigation.compose.rememberNavController
 import com.disfluency.components.bar.HomeTopAppBar
 import com.disfluency.components.charts.rememberChartStyle
 import com.disfluency.components.charts.rememberMarker
+import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.list.item.FormAssignmentListItem
+import com.disfluency.components.list.item.ListItem
+import com.disfluency.components.thumbnail.TitleThumbnail
 import com.disfluency.model.exercise.Exercise
 import com.disfluency.model.exercise.ExerciseAssignment
 import com.disfluency.model.exercise.ExercisePractice
@@ -43,7 +47,9 @@ import com.disfluency.screens.patient.home.chart.WeeklyProgressChart
 import com.disfluency.screens.therapist.exercises.ExerciseAssignmentListItem
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.color.darken
+import com.disfluency.utilities.color.stringToRGB
 import com.disfluency.utilities.date.equalsDay
+import com.disfluency.utilities.format.formatLocalDate
 import com.disfluency.viewmodel.LoggedUserViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -284,7 +290,6 @@ fun lerp(start: Float, stop: Float, fraction: Float): Float {
     return start * (1 - fraction) + stop * fraction
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun News(
     patient: Patient,
@@ -312,26 +317,20 @@ private fun News(
         Spacer(modifier = Modifier.height(8.dp))
 
         patient.exercises.maxByOrNull { it.dateOfAssignment }?.let {
-            ExerciseAssignmentListItem(
+            PendingExerciseListItem(
                 exerciseAssignment = it,
-                navController = navController,
-                onClickRoute = Route.Patient.ExerciseAssignmentDetail
+                navController = navController
             )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         patient.forms.maxByOrNull { it.date }?.let {
-            FormAssignmentListItem(
+            PendingFormListItem(
                 formAssignment = it,
-                onClick = {
-                    navController.navigate(Route.Patient.FormCompletion.routeTo(it.id))
-                }
+                navController = navController
             )
         }
-
-        //TODO: cambiarle algo a los items para que se distinga que es ejercicio y que es cuestionario
-
     }
 
 }
@@ -383,10 +382,9 @@ private fun PendingList(
     pendingExercises.forEach {
         Spacer(modifier = Modifier.height(8.dp))
 
-        ExerciseAssignmentListItem(
+        PendingExerciseListItem(
             exerciseAssignment = it,
-            navController = navController,
-            onClickRoute = Route.Patient.ExerciseAssignmentDetail
+            navController = navController
         )
     }
 
@@ -404,13 +402,62 @@ private fun PendingList(
     pendingForms.forEach {
         Spacer(modifier = Modifier.height(8.dp))
 
-        FormAssignmentListItem(
+        PendingFormListItem(
             formAssignment = it,
-            onClick = {
-                navController.navigate(Route.Patient.FormCompletion.routeTo(it.id))
-            }
+            navController = navController
         )
     }
+}
+
+@Composable
+fun PendingFormListItem(
+    formAssignment: FormAssignment,
+    navController: NavHostController
+){
+    ListItem(
+        title = formAssignment.form.title,
+        subtitle = formatLocalDate(formAssignment.date),
+        leadingContent = {
+            TitleThumbnail(formAssignment.form.title)
+        },
+        trailingContent = {
+            Icon(
+                imageVector = Icons.Outlined.Assignment,
+                contentDescription = null,
+                modifier = Modifier.size(25.dp),
+                tint = stringToRGB(formAssignment.form.title)
+            )
+        },
+        onClick = {
+            navController.navigate(Route.Patient.FormCompletion.routeTo(formAssignment.id))
+        }
+    )
+}
+
+
+@Composable
+fun PendingExerciseListItem(exerciseAssignment: ExerciseAssignment, navController: NavHostController){
+
+    ListItem(
+        title = exerciseAssignment.exercise.title,
+        subtitle = formatLocalDate(exerciseAssignment.dateOfAssignment),
+        leadingContent = {
+            TitleThumbnail(exerciseAssignment.exercise.title)
+        },
+        trailingContent = {
+            Icon(
+                imageVector = Icons.Outlined.RecordVoiceOver,
+                contentDescription = null,
+                modifier = Modifier.size(25.dp),
+                tint = stringToRGB(exerciseAssignment.exercise.title)
+            )
+        },
+        onClick = {
+            navController.navigate(
+                Route.Patient.ExerciseAssignmentDetail.routeTo(exerciseAssignment.id)
+            )
+        }
+    )
 }
 
 @Composable
