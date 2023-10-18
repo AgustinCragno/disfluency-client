@@ -1,6 +1,8 @@
 package com.disfluency.screens.therapist.analysis.results
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BorderColor
 import androidx.compose.material3.Divider
@@ -45,8 +47,8 @@ fun DisfluencyTypeCharts(analysisResults: AnalysisResults){
         ) {
             BarChart(
                 modifier = Modifier
-                    .padding(8.dp)
-                    .height(190.dp),
+                    .padding(6.dp)
+                    .height(500.dp),
                 values = disfluencyTypeCountList,
                 colors = disfluencyTypeColorList,
                 labels = disfluencyTypeNameList,
