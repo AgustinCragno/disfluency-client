@@ -1,5 +1,6 @@
 package com.disfluency.model.analysis
 
+import com.disfluency.api.dto.UpdatedAnalysisDTO
 import java.time.LocalDate
 
 data class Analysis(
@@ -8,4 +9,8 @@ data class Analysis(
     val date: LocalDate,
     val analysedWords: List<AnalysedWord>? = null,
     val results: AnalysisResults? = null
-)
+) {
+    fun asUpdatedAnalysisDTO(): UpdatedAnalysisDTO {
+        return UpdatedAnalysisDTO(analysedWords.orEmpty().map { it.asAnalysedWordOutputDTO() })
+    }
+}

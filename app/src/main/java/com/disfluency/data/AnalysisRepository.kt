@@ -29,6 +29,11 @@ class AnalysisRepository {
         }
     }
 
+    suspend fun updateAnalysis(analysis: Analysis) {
+        Log.i("analysis", "Updating analysis: $analysis")
+        DisfluencyAPI.analysisService.updateAnalysis(analysis.id, analysis.asUpdatedAnalysisDTO())
+    }
+
     suspend fun getAnalysisResultsById(analysisId: String): AnalysisResults {
         Log.i("analysis", "Retrieving results of analysis: $analysisId")
         try {
