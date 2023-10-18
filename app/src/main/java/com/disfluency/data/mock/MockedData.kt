@@ -1,12 +1,48 @@
 package com.disfluency.data.mock
 
 import com.disfluency.model.analysis.*
+import com.disfluency.model.user.Patient
+import com.disfluency.model.user.Therapist
+import com.disfluency.navigation.routing.BottomNavigationItem
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalTime
 
 /**
  * Object with mocked model examples used for preview testing purposes
  */
 object MockedData {
+
+    val patient = Patient(
+        id = "aaa",
+        name = "Pedro",
+        lastName = "Dominguez",
+        dateOfBirth = LocalDate.now(),
+        email = "pedrito@gmail.com",
+        joinedSince = LocalDate.now().minusWeeks(6),
+        avatarIndex = 1,
+        weeklyTurn = listOf(DayOfWeek.MONDAY),
+        weeklyHour = LocalTime.of(0,5)
+    )
+    val patient2 = Patient(
+        id = "aaaa",
+        name = "Juan",
+        lastName = "Guillermo",
+        dateOfBirth = LocalDate.now(),
+        email = "juani@gmail.com",
+        joinedSince = LocalDate.now().minusWeeks(6),
+        avatarIndex = 1,
+        weeklyTurn = listOf(DayOfWeek.SUNDAY),
+        weeklyHour = LocalTime.of(15, 30)
+    )
+
+    val therapist = Therapist(
+        id = "asd",
+        name = "Rodrigo",
+        lastName = "Palacio",
+        profilePictureUrl = 1,
+        todayPatients = mutableListOf(patient, patient2)
+    )
 
     val analysis = Analysis(
         "2",
