@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.disfluency.api.dto.FormEntryDTO
+import com.disfluency.components.skeleton.FullScreenLoader
 import com.disfluency.components.slider.CustomSlider
 import com.disfluency.components.slider.CustomSliderDefaults
 import com.disfluency.components.slider.progress
@@ -41,11 +42,17 @@ import com.smarttoolfactory.bubble.bubble
 import com.smarttoolfactory.bubble.rememberBubbleState
 
 @Composable
-fun FormCompletionScreen(assignmentId: String, navController: NavHostController, viewModel: FormsViewModel){
-    val assignment = viewModel.getAssignmentById(assignmentId)
+fun FormCompletionScreen(patientId: String, assignmentId: String, navController: NavHostController, viewModel: FormsViewModel){
+    val assignment = remember(viewModel.assignedForms.value) {
+        mutableStateOf(viewModel.getAssignmentById(assignmentId))
+    }
+
+    LaunchedEffect(Unit){
+        viewModel.getAssignmentsOfPatient(patientId)
+    }
 
     BackNavigationScaffold(
-        title = assignment.form.title,
+        title = assignment.value?.form?.title ?: "Cuestionario",
         navController = navController
     ) { paddingValues ->
         Column(
@@ -53,7 +60,11 @@ fun FormCompletionScreen(assignmentId: String, navController: NavHostController,
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            FormCompletion(assignment = assignment, navController = navController, viewModel = viewModel)
+            assignment.value?.let {
+                FormCompletion(assignment = it, navController = navController, viewModel = viewModel)
+            }
+                ?:
+            FullScreenLoader()
         }
     }
 

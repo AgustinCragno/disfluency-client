@@ -32,6 +32,7 @@ import com.disfluency.components.audio.AudioMediaType
 import com.disfluency.components.audio.AudioPlayer
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.components.icon.ImageMessagePage
+import com.disfluency.components.skeleton.FullScreenLoader
 import com.disfluency.model.analysis.Analysis
 import com.disfluency.model.exercise.Exercise
 import com.disfluency.model.exercise.ExerciseAssignment
@@ -48,22 +49,19 @@ import java.time.LocalDateTime
 
 
 @Composable
-fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostController, viewModel: ExercisesViewModel){
-    val assignment = remember { mutableStateOf<ExerciseAssignment?>(null) }
-
+fun ExerciseAssignmentDetailScreen(patientId: String, assignmentId: String, navController: NavHostController, viewModel: ExercisesViewModel){
     LaunchedEffect(Unit){
-        assignment.value = viewModel.getAssignmentById(assignmentId)
+        viewModel.getAssignmentsOfPatient(patientId)
     }
-
 
     BackNavigationScaffold(title = stringResource(R.string.exercises), navController = navController) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-        ){
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                assignment.value?.let {
+        ) {
+            viewModel.getAssignmentById(assignmentId)?.let {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     ExerciseDetailPanel(exercise = it.exercise)
 
                     ExercisePracticeList(
@@ -75,9 +73,11 @@ fun ExerciseAssignmentDetailScreen(assignmentId: String, navController: NavHostC
 
                     Spacer(modifier = Modifier.height(64.dp))
                 }
-            }
 
-            PracticeButton(assignmentId = assignmentId, navController = navController)
+                PracticeButton(assignmentId = assignmentId, navController = navController)
+            }
+                ?:
+            FullScreenLoader()
         }
     }
 }

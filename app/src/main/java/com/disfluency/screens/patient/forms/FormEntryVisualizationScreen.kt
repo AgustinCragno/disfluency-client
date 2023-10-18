@@ -32,7 +32,9 @@ fun FormEntryVisualizationScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ){
-            FormResponsePanel(entry = assignment.completionEntries.maxBy { it.date })
+            assignment?.let {
+                FormResponsePanel(entry = assignment.completionEntries.maxBy { it.date })
+            }
         }
     }
 }
