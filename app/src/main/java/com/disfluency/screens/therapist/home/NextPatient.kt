@@ -6,11 +6,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.disfluency.R
 import com.disfluency.components.list.item.PatientListItem
-import com.disfluency.data.mock.MockedData
 import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
 
@@ -22,22 +23,30 @@ fun NextPatients(therapist: Therapist, navController: NavHostController) {
             .padding(horizontal = 20.dp)
     ) {
         Text(
-            text = "Pacientes de hoy",
+            text = stringResource(R.string.today_patients),
             style = MaterialTheme.typography.displayMedium,
             color = Color.Black,
             fontSize = 24.sp
         )
+        val nextPatients = therapist.todayPatients.sortedBy { it.weeklyHour }
 
-        Text(
-            text = "Hoy tienes ${therapist.todayPatients.size} pacientes en la agenda",
-            color = Color.Gray,
-            fontSize = 13.sp,
-            lineHeight = 14.sp
-        )
+        if (nextPatients.isEmpty()){
+            Text(
+                text = stringResource(R.string.no_more_patients),
+                color = Color.Gray,
+                fontSize = 13.sp,
+                lineHeight = 14.sp
+            )
+        } else {
+            Text(
+                text = "Hoy tienes ${therapist.todayPatients.size} pacientes en la agenda",
+                color = Color.Gray,
+                fontSize = 13.sp,
+                lineHeight = 14.sp
+            )
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
-
-        val nextPatients = therapist.todayPatients.sortedBy { it.weeklyHour }
 
         nextPatients.forEach { patient ->
             PatientListItem(
@@ -47,13 +56,5 @@ fun NextPatients(therapist: Therapist, navController: NavHostController) {
             )
         }
 
-        if (nextPatients.isEmpty()){
-            Text(
-                text = "No tienes mas pacientes por hoy. ¡Gran trabajo!",
-                color = Color.Gray,
-                fontSize = 13.sp,
-                lineHeight = 14.sp
-            )
-        }
     }
 }

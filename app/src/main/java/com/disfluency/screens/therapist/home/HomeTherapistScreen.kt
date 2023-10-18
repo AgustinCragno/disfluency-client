@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -71,7 +72,7 @@ fun Shortcuts(navController: NavHostController) {
             .padding(horizontal = 20.dp)
     ) {
         Text(
-            text = "Atajos",
+            text = stringResource(R.string.home_therapist_shortcuts),
             style = MaterialTheme.typography.displayMedium,
             color = Color.Black,
             fontSize = 24.sp
@@ -82,13 +83,15 @@ fun Shortcuts(navController: NavHostController) {
         Row(
             modifier = Modifier.fillMaxWidth()
         ){
-            ShortcutButton(modifier = Modifier.weight(10f), title = "Ejercicios", background = R.drawable.session_banner_2) {
+            ShortcutButton(modifier = Modifier.weight(10f), title = stringResource(id = R.string.exercises), background = R.drawable.session_banner_2) {
                 navController.navigate(Route.Therapist.NewExercise.path)
             }
 
-            Spacer(modifier = Modifier.height(8.dp).weight(1f))
+            Spacer(modifier = Modifier
+                .height(8.dp)
+                .weight(1f))
 
-            ShortcutButton(modifier = Modifier.weight(10f), title = "Cuestionarios", background = R.drawable.form_banner_2) {
+            ShortcutButton(modifier = Modifier.weight(10f), title = stringResource(id = R.string.forms), background = R.drawable.form_banner_2) {
                 navController.navigate(Route.Therapist.NewForm.path)
             }
         }
