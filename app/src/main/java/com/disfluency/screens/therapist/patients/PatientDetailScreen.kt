@@ -29,21 +29,23 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.disfluency.R
+import com.disfluency.api.error.PatientNotFoundException
 import com.disfluency.components.grid.span.TwoColumnGridItemSpan
 import com.disfluency.components.icon.IconLabeled
 import com.disfluency.model.user.Patient
+import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.utilities.format.formatWeeklyTurn
 import com.disfluency.viewmodel.PatientsViewModel
+import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun PatientDetailScreen(patientId: String, navController: NavHostController, viewModel: PatientsViewModel){
-    val patient = remember { mutableStateOf<Patient?>(null) }
+fun PatientDetailScreen(therapist: Therapist, patientId: String, navController: NavHostController, viewModel: PatientsViewModel){
 
     LaunchedEffect(Unit) {
-        patient.value = viewModel.getPatientById(patientId)
+        viewModel.getPatientsByTherapist(therapist.id)
     }
 
     BackNavigationScaffold(
@@ -53,14 +55,18 @@ fun PatientDetailScreen(patientId: String, navController: NavHostController, vie
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState()),
+                .fillMaxHeight()
+                .padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            patient.value?.let {
+            viewModel.getPatientById(patientId)?.let {
                 PatientInfoCard(patient = it)
                 ButtonPanel(patient = it, navController = navController)
                 ActivitiesOverview(patient = it)
+            }
+                ?:
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                CircularProgressIndicator()
             }
         }
     }

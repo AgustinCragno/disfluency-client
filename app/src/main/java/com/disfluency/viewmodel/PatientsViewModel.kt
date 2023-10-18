@@ -36,7 +36,7 @@ class PatientsViewModel : ViewModel(){
         }
     }
 
-    fun getPatientById(patientId: String): Patient {
-        return patients.value?.first { it.id == patientId } ?: throw PatientNotFoundException(patientId)
+    fun getPatientById(patientId: String): Patient? {
+        return patients.value?.first { it.id == patientId }
     }
 }

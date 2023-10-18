@@ -116,7 +116,13 @@ fun ExerciseAssignmentListItem(exerciseAssignment: ExerciseAssignment, navContro
         title = exerciseAssignment.exercise.title,
         subtitle = formatLocalDate(exerciseAssignment.dateOfAssignment),
         leadingContent = {
-            TitleThumbnail(exerciseAssignment.exercise.title)
+//            TitleThumbnail(exerciseAssignment.exercise.title)
+            Icon(
+                imageVector = Icons.Outlined.RecordVoiceOver,
+                contentDescription = null,
+                modifier = Modifier.size(25.dp),
+                tint = stringToRGB(exerciseAssignment.exercise.title)
+            )
         },
         trailingContent = {
             val color = if (exerciseAssignment.attemptsCount() > 0) MaterialTheme.colorScheme.primary else Color.Gray
