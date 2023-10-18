@@ -25,7 +25,7 @@ class ExercisesViewModel : ViewModel() {
         analysis.value = exerciseRepository.getAnalysisByExercisePracticeId(practiceId)
     }
 
-    fun getAssignmentById(assignmentId: String): ExerciseAssignment {
-        return assignments.value?.first { it.id == assignmentId } ?: throw ExerciseAssignmentNotFoundException(assignmentId)
+    fun getAssignmentById(assignmentId: String): ExerciseAssignment? {
+        return assignments.value?.first { it.id == assignmentId }
     }
 }

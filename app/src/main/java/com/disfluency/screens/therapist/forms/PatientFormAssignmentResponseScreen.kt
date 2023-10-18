@@ -41,7 +41,7 @@ fun PatientFormAssignmentResponseScreen(
     navController: NavHostController,
     viewModel: FormsViewModel
 ){
-    val assignment = viewModel.getAssignmentById(assignmentId)
+    val assignment = viewModel.getAssignmentById(assignmentId)!!
     val report = generateResponsesReport(
         questions = assignment.form.questions,
         responses = assignment.completionEntries

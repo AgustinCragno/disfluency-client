@@ -1,6 +1,5 @@
 package com.disfluency.viewmodel
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -33,6 +32,7 @@ class AnalysisViewModel : ViewModel() {
 
     fun getResults(id: String) = viewModelScope.launch {
         analysisResults.value = analysisRepository.getAnalysisResultsById(id)
+        println(analysisResults.value)
     }
 
     fun updateAnalysis(analysis: Analysis) = viewModelScope.launch {

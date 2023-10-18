@@ -14,6 +14,7 @@ import com.disfluency.screens.therapist.*
 import com.disfluency.screens.therapist.analysis.*
 import com.disfluency.screens.therapist.exercises.*
 import com.disfluency.screens.therapist.forms.*
+import com.disfluency.screens.therapist.home.HomeTherapistScreen
 import com.disfluency.screens.therapist.patients.MyPatientsScreen
 import com.disfluency.screens.therapist.patients.NewPatientScreen
 import com.disfluency.screens.therapist.patients.PatientDetailScreen
@@ -57,7 +58,7 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
         }
         composable(Route.Therapist.PatientDetail.path, listOf(navArgument("id"){})){ backStackEntry ->
             backStackEntry.arguments?.getString("id")?.let {
-                PatientDetailScreen(patientId = it, navController = navHostController, viewModel = patientsViewModel)
+                PatientDetailScreen(therapist = therapist, patientId = it, navController = navHostController, viewModel = patientsViewModel)
             }
         }
         composable(Route.Therapist.PatientExercises.path, listOf(navArgument("id"){})){ backStackEntry ->
