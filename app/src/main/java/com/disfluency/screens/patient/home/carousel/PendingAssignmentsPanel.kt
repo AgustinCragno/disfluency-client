@@ -16,6 +16,7 @@ import com.disfluency.R
 import com.disfluency.components.list.item.CarouselCard
 import com.disfluency.components.text.NumberTag
 import com.disfluency.model.user.Patient
+import com.disfluency.model.user.PatientProgressInfo
 import com.disfluency.utilities.color.darken
 import com.disfluency.utilities.color.lighten
 import com.disfluency.utilities.color.verticalGradient
@@ -24,18 +25,18 @@ import com.disfluency.utilities.date.isToday
 
 @Composable
 fun PendingAssignmentsPanel(
-    patient: Patient
+    progressInfo: PatientProgressInfo
 ){
-    if (allAssignmentsCompletedToday(patient)){
-        AllAssignmentsCompletedForTodayPanel(patient = patient)
+    if (progressInfo.allAssignmentsCompletedToday){
+        AllAssignmentsCompletedForTodayPanel(progressInfo)
     } else {
-        LetsGetToWorkPanel(patient = patient)
+        LetsGetToWorkPanel(progressInfo)
     }
 }
 
 @Composable
 private fun AllAssignmentsCompletedForTodayPanel(
-    patient: Patient
+    progressInfo: PatientProgressInfo
 ){
     CarouselCard(
         background = R.drawable.assignments_done_2,
@@ -66,15 +67,15 @@ private fun AllAssignmentsCompletedForTodayPanel(
             ) {
                 CompletedCountIndicator(
                     title = stringResource(id = R.string.exercises).lowercase(),
-                    total = patient.exercises.count(),
-                    completed = patient.exercises.count(),
+                    total = progressInfo.exercisesCount,
+                    completed = progressInfo.exercisesCount,
                     color = MaterialTheme.colorScheme.primary
                 )
 
                 CompletedCountIndicator(
                     title = stringResource(id = R.string.forms).lowercase(),
-                    total = patient.forms.count(),
-                    completed = patient.forms.count(),
+                    total = progressInfo.formsCount,
+                    completed = progressInfo.formsCount,
                     color = Color.Red.lighten()
                 )
             }
@@ -112,19 +113,8 @@ private fun CompletedCountIndicator(
 
 @Composable
 private fun LetsGetToWorkPanel(
-    patient: Patient
+    progressInfo: PatientProgressInfo
 ){
-    val totalExercisesToday = patient.exercises.count()
-    val totalFormsToday = patient.forms.count()
-
-    val exercisesCompletedToday = patient.exercises.count { assignment ->
-        assignment.practiceAttempts.any { it.date.isToday() }
-    }
-
-    val formsCompletedToday = patient.forms.count { assignment ->
-        assignment.completionEntries.any { it.date.isToday() }
-    }
-
     CarouselCard(
         background = R.drawable.session_banner_2,
         gradient = verticalGradient(Color.Black)
@@ -163,30 +153,18 @@ private fun LetsGetToWorkPanel(
             ) {
                 CompletedCountIndicator(
                     title = stringResource(id = R.string.exercises).lowercase(),
-                    total = totalExercisesToday,
-                    completed = exercisesCompletedToday,
+                    total = progressInfo.exercisesCount,
+                    completed = progressInfo.exercisesCompletedTodayCount,
                     color = Color.Green.darken()
                 )
 
                 CompletedCountIndicator(
                     title = stringResource(id = R.string.forms).lowercase(),
-                    total = totalFormsToday,
-                    completed = formsCompletedToday,
+                    total = progressInfo.formsCount,
+                    completed = progressInfo.formsCompletedTodayCount,
                     color = Color.Blue.darken()
                 )
             }
         }
     }
-}
-
-private fun allAssignmentsCompletedToday(patient: Patient): Boolean {
-    val exercisesCompletedToday = patient.exercises.all { assignment ->
-        assignment.practiceAttempts.any { it.date.isToday() }
-    }
-
-    val formsCompletedToday = patient.forms.all { assignment ->
-        assignment.completionEntries.any { it.date.isToday() }
-    }
-
-    return exercisesCompletedToday && formsCompletedToday
 }

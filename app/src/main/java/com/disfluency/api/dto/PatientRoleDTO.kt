@@ -1,6 +1,7 @@
 package com.disfluency.api.dto
 
 import com.disfluency.api.serialization.DayOfWeekDeserializer
+import com.disfluency.api.serialization.WeeklyProgressMapDeserializer
 import com.disfluency.model.user.Patient
 import com.disfluency.model.user.UserRole
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -20,10 +21,11 @@ class PatientRoleDTO(
      @JsonProperty("joinedSince") @JsonDeserialize(using = LocalDateDeserializer::class) val joinedSince: LocalDate,
      @JsonProperty("profilePictureUrl") val profilePictureUrl: Int,
      @JsonProperty("weeklyTurn") @JsonDeserialize(using = DayOfWeekDeserializer::class) val weeklyTurn: List<DayOfWeek>,
-     @JsonProperty("weeklyHour") @JsonDeserialize(using = LocalTimeDeserializer::class) val weeklyHour: LocalTime
+     @JsonProperty("weeklyHour") @JsonDeserialize(using = LocalTimeDeserializer::class) val weeklyHour: LocalTime,
+     @JsonProperty("progressInfo") val progressInfo: PatientProgressInfoDTO
 ) : RoleDTO {
 
     override fun toRole(): UserRole {
-        return Patient(id, name, lastName, dateOfBirth, email, joinedSince, profilePictureUrl, weeklyTurn, weeklyHour)
+        return Patient(id, name, lastName, dateOfBirth, email, joinedSince, profilePictureUrl, weeklyTurn, weeklyHour, progressInfo = progressInfo.asProgress())
     }
 }

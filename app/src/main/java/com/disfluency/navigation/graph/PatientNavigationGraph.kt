@@ -44,12 +44,12 @@ fun PatientNavigationGraph(patient: Patient, loggedUserViewModel: LoggedUserView
         }
         composable(Route.Patient.ExerciseAssignmentDetail.path){ backStackEntry ->
             backStackEntry.arguments?.getString("id")?.let {
-                ExerciseAssignmentDetailScreen(assignmentId = it, navController = navHostController, viewModel = exercisesViewModel)
+                ExerciseAssignmentDetailScreen(patientId = patient.id, assignmentId = it, navController = navHostController, viewModel = exercisesViewModel)
             }
         }
         composable(Route.Patient.FormCompletion.path){ backStackEntry ->
             backStackEntry.arguments?.getString("id")?.let {
-                FormCompletionScreen(assignmentId = it, navController = navHostController, viewModel = formsViewModel)
+                FormCompletionScreen(patientId = patient.id, assignmentId = it, navController = navHostController, viewModel = formsViewModel)
             }
         }
         composable(Route.Patient.FormCompletionConfirmation.path){ backStackEntry ->

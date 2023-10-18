@@ -6,26 +6,25 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Assignment
+import androidx.compose.material.icons.outlined.RecordVoiceOver
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.disfluency.components.bar.HomeTopAppBar
-import com.disfluency.components.charts.rememberChartStyle
-import com.disfluency.components.charts.rememberMarker
-import com.disfluency.components.list.item.FormAssignmentListItem
+import com.disfluency.components.list.item.ListItem
+import com.disfluency.components.thumbnail.TitleThumbnail
 import com.disfluency.model.exercise.Exercise
 import com.disfluency.model.exercise.ExerciseAssignment
 import com.disfluency.model.exercise.ExercisePractice
@@ -40,35 +39,20 @@ import com.disfluency.screens.patient.home.carousel.LastTwoWeeksRecapPanel
 import com.disfluency.screens.patient.home.carousel.PatientWelcomePanel
 import com.disfluency.screens.patient.home.carousel.PendingAssignmentsPanel
 import com.disfluency.screens.patient.home.chart.WeeklyProgressChart
-import com.disfluency.screens.therapist.exercises.ExerciseAssignmentListItem
 import com.disfluency.ui.theme.DisfluencyTheme
 import com.disfluency.utilities.color.darken
-import com.disfluency.utilities.date.equalsDay
+import com.disfluency.utilities.color.stringToRGB
+import com.disfluency.utilities.format.formatLocalDate
 import com.disfluency.viewmodel.LoggedUserViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
-import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
-import com.patrykandpatrick.vico.compose.chart.Chart
-import com.patrykandpatrick.vico.compose.chart.line.lineChart
-import com.patrykandpatrick.vico.compose.chart.scroll.rememberChartScrollState
-import com.patrykandpatrick.vico.compose.component.textComponent
-import com.patrykandpatrick.vico.compose.dimensions.dimensionsOf
-import com.patrykandpatrick.vico.compose.style.ProvideChartStyle
-import com.patrykandpatrick.vico.compose.style.currentChartStyle
-import com.patrykandpatrick.vico.core.chart.DefaultPointConnector
-import com.patrykandpatrick.vico.core.chart.copy
-import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
-import com.patrykandpatrick.vico.core.entry.entryModelOf
-import com.patrykandpatrick.vico.core.entry.entryOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import kotlin.math.absoluteValue
 
 @Preview
@@ -202,8 +186,8 @@ private fun WelcomeBackCarousel(patient: Patient){
 
     val items = listOf<@Composable () -> Unit>(
         { PatientWelcomePanel() },
-        { PendingAssignmentsPanel(patient = patient) },
-        { LastTwoWeeksRecapPanel(patient = patient) }
+        { PendingAssignmentsPanel(patient.progressInfo!!) },
+        { LastTwoWeeksRecapPanel(patient.progressInfo!!) }
     )
 
     val pageCount = items.size
@@ -284,7 +268,6 @@ fun lerp(start: Float, stop: Float, fraction: Float): Float {
     return start * (1 - fraction) + stop * fraction
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun News(
     patient: Patient,
@@ -311,27 +294,28 @@ private fun News(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        patient.exercises.maxByOrNull { it.dateOfAssignment }?.let {
-            ExerciseAssignmentListItem(
+        val lastAssignedExercise = patient.progressInfo!!.lastAssignedExercise
+        val lastAssignedForm = patient.progressInfo.lastAssignedForm
+
+        lastAssignedExercise?.let {
+            PendingExerciseListItem(
                 exerciseAssignment = it,
-                navController = navController,
-                onClickRoute = Route.Patient.ExerciseAssignmentDetail
+                navController = navController
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        lastAssignedForm?.let {
+            Spacer(modifier = Modifier.height(8.dp))
 
-        patient.forms.maxByOrNull { it.date }?.let {
-            FormAssignmentListItem(
+            PendingFormListItem(
                 formAssignment = it,
-                onClick = {
-                    navController.navigate(Route.Patient.FormCompletion.routeTo(it.id))
-                }
+                navController = navController
             )
         }
 
-        //TODO: cambiarle algo a los items para que se distinga que es ejercicio y que es cuestionario
-
+        if (lastAssignedExercise == null && lastAssignedForm == null){
+            DefaultMessageCard(title = "Por el momento no tenes material asignado")
+        }
     }
 
 }
@@ -354,11 +338,12 @@ private fun Pending(
             fontSize = 24.sp
         )
 
-        val pendingExercises = patient.exercises.filter { it.practiceAttempts.isEmpty() }
-        val pendingForms = patient.forms.filter { it.completionEntries.isEmpty() }
+        val pendingExercises = patient.progressInfo!!.pendingExercises
+        val pendingForms = patient.progressInfo.pendingForms
 
         if (pendingExercises.isEmpty() && pendingForms.isEmpty()){
-            //TODO: no pending message
+            Spacer(modifier = Modifier.height(8.dp))
+            DefaultMessageCard(title = "¡Buen trabajo! No tenes tareas pendientes al dia de hoy")
         } else {
             PendingList(pendingExercises = pendingExercises, pendingForms = pendingForms, navController = navController)
         }
@@ -383,10 +368,9 @@ private fun PendingList(
     pendingExercises.forEach {
         Spacer(modifier = Modifier.height(8.dp))
 
-        ExerciseAssignmentListItem(
+        PendingExerciseListItem(
             exerciseAssignment = it,
-            navController = navController,
-            onClickRoute = Route.Patient.ExerciseAssignmentDetail
+            navController = navController
         )
     }
 
@@ -404,18 +388,67 @@ private fun PendingList(
     pendingForms.forEach {
         Spacer(modifier = Modifier.height(8.dp))
 
-        FormAssignmentListItem(
+        PendingFormListItem(
             formAssignment = it,
-            onClick = {
-                navController.navigate(Route.Patient.FormCompletion.routeTo(it.id))
-            }
+            navController = navController
         )
     }
 }
 
 @Composable
+fun PendingFormListItem(
+    formAssignment: FormAssignment,
+    navController: NavHostController
+){
+    ListItem(
+        title = formAssignment.form.title,
+        subtitle = formatLocalDate(formAssignment.date),
+        leadingContent = {
+            TitleThumbnail(formAssignment.form.title)
+        },
+        trailingContent = {
+            Icon(
+                imageVector = Icons.Outlined.Assignment,
+                contentDescription = null,
+                modifier = Modifier.size(25.dp),
+                tint = stringToRGB(formAssignment.form.title)
+            )
+        },
+        onClick = {
+            navController.navigate(Route.Patient.FormCompletion.routeTo(formAssignment.id))
+        }
+    )
+}
+
+
+@Composable
+fun PendingExerciseListItem(exerciseAssignment: ExerciseAssignment, navController: NavHostController){
+
+    ListItem(
+        title = exerciseAssignment.exercise.title,
+        subtitle = formatLocalDate(exerciseAssignment.dateOfAssignment),
+        leadingContent = {
+            TitleThumbnail(exerciseAssignment.exercise.title)
+        },
+        trailingContent = {
+            Icon(
+                imageVector = Icons.Outlined.RecordVoiceOver,
+                contentDescription = null,
+                modifier = Modifier.size(25.dp),
+                tint = stringToRGB(exerciseAssignment.exercise.title)
+            )
+        },
+        onClick = {
+            navController.navigate(
+                Route.Patient.ExerciseAssignmentDetail.routeTo(exerciseAssignment.id)
+            )
+        }
+    )
+}
+
+@Composable
 private fun Progress(patient: Patient){
-    val data = generateWeeklyProgressMap(patient)
+    val data = patient.progressInfo!!.weeklyProgressMap
 
     Column(
         modifier = Modifier
@@ -438,20 +471,15 @@ private fun Progress(patient: Patient){
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Card(
-            elevation = CardDefaults.cardElevation(4.dp),
-            colors = CardDefaults.cardColors(Color.White)
-        ) {
-            if (data.size > 1)
+        if (data.size > 1){
+            Card(
+                elevation = CardDefaults.cardElevation(4.dp),
+                colors = CardDefaults.cardColors(Color.White)
+            ) {
                 ProgressChart(data = data)
-            else
-                Text(
-                    text = "¡Bienvenido! A partir de la proxima semana podras ver el progreso de tus prácticas",
-                    fontSize = 13.sp,
-                    lineHeight = 14.sp,
-                    color = Color.Gray,
-                    modifier = Modifier.padding(24.dp)
-                )
+            }
+        } else {
+            DefaultMessageCard(title = "¡Bienvenido! A partir de la proxima semana podras ver el progreso de tus prácticas")
         }
     }
 }
@@ -471,48 +499,23 @@ private fun ProgressChart(data: Map<LocalDate, Int>){
     }
 }
 
-/**
- * Returns a map of the sum of exercise practices and form responses
- * for every week from the patients joined since date to today
- */
-private fun generateWeeklyProgressMap(patient: Patient): Map<LocalDate, Int> {
-    val weeksRange = generateWeekRange(start = patient.joinedSince, end = LocalDate.now())
-
-    val practicesDates =
-        patient.exercises.flatMap { it.practiceAttempts }.map { it.date.toLocalDate() } +
-        patient.forms.flatMap { it.completionEntries }.map { it.date }
-
-    return weeksRange.associateWith { date ->
-        practicesDates.count { getCorrespondingWeekInRange(weeksRange.sorted(), it) == date }
-    }
-}
-
-/**
- * Generates a list of LocalDates spaced by a week, from start date to end date
- */
-private fun generateWeekRange(start: LocalDate, end: LocalDate): List<LocalDate> {
-    val weeksRange = mutableListOf<LocalDate>()
-
-    var i = 0
-    while (start.plusWeeks(i.toLong()).isBefore(end)){
-        weeksRange.add(start.plusWeeks(i.toLong()))
-        i++
+@Composable
+private fun DefaultMessageCard(title: String){
+    Card(
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(Color.White),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = title,
+            fontSize = 13.sp,
+            lineHeight = 14.sp,
+            color = Color.Gray,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(24.dp)
+                .fillMaxWidth()
+        )
     }
 
-    return weeksRange
-}
-
-/**
- * Given a list of weeks, returns the week element closest to the given date
- */
-private fun getCorrespondingWeekInRange(range: List<LocalDate>, date: LocalDate): LocalDate {
-    for (i in (0 until range.size - 1)){
-        val start = range[i]
-        val end = range[i + 1]
-
-        if (date.isEqual(start) || (date.isAfter(start) && date.isBefore(end))){
-            return start
-        }
-    }
-    return range.last()
 }

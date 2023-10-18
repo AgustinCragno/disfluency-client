@@ -25,8 +25,8 @@ class FormsViewModel : ViewModel() {
         assignedForms.value = formsRepository.getAssignmentsByPatientId(patientId)
     }
 
-    fun getAssignmentById(assignmentId: String): FormAssignment {
-        return assignedForms.value?.first { it.id == assignmentId } ?: throw FormAssignmentNotFoundException(assignmentId)
+    fun getAssignmentById(assignmentId: String): FormAssignment? {
+        return assignedForms.value?.first { it.id == assignmentId }
     }
 
     fun completeFormAssignment(formAssignmentId: String, responses: FormEntryDTO) = viewModelScope.launch {
