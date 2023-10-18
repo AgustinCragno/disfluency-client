@@ -164,8 +164,36 @@
     <string name="rsi_description_1">La </string>
     <string name="rsi_description_2"> consiste en repetir involuntariamente alguna sílaba de la palabra que se esta tratando de comunicar. Por ejemplo: \'yo-yo-yogur\'.</string>
 
+    <string name="b_description_1">La </string>
+    <string name="b_description_2">ocurre cuando a una persona no le sale una palabra que quiere pronunciar, no emitiendo sonido alguno.</string>
+
+    <string name="gg_description_1">La </string>
+    <string name="gg_description_2">es un defecto en la locución que debemos cuidar al inicio de cada frase impulsando un torrente de aire lento, regular y suave, es decir, con un ataque blando.</string>
+
+    <string name="ca_description_1">La </string>
+    <string name="ca_description_2">consiste en hablar de manera irregular en cuanto a la altura de la voz. A su vez, la altura es cuan grave o agudo es  el sonido.</string>
+
+    <string name="n_description_1">La </string>
+    <string name="n_description_2">consiste en la eliminación de la oposición (diferencia) entre dos fonemas en un determinado contexto, de manera que fonéticamente suenen igual, aunque se trate de la realización de dos fonemas distintos.</string>
+
+    <string name="tvi_description_1">La </string>
+    <string name="tvi_description_2">consiste en la tensión de los músculos faciales o la realización de un esfuerzo muscular extra para poder pronunciar una palabra. La misma es solo visible y no audible.</string>
+
+    <string name="u_description_1">La </string>
+    <string name="u_description_2">ocurre cuando una persona inspira muy fuerte para hablar.</string>
+
+    <string name="d_description_1">La </string>
+    <string name="d_description_2">ocurre cuando la persona traga de manera notoria en medio del habla.</string>
+
+    <string name="tau_description_1">La </string>
+    <string name="tau_description_2">ocurre cuando la persona hace un esfuerzo muscular extra, que es de caracter audible, para pronunciar una palabra.</string>
+
+    <string name="ac_description_1">La </string>
+    <string name="ac_description_2">ocurre cuando la persona comineza a hablar de manera más rápida involuntariamente.</string>
+
     <string name="p_description_1">La </string>
     <string name="p_description_2"> consiste en alargar la pronunciacion de una letra dentro de la palabra a decir, hasta que la persona logra desbloquearse y completar el resto de la palabra.</string>
+
     <string name="exercise">Ejercicio</string>
     <string name="your_responses">Tus Respuestas</string>
     <string name="form">Cuestionario</string>
