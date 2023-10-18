@@ -1,5 +1,6 @@
 package com.disfluency.model.user
 
+import com.disfluency.api.dto.PatientProgressInfoDTO
 import com.disfluency.model.exercise.ExerciseAssignment
 import com.disfluency.model.form.FormAssignment
 import com.disfluency.utilities.avatar.AvatarManager
@@ -19,7 +20,8 @@ data class Patient(
     val weeklyTurn: List<DayOfWeek>,
     val weeklyHour: LocalTime,
     val exercises: List<ExerciseAssignment> = emptyList(),
-    val forms: List<FormAssignment> = emptyList()
+    val forms: List<FormAssignment> = emptyList(),
+    val progressInfo: PatientProgressInfo? = null
 ) : UserRole {
     fun fullName(): String {
         return "$name $lastName"

@@ -13,6 +13,7 @@ import com.disfluency.R
 import com.disfluency.components.list.item.CarouselCard
 import com.disfluency.components.text.NumberTag
 import com.disfluency.model.user.Patient
+import com.disfluency.model.user.PatientProgressInfo
 import com.disfluency.utilities.color.darken
 import com.disfluency.utilities.color.verticalGradient
 import com.disfluency.utilities.color.verticalGradientStrong
@@ -22,11 +23,9 @@ private const val GOOD_WORK_COUNT = 7
 
 @Composable
 fun LastTwoWeeksRecapPanel(
-    patient: Patient
+    progressInfo: PatientProgressInfo
 ){
-    val exercisesCompletedInLastTwoWeeks = patient.exercises
-        .flatMap { it.practiceAttempts }
-        .count { it.date.isAfter(LocalDateTime.now().minusWeeks(2)) }
+    val exercisesCompletedInLastTwoWeeks = progressInfo.exercisesCompletedInLastTwoWeeks
 
     CarouselCard(
         background = R.drawable.form_banner_2,
