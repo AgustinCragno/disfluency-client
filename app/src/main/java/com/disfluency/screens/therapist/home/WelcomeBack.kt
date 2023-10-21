@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.disfluency.model.user.Therapist
 import com.disfluency.screens.patient.home.DotIndicators
 import com.disfluency.screens.therapist.home.carousel.PendingPatients
+import com.disfluency.screens.therapist.home.carousel.TherapistDisfluencyPanel
 import com.disfluency.screens.therapist.home.carousel.TherapistWelcomePanel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -25,6 +26,7 @@ fun WelcomeBackCarousel(therapist: Therapist){
 
     val items = listOf<@Composable () -> Unit>(
         { TherapistWelcomePanel() },
+        { TherapistDisfluencyPanel() },
         { PendingPatients(therapist) }
     )
 
