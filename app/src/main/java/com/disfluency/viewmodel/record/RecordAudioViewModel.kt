@@ -55,4 +55,8 @@ open class RecordAudioViewModel(context: Context) : ViewModel() {
     fun isPlaybackReady(): Boolean {
         return audioRecorder.hasRecorded.value && audioPlayer.asyncReady()
     }
+
+    fun isRecordingValid(): Boolean {
+        return audioRecorder.hasRecorded.value && audioRecorder.amplitudesAsInt().any { it > 1 }
+    }
 }
