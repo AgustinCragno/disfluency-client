@@ -1,10 +1,10 @@
 package com.disfluency.screens.patient.forms
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -16,9 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.bar.SearchBar
-import com.disfluency.components.icon.ImageMessagePage
 import com.disfluency.components.list.item.FormAssignmentListItem
-import com.disfluency.components.list.item.ListItem
 import com.disfluency.components.list.item.NoFormAssignmentsMessage
 import com.disfluency.components.skeleton.SkeletonLoader
 import com.disfluency.model.form.FormAssignment
@@ -26,9 +24,9 @@ import com.disfluency.model.user.Patient
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BottomNavigationScaffold
-import com.disfluency.screens.therapist.forms.FormAssignmentsList
-import com.disfluency.utilities.format.formatLocalDate
 import com.disfluency.viewmodel.FormsViewModel
+import java.time.LocalDate
+
 
 @Composable
 fun MyFormsScreen(patient: Patient, navController: NavHostController, viewModel: FormsViewModel){
@@ -78,14 +76,42 @@ fun FormAssignmentList(assignedForms: List<FormAssignment>, navController: NavHo
         NoFormAssignmentsMessage()
     }
 
+    val showAlert = remember { mutableStateOf(false) }
+
     LazyColumn(
         contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        Log.i("now: ", LocalDate.now().toString())
         items(assignedForms) {assignment ->
+            assignment.completionEntries.forEach { Log.i("assignment date: ", it.date.toString()) }
             FormAssignmentListItem(formAssignment = assignment){
-                navController.navigate(Route.Patient.FormCompletion.routeTo(assignment.id))
+                if(assignment.completionEntries.any { it.date == LocalDate.now() }){
+                    showAlert.value = true
+                }else{
+                    navController.navigate(Route.Patient.FormCompletion.routeTo(assignment.id))
+                }
             }
         }
     }
+    if (showAlert.value){
+        AlertDialog(
+            onDismissRequest = { },
+            title = {
+                Text(text = stringResource(R.string.form_alert_title))
+            },
+            text = {
+                Text(stringResource(R.string.form_alert_text))
+            },
+            confirmButton = {
+                Button(
+                    onClick = { showAlert.value = false },
+                    content = {
+                        Text(stringResource(R.string.form_alert_button))
+                    }
+                )
+            }
+        )
+    }
 }
+
