@@ -10,6 +10,8 @@ import com.disfluency.viewmodel.states.ConfirmationState
 import com.disfluency.worker.*
 import kotlinx.coroutines.launch
 import java.io.File
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 class RecordSessionViewModel(context: Context, private val lifecycleOwner: LifecycleOwner) : RecordAudioViewModel(context) {
 
@@ -19,7 +21,7 @@ class RecordSessionViewModel(context: Context, private val lifecycleOwner: Lifec
 
     
     private fun dispatchFileUploadWorker(
-        assignmentId: String,
+        patientId: String,
         file: File
     ) {
         val constraints = Constraints.Builder()
@@ -27,7 +29,7 @@ class RecordSessionViewModel(context: Context, private val lifecycleOwner: Lifec
             .build()
 
         val inputData = Data.Builder()
-            .putString(FILE_UPLOAD_ASSIGNMENT_KEY, assignmentId)
+            .putString(FILE_UPLOAD_ASSIGNMENT_KEY, patientId)
             .putString(FILE_UPLOAD_PATH_KEY, file.path)
             .build()
 
@@ -36,8 +38,10 @@ class RecordSessionViewModel(context: Context, private val lifecycleOwner: Lifec
             .setConstraints(constraints)
             .build()
 
+        val uniqueWorkName = SessionUploadWorker.WORK_NAME + patientId + LocalDateTime.now().toString()
+
         Log.i("RecordSessionViewModel", "Preparing session upload worker")
-        workManager.enqueueUniqueWork(SessionUploadWorker.WORK_NAME, ExistingWorkPolicy.REPLACE, workRequest)
+        workManager.enqueueUniqueWork(uniqueWorkName, ExistingWorkPolicy.REPLACE, workRequest)
         Log.i("RecordSessionViewModel", "Enqueued session upload worker")
 
         workManager.getWorkInfoByIdLiveData(workRequest.id).observe(lifecycleOwner) { workInfo ->

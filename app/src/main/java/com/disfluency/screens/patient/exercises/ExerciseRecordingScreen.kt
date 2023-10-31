@@ -1,5 +1,6 @@
 package com.disfluency.screens.patient.exercises
 
+import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -95,6 +96,7 @@ fun RecordExerciseScreen(
     }
 
     LaunchedEffect(Unit){
+        recordViewModel.audioRecorder.reset()
         assignment.value = exercisesViewModel.getAssignmentById(assignmentId)
     }
 

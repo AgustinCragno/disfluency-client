@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.disfluency.R
+import com.disfluency.utilities.color.darken
 import com.disfluency.utilities.color.verticalGradientStrong
 
 @Composable
@@ -29,7 +30,8 @@ fun ShortcutButton(
     modifier: Modifier,
     title: String,
     background: Int,
-    onClick: () -> Unit) {
+    onClick: () -> Unit
+) {
 
     Box(modifier = modifier
         .height(90.dp)
@@ -47,7 +49,7 @@ fun ShortcutButton(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    verticalGradientStrong(Color.Black)
+                    verticalGradientStrong(Color.Green.darken(0.7f))
                 )
         )
 
@@ -67,7 +69,7 @@ fun ShortcutButton(
                 text = title,
                 style = MaterialTheme.typography.displayMedium,
                 color = Color.White,
-                fontSize = 21.sp
+                fontSize = 20.sp
             )
         }
     }

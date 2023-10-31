@@ -1,5 +1,6 @@
 package com.disfluency.components.button
 
+import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.border
@@ -121,6 +122,7 @@ fun RecordButton(
             animationProgress = animationProgress,
             isMenuExtended = isMenuExtended,
             startedRecording = startedRecording,
+            viewModel = viewModel,
             onPress = onPress,
             onRelease = onRelease
         )
@@ -187,6 +189,7 @@ fun RecordButtonSmall(
             animationProgress = animationProgress,
             isMenuExtended = isMenuExtended,
             startedRecording = startedRecording,
+            viewModel = viewModel,
             border = 0.dp,
             onPress = onPress,
             onRelease = onRelease
@@ -230,10 +233,12 @@ private fun MicButton(
     animationProgress: Float = 0f,
     isMenuExtended: MutableState<Boolean>,
     startedRecording: MutableState<Boolean>,
+    viewModel: RecordAudioViewModel,
     border: Dp = 3.dp,
     onPress: () -> Unit,
     onRelease: () -> Unit
 ){
+    val context = LocalContext.current
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
@@ -250,6 +255,23 @@ private fun MicButton(
     val animateSize = animateFloatAsState(
         targetValue = if (isPressed) 1.5f else 1.05f
     )
+
+    val onReleaseValidateAudio = {
+        if (viewModel.isRecordingValid().not()){
+            Toast.makeText(
+                context,
+                "No se detecto audio en la grabacion realizada",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            viewModel.audioRecorder.reset()
+
+            isMenuExtended.value = false
+            startedRecording.value = false
+        } else {
+            isMenuExtended.value = true
+        }
+    }
 
     IconButton(
         onClick = {  },
@@ -288,7 +310,7 @@ private fun MicButton(
             DisposableEffect(Unit) {
                 onDispose {
                     onRelease()
-                    isMenuExtended.value = true
+                    onReleaseValidateAudio()
                 }
             }
         }

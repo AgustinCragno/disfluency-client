@@ -90,7 +90,7 @@ fun Shortcuts(navController: NavHostController) {
         Row(
             modifier = Modifier.fillMaxWidth()
         ){
-            ShortcutButton(modifier = Modifier.weight(10f), title = stringResource(id = R.string.exercises), background = R.drawable.session_banner_2) {
+            ShortcutButton(modifier = Modifier.weight(10f), title = stringResource(id = R.string.exercise), background = R.drawable.session_banner_2) {
                 navController.navigate(Route.Therapist.NewExercise.path)
             }
 
@@ -98,7 +98,7 @@ fun Shortcuts(navController: NavHostController) {
                 .height(8.dp)
                 .weight(1f))
 
-            ShortcutButton(modifier = Modifier.weight(10f), title = stringResource(id = R.string.forms), background = R.drawable.form_banner_2) {
+            ShortcutButton(modifier = Modifier.weight(10f), title = stringResource(id = R.string.form), background = R.drawable.form_banner_2) {
                 navController.navigate(Route.Therapist.NewForm.path)
             }
         }
