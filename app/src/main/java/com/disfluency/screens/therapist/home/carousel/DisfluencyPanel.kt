@@ -15,7 +15,7 @@ import com.disfluency.utilities.color.verticalGradient
 @Composable
 fun TherapistDisfluencyPanel(){
     CarouselCard(
-        background = R.drawable.session_banner_3,
+        background = R.drawable.session_banner_2,
         gradient = verticalGradient(Color.Black)
     ) {
         Column(

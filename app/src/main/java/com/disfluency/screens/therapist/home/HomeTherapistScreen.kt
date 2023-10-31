@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,15 +29,21 @@ fun HomeTherapistScreen(therapist: Therapist, navController: NavHostController, 
         bottomNavigationItems = BottomNavigationItem.Therapist.items(),
         navController = navController
     ) { paddingValues ->
-        Column(
+        Surface(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            HomeTopAppBar(navController = navController, viewModel = viewModel)
+                .fillMaxSize(),
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        ){
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                HomeTopAppBar(navController = navController, viewModel = viewModel)
 
-            HomeScreenContent(therapist = therapist, navController = navController)
+                HomeScreenContent(therapist = therapist, navController = navController)
 
+            }
         }
     }
 

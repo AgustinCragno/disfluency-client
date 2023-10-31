@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.disfluency.screens.therapist.success.ON_SUCCESS_ANIMATION_TIME
 import com.disfluency.viewmodel.states.ConfirmationState
 
@@ -40,6 +41,7 @@ fun ConfirmationScreen(
         }
 
         AnimatedVisibility(
+            modifier = Modifier.padding(32.dp),
             visible = loadingState.value == ConfirmationState.LOADING,
             enter = fadeIn(
                 tween(
@@ -52,6 +54,7 @@ fun ConfirmationScreen(
         )
 
         AnimatedVisibility(
+            modifier = Modifier.padding(32.dp),
             visible = loadingState.value == ConfirmationState.SUCCESS,
             enter = fadeIn(tween(durationMillis = 1, delayMillis = ON_SUCCESS_ANIMATION_TIME)),
             exit = fadeOut(tween(ON_SUCCESS_ANIMATION_TIME)),
@@ -59,6 +62,7 @@ fun ConfirmationScreen(
         )
 
         AnimatedVisibility(
+            modifier = Modifier.padding(32.dp),
             visible = loadingState.value == ConfirmationState.ERROR,
             enter = fadeIn(tween(durationMillis = 1, delayMillis = ON_SUCCESS_ANIMATION_TIME)),
             exit = fadeOut(tween(ON_SUCCESS_ANIMATION_TIME)),

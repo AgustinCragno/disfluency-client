@@ -306,4 +306,7 @@
     <string name="home_therapist_shortcuts">Atajos</string>
     <string name="today_patients">Pacientes de hoy</string>
     <string name="no_more_patients">No tienes mas pacientes por hoy. ¡Gran trabajo!</string>
+    <string name="form_alert_title">Ya completado</string>
+    <string name="form_alert_text">Ya completaste este cuestionario en el dia de hoy. ¡Vuelve a intentarlo mañana!</string>
+    <string name="form_alert_button">OK</string>
 </resources>

@@ -54,6 +54,7 @@ fun NextPatients(therapist: Therapist, navController: NavHostController) {
                 onClick = { navController.navigate(Route.Therapist.PatientDetail.routeTo(patient.id)) },
                 navController = navController
             )
+            Spacer(modifier = Modifier.height(8.dp))
         }
 
     }
