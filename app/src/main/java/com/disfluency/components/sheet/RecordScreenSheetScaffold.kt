@@ -47,6 +47,8 @@ fun RecordScreenSheetScaffold(
         derivedStateOf { BOTTOM_SHEET_TITLE_PADDING_OPEN }
     }
 
+    //TODO: icono de info en la esquina derecha, que te muestre un dialogo de como grabar
+
     BackNavigationScaffold(
         title = title, navController = navController
     ) { paddingValues ->

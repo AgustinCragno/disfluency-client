@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,6 +27,7 @@ import com.disfluency.components.audio.AudioLiveWaveform
 import com.disfluency.components.audio.AudioWaveformCustom
 import com.disfluency.components.sheet.BottomSheetTitleContent
 import com.disfluency.components.sheet.RecordScreenSheetScaffold
+import com.disfluency.model.user.Patient
 import com.disfluency.navigation.routing.Route
 import com.disfluency.utilities.format.formatLocalDate
 import com.disfluency.viewmodel.AnalysisViewModel
@@ -33,7 +36,12 @@ import com.disfluency.viewmodel.states.ConfirmationState
 import java.time.LocalDate
 
 @Composable
-fun RecordSessionScreen(patientId: String, navController: NavHostController, viewModel: AnalysisViewModel, recordViewModel: RecordSessionViewModel){
+fun RecordSessionScreen(
+    patient: Patient,
+    sessionNumber: Int,
+    navController: NavHostController,
+    recordViewModel: RecordSessionViewModel
+){
     DisposableEffect(Lifecycle.Event.ON_STOP){
         onDispose {
             recordViewModel.audioRecorder.reset()
@@ -42,36 +50,40 @@ fun RecordSessionScreen(patientId: String, navController: NavHostController, vie
     }
 
     RecordSession(
-        patientId = patientId,
+        patient = patient,
+        sessionNumber = sessionNumber,
         navController = navController,
-        viewModel = viewModel,
         recordViewModel = recordViewModel
     )
 
     if (recordViewModel.uploadConfirmationState.value == ConfirmationState.LOADING) {
         LaunchedEffect(Unit){
             navController.popBackStack()
-            navController.navigate(Route.Therapist.NewSessionConfirmation.routeTo(patientId))
+            navController.navigate(Route.Therapist.NewSessionConfirmation.routeTo(patient.id))
         }
     }
 }
 
 @Composable
-private fun RecordSession(patientId: String, navController: NavHostController, viewModel: AnalysisViewModel, recordViewModel: RecordSessionViewModel){
+private fun RecordSession(
+    patient: Patient,
+    sessionNumber: Int,
+    navController: NavHostController,
+    recordViewModel: RecordSessionViewModel
+){
 
     RecordScreenSheetScaffold(
         title = stringResource(R.string.new_session),
         navController = navController,
         recordViewModel = recordViewModel,
-        onSend = { recordViewModel.uploadRecording(patientId) },
+        onSend = { recordViewModel.uploadRecording(patient.id) },
         mainContent = {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                //TODO: sacar datos del paciente real
-                PatientSessionLabel(fullName = "Agustin Cragno", sessionNumber = 4)
+                PatientSessionLabel(fullName = patient.fullName(), sessionNumber = sessionNumber)
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -83,8 +95,6 @@ private fun RecordSession(patientId: String, navController: NavHostController, v
         sheetContent = { animateTitlePadding ->
             BottomSheetTitleContent(animatePadding = animateTitlePadding, title = stringResource(R.string.disfluency_analisys)) {
                 AnalysisGuidePanel()
-
-                Spacer(modifier = Modifier.height(96.dp))
             }
         }
     )
@@ -187,7 +197,7 @@ private fun RecordingVisualizer(viewModel: RecordSessionViewModel){
 @Composable
 private fun AnalysisGuidePanel(){
     Text(
-        text = "Realice una grabacion de su paciente mientras habla durante la sesion, para luego poder realizar el analisis automatico y detectar todas las disfluencias producidas por la persona en ese lapso de tiempo.",
+        text = stringResource(R.string.analysis_guide),
         color = Color.White,
         fontSize = 18.sp,
         textAlign = TextAlign.Center,
@@ -196,5 +206,36 @@ private fun AnalysisGuidePanel(){
             .padding(horizontal = 16.dp)
     )
 
-    //TODO: dibujito de audio ==> analisis ==> resultados
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Box(
+        modifier = Modifier.size(250.dp)
+    ){
+        Image(
+            modifier = Modifier.fillMaxSize(),
+            painter = painterResource(id = R.drawable.analysis_guide),
+            contentDescription = null,
+            alpha = 0.7f
+        )
+
+        Text(
+            text = stringResource(R.string.step_one_recording),
+            color = Color.White,
+            modifier = Modifier.align(Alignment.TopCenter).offset(x = 35.dp, y = 30.dp)
+        )
+
+        Text(
+            text = stringResource(R.string.step_two_transcription),
+            color = Color.White,
+            modifier = Modifier.align(Alignment.CenterStart).offset(x = 20.dp, y = 10.dp)
+        )
+
+        Text(
+            text = stringResource(R.string.step_three_analysis),
+            color = Color.White,
+            modifier = Modifier.align(Alignment.BottomCenter).offset(x = 30.dp, y = (-20).dp)
+        )
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
 }
