@@ -48,7 +48,8 @@ fun NewExerciseConfirmationScreen(
             launch {
                 if (recordViewModel.uploadConfirmationState.value == ConfirmationState.SUCCESS){
                     val submittedExercise = recordViewModel.uploadedExercise.value!!
-                    therapist.addExercise(submittedExercise)
+                    // TODO sacar ejercicio agregado por front
+//                    therapist.addExercise(submittedExercise)
                     recordViewModel.uploadedExercise.value = null
                 }
             }
