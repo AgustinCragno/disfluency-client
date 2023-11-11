@@ -15,7 +15,10 @@ import com.disfluency.R
 
 @Composable
 fun ExitDialog(onAccept: () -> Unit, onCancel: () -> Unit){
-    AnimatedDialog(dismissAction = onCancel) {
+    AnimatedDialog(
+        modifier = Modifier.wrapContentSize(),
+        dismissAction = onCancel
+    ) { dismissAction ->
         Surface(
             modifier = Modifier
                 .wrapContentSize()
@@ -44,7 +47,7 @@ fun ExitDialog(onAccept: () -> Unit, onCancel: () -> Unit){
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     TextButton(
-                        onClick = onCancel,
+                        onClick = dismissAction,
                     ) {
                         Text(text = stringResource(id = R.string.cancel))
                     }

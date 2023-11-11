@@ -2,24 +2,37 @@ package com.disfluency.components.sheet
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.QueryStats
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.disfluency.R
 import com.disfluency.components.button.RecordButton
+import com.disfluency.components.dialogs.AnimatedDialog
 import com.disfluency.model.exercise.Exercise
+import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.screens.patient.exercises.*
+import com.disfluency.utilities.color.darken
 import com.disfluency.viewmodel.record.RecordAudioViewModel
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 private const val BOTTOM_SHEET_PEEK_HEIGHT = 80
 
@@ -47,10 +60,30 @@ fun RecordScreenSheetScaffold(
         derivedStateOf { BOTTOM_SHEET_TITLE_PADDING_OPEN }
     }
 
-    //TODO: icono de info en la esquina derecha, que te muestre un dialogo de como grabar
+    var openInfoDialog by remember {
+        mutableStateOf(false)
+    }
+
+    if (openInfoDialog){
+        RecordingRecommendationsDialog {
+            openInfoDialog = false
+        }
+    }
+
+    // TODO: icono de info en la esquina derecha, que te muestre un dialogo de como grabar
 
     BackNavigationScaffold(
-        title = title, navController = navController
+        title = title,
+        navController = navController,
+        actions = {
+            IconButton(
+                onClick = {
+                    openInfoDialog = true
+                }
+            ) {
+                Icon(imageVector = Icons.Outlined.Info, contentDescription = null)
+            }
+        }
     ) { paddingValues ->
         Box(
             Modifier.fillMaxSize()
@@ -58,7 +91,10 @@ fun RecordScreenSheetScaffold(
             BottomSheetScaffold(
                 content = { bottomSheetPaddingValues ->
                     Box(
-                        modifier = Modifier.fillMaxSize().padding(paddingValues).padding(bottomSheetPaddingValues)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues)
+                            .padding(bottomSheetPaddingValues)
                     ){
                         mainContent()
                     }
@@ -153,5 +189,67 @@ fun BottomSheetTitleContent(
         )
 
         content()
+    }
+}
+
+@Composable
+private fun RecordingRecommendationsDialog(dismissAction: () -> Unit){
+    AnimatedDialog(
+        modifier = Modifier
+            .wrapContentHeight()
+            .fillMaxWidth(0.8f),
+        dismissAction = dismissAction
+    ) {
+        Surface(
+            shape = MaterialTheme.shapes.large,
+            color = MaterialTheme.colorScheme.secondaryContainer
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 16.dp,
+                        bottom = 8.dp
+                    ),
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Grabacion de audios",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Para obtener resultados optimos, asegurese de colocarse cerca del dispositivo y hablar directo al microfono del mismo",
+                    textAlign = TextAlign.Center,
+                    color = Color.White.copy(alpha = 0.7f),
+                    fontSize = 17.sp,
+                    lineHeight = 18.sp
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Image(
+                    modifier = Modifier.fillMaxWidth(),
+                    painter = painterResource(id = R.drawable.speech_to_phone),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
+                )
+
+                TextButton(
+                    onClick = dismissAction
+                ) {
+                    Text(text = "Entendido", color = Color.White)
+                }
+            }
+        }
     }
 }
