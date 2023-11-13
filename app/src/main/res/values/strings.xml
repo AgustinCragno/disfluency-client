@@ -315,4 +315,6 @@
     <string name="step_one_recording">1. grabación</string>
     <string name="step_two_transcription">2. transcripción</string>
     <string name="step_three_analysis">3. análisis</string>
+    <string name="audio_recording">Grabacion de audios</string>
+    <string name="audio_recording_description">Para obtener resultados optimos, asegurese de colocarse cerca del dispositivo y hablar directo al microfono del mismo</string>
 </resources>

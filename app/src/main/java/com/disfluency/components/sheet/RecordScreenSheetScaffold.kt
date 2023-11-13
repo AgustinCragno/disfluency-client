@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -26,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.disfluency.R
 import com.disfluency.components.button.RecordButton
 import com.disfluency.components.dialogs.AnimatedDialog
+import com.disfluency.components.dialogs.RecordingRecommendationsDialog
 import com.disfluency.model.exercise.Exercise
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
@@ -69,8 +71,6 @@ fun RecordScreenSheetScaffold(
             openInfoDialog = false
         }
     }
-
-    // TODO: icono de info en la esquina derecha, que te muestre un dialogo de como grabar
 
     BackNavigationScaffold(
         title = title,
@@ -189,67 +189,5 @@ fun BottomSheetTitleContent(
         )
 
         content()
-    }
-}
-
-@Composable
-private fun RecordingRecommendationsDialog(dismissAction: () -> Unit){
-    AnimatedDialog(
-        modifier = Modifier
-            .wrapContentHeight()
-            .fillMaxWidth(0.8f),
-        dismissAction = dismissAction
-    ) {
-        Surface(
-            shape = MaterialTheme.shapes.large,
-            color = MaterialTheme.colorScheme.secondaryContainer
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 16.dp,
-                        bottom = 8.dp
-                    ),
-                horizontalAlignment = Alignment.End
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Grabacion de audios",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Para obtener resultados optimos, asegurese de colocarse cerca del dispositivo y hablar directo al microfono del mismo",
-                    textAlign = TextAlign.Center,
-                    color = Color.White.copy(alpha = 0.7f),
-                    fontSize = 17.sp,
-                    lineHeight = 18.sp
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Image(
-                    modifier = Modifier.fillMaxWidth(),
-                    painter = painterResource(id = R.drawable.speech_to_phone),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f))
-                )
-
-                TextButton(
-                    onClick = dismissAction
-                ) {
-                    Text(text = "Entendido", color = Color.White)
-                }
-            }
-        }
     }
 }
