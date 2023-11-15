@@ -273,6 +273,7 @@ private fun MicButton(
         }
     }
 
+    //TODO: arreglar borde blanco feo
     IconButton(
         onClick = {  },
         colors = IconButtonDefaults.iconButtonColors(
