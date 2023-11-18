@@ -15,6 +15,7 @@ fun BackNavigationScaffold(
     title: String,
     navController: NavHostController,
     onBackNavigation: () -> Unit = { navController.popBackStack() },
+    background: Color = Color.Transparent,
     actions: @Composable() (RowScope.() -> Unit) = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -35,7 +36,7 @@ fun BackNavigationScaffold(
                     }
                 },
                 actions = actions,
-                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.Transparent)
+                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = background)
             )
         },
         content = content

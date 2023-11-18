@@ -163,7 +163,7 @@ fun CompactAudioPlayer(audioPlayer: DisfluencyAudioPlayer, modifier: Modifier = 
             Button(
                 modifier = Modifier.size(40.dp),
                 contentPadding = PaddingValues(1.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onSecondaryContainer),
                 onClick = {
                     if (!audioPlayer.isPlaying()){
                         audioPlayer.play()
@@ -207,14 +207,14 @@ fun CompactAudioPlayer(audioPlayer: DisfluencyAudioPlayer, modifier: Modifier = 
             Text(
                 text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.position().toLong()),
                 style = MaterialTheme.typography.labelSmall,
-                color = Color.Gray,
+                color = Color.White,
                 modifier = Modifier.padding(start = 3.dp)
             )
 
             Text(
                 text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.duration().toLong()),
                 style = MaterialTheme.typography.labelSmall,
-                color = Color.Gray,
+                color = Color.White,
                 modifier = Modifier.padding(end = 8.dp)
             )
         }

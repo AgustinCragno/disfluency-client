@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -46,6 +47,7 @@ import com.disfluency.model.analysis.DisfluencyType
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.ui.theme.DisfluencyTheme
+import com.disfluency.utilities.color.darken
 import com.disfluency.utilities.color.lighten
 import com.disfluency.utilities.format.formatLocalDateAsMonthInWords
 import com.disfluency.viewmodel.AnalysisViewModel
@@ -98,6 +100,8 @@ fun SessionTranscriptionScreen(
     val index = viewModel.getSessionIndex(analysis)
     var title = "Sesión #$index"
 
+//    analysis.saveOriginalAnalysis()
+
     AnalysisTranscription(analysis = analysis, title = title, navController = navController, viewModel = viewModel)
 }
 
@@ -129,11 +133,30 @@ fun AnalysisTranscription(
     }
 
     BackNavigationScaffold(
-        title = stringResource(R.string.disfluency_analisis),
+        title =
+            if (isInEditMode.value)
+                stringResource(R.string.manual_editor)
+            else
+                stringResource(R.string.disfluency_analisis),
         navController = navController,
         actions = {
-            ViewResultsAction(analysis = analysis, navController = navController)
-        }
+            if (isInEditMode.value)
+                SubmitEditAction(analysis = analysis, editing = isInEditMode, viewModel = viewModel)
+            else
+                ViewResultsAction(analysis = analysis, navController = navController)
+        },
+        background =
+            if (isInEditMode.value)
+                MaterialTheme.colorScheme.onPrimaryContainer.lighten(0.2f)
+            else
+                Color.Transparent,
+//        onBackNavigation = {
+//            if (isInEditMode.value)
+//                analysis.resetToOriginalAnalysis()
+//            else
+//                navController.popBackStack()
+//            //TODO: cancelar el edit si va para atras cuando esta editando
+//        }
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -146,8 +169,6 @@ fun AnalysisTranscription(
                 TranscriptionPanel(
                     analysis = analysis,
                     title = title,
-                    viewModel = viewModel,
-//                disfluencyAudioPlayer = disfluencyAudioPlayer,
                     modifier = Modifier.weight(11f),
                     onWordEdit = {
                         wordForEdit.value = it
@@ -158,7 +179,6 @@ fun AnalysisTranscription(
 
                 SessionPlayerPanel(
                     audioUrl = analysis.audioUrl,
-//                audioPlayer = disfluencyAudioPlayer,
                     modifier = Modifier.weight(2f)
                 )
             }
@@ -223,17 +243,27 @@ private fun ViewResultsAction(analysis: Analysis, navController: NavHostControll
 }
 
 @Composable
+private fun SubmitEditAction(analysis: Analysis, editing: MutableState<Boolean>, viewModel: AnalysisViewModel){
+    IconButton(
+        onClick = {
+            editing.value = false
+            viewModel.updateAnalysis(analysis)
+        }
+    ) {
+        Icon(imageVector = Icons.Filled.Done, contentDescription = null)
+    }
+}
+
+@Composable
 private fun SessionPlayerPanel(
     audioUrl: String,
-//    audioPlayer: DisfluencyAudioUrlPlayer,
     modifier: Modifier = Modifier
 ){
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 0.dp),
-        colors = CardDefaults.cardColors(Color.White),
-//        shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ){
         Box(
@@ -241,7 +271,6 @@ private fun SessionPlayerPanel(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 8.dp)
         ){
-//            AudioPlayer(url = audioUrl, AudioMediaType.URL)
             CompactAudioPlayer(url = audioUrl, type = AudioMediaType.URL)
         }
     }
@@ -251,134 +280,94 @@ private fun SessionPlayerPanel(
 private fun TranscriptionPanel(
     analysis: Analysis,
     title: String,
-    viewModel: AnalysisViewModel,
-//    disfluencyAudioPlayer: DisfluencyAudioPlayer,
     modifier: Modifier = Modifier,
     editing: MutableState<Boolean>,
     onWordEdit: (AnalysedWord) -> Unit = {}
 ) {
-    Card(
+    val scrollState = rememberScrollState()
+
+    Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 8.dp),
-        colors = CardDefaults.cardColors(Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            .verticalFadingEdge(scrollState, length = 100.dp, edgeColor = Color.White)
+            .verticalScroll(state = scrollState)
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .background(
-                        if (editing.value) MaterialTheme.colorScheme.surface else Color.LightGray.copy(
-                            alpha = 0.15f
-                        )
-                    )
-                    .fillMaxWidth()
-            ) {
-                val fontSize = 18.sp
-                val padding = 12.dp
+        SessionHeader(title = title)
 
-                if (editing.value) {
-                    Box(Modifier.fillMaxWidth()) {
-                        IconButton(
-                            onClick = {
-                                editing.value = false
-                                viewModel.updateAnalysis(analysis)
-                            },
-                            modifier = Modifier.align(Alignment.CenterStart)) {
-                            Icon(
-                                imageVector = Icons.Filled.Done,
-                                contentDescription = "Back"
-                            )
-                        }
-
-                        Text(
-                            text = "Editor manual",
-                            color = Color.Gray,
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = fontSize,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(vertical = padding)
-                        )
-                    }
-                } else {
-                    Text(
-                        text = title,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = fontSize,
-                        modifier = Modifier.padding(padding)
-                    )
-
-                    Text(
-                        text = formatLocalDateAsMonthInWords(LocalDate.now(), stringResource(id = R.string.locale)),
-                        color = Color.Gray,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = fontSize,
-                        modifier = Modifier.padding(vertical = padding)
-                    )
-                }
-            }
-
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 3.dp,
-                color = Color.Gray.copy(alpha = 0.3f)
-            )
-
-            Transcription(
-                analysis = analysis,
-                updateEditing = { editing.value = it },
-                onWordEdit = onWordEdit
-//                audioPlayer = disfluencyAudioPlayer
-            )
-        }
+        Transcription(
+            analysis = analysis,
+            updateEditing = { editing.value = it },
+            onWordEdit = onWordEdit
+        )
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class
-)
+@Composable
+private fun SessionHeader(
+    title: String
+){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp),
+        contentAlignment = Alignment.Center
+    ){
+        Row(
+            modifier = Modifier
+                .wrapContentWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(
+                    Color.LightGray.copy(
+                        alpha = 0.15f
+                    )
+                )
+        ) {
+            val fontSize = 18.sp
+            val padding = 12.dp
+
+            Text(
+                text = title,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = fontSize,
+                modifier = Modifier.padding(top = padding, bottom = padding, start = padding, end = padding)
+            )
+
+            Text(
+                text = formatLocalDateAsMonthInWords(LocalDate.now(), stringResource(id = R.string.locale)),
+                color = Color.Gray,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = fontSize,
+                modifier = Modifier.padding(top = padding, bottom = padding, end = padding)
+            )
+        }
+    }
+
+}
+
+@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun Transcription(
     analysis: Analysis,
     updateEditing: (Boolean) -> Unit = {},
-    onWordEdit: (AnalysedWord) -> Unit = {},
-//    audioPlayer: DisfluencyAudioPlayer
+    onWordEdit: (AnalysedWord) -> Unit = {}
 ){
-    //TODO: auto-scroll on play
-    val scrollState = rememberScrollState()
-
-    //TODO: las palabras cortitas no se llegan a pintar en naranja cuando las reproduce
-    // porque el tiempo entre los timestamps es muy chico, habria que ver alguna forma de
-    // evitar eso
 
     Box(
         modifier = Modifier
-            .verticalFadingEdge(scrollState, length = 100.dp, edgeColor = Color.White)
-            .verticalScroll(
-                state = scrollState,
-//                enabled = !audioPlayer.isPlaying()
-            )
     ){
         FlowRow(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(vertical = 16.dp, horizontal = 32.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-
             analysis.analysedWords?.forEach { word ->
                 Column(
                     modifier = Modifier.wrapContentWidth()
                 ) {
                     WordDisfluencyDisplay(word = word)
 
-//                    val bgColor: Color by animateColorAsState(
-//                        targetValue = if (word.isTimeInBetween(audioPlayer.position().toInt())) MaterialTheme.colorScheme.primary else Color.Black,
-//                        animationSpec = tween(50, 0, LinearEasing)
-//                    )
                     var expanded by remember { mutableStateOf(false) }
                     var nestedExpanded by remember { mutableStateOf(false) }
 
@@ -386,8 +375,7 @@ private fun Transcription(
                         Text(
                             text = word.word + " ",
                             fontSize = 18.sp,
-//                        modifier = Modifier.clickable { audioPlayer.seekTo(word.startTime.toFloat()) },
-                            color = /*bgColor*/ Color.Black,
+                            color = Color.Black,
                             modifier = Modifier
                                 .combinedClickable(
                                     onClick = {  },
@@ -404,10 +392,6 @@ private fun Transcription(
                         )
                         DisfluencySelectionNestedMenu(nestedExpanded, word, updateEditing) { nestedExpanded = it }
                     }
-
-
-                    // Se arregla en androidx.compose.foundation:foundation-layout:1.5.0 que agrega al FlowRow un VerticalArrangement
-//                    Spacer(modifier = Modifier.height(2.dp))
                 }
             }
         }
