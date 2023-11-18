@@ -179,7 +179,7 @@ fun AnalysisTranscription(
 
                 SessionPlayerPanel(
                     audioUrl = analysis.audioUrl,
-                    modifier = Modifier.weight(2f)
+                    modifier = Modifier.weight(1.5f)
                 )
             }
 
@@ -259,19 +259,24 @@ private fun SessionPlayerPanel(
     audioUrl: String,
     modifier: Modifier = Modifier
 ){
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 0.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ){
-        Box(
+    Box(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 8.dp)
+                .height(86.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 0.dp),
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ){
-            CompactAudioPlayer(url = audioUrl, type = AudioMediaType.URL)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ){
+                CompactAudioPlayer(url = audioUrl, type = AudioMediaType.URL)
+            }
         }
     }
 }
