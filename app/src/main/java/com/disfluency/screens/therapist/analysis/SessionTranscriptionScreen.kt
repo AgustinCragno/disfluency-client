@@ -163,13 +163,13 @@ fun AnalysisTranscription(
                 .fillMaxSize()
                 .padding(paddingValues)
         ){
-            Column(
+            Box(
                 modifier = Modifier.fillMaxSize()
             ) {
                 TranscriptionPanel(
                     analysis = analysis,
                     title = title,
-                    modifier = Modifier.weight(11f),
+                    modifier = Modifier.padding(bottom = 86.dp).fillMaxHeight(),
                     onWordEdit = {
                         wordForEdit.value = it
                         isInWordEditMode = true
@@ -179,7 +179,7 @@ fun AnalysisTranscription(
 
                 SessionPlayerPanel(
                     audioUrl = analysis.audioUrl,
-                    modifier = Modifier.weight(1.5f)
+                    modifier = Modifier.align(Alignment.BottomCenter)
                 )
             }
 
@@ -260,7 +260,7 @@ private fun SessionPlayerPanel(
     modifier: Modifier = Modifier
 ){
     Box(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.wrapContentHeight().fillMaxWidth()
     ) {
         Card(
             modifier = Modifier
