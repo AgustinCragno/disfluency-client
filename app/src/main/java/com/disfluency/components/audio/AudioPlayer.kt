@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import com.disfluency.audio.playback.DisfluencyAudioFilePlayer
 import com.disfluency.audio.playback.DisfluencyAudioPlayer
@@ -154,69 +155,66 @@ fun CompactAudioPlayer(
 @Composable
 fun CompactAudioPlayer(audioPlayer: DisfluencyAudioPlayer, modifier: Modifier = Modifier){
 
-    Column() {
-        Row(
-            modifier = modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(70.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(
+            modifier = Modifier.size(40.dp),
+            contentPadding = PaddingValues(1.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onSecondaryContainer),
+            onClick = {
+                if (!audioPlayer.isPlaying()){
+                    audioPlayer.play()
+                } else {
+                    audioPlayer.pause()
+                }
+            },
+            enabled = audioPlayer.asyncReady()
         ) {
-            Button(
-                modifier = Modifier.size(40.dp),
-                contentPadding = PaddingValues(1.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
-                onClick = {
-                    if (!audioPlayer.isPlaying()){
-                        audioPlayer.play()
-                    } else {
-                        audioPlayer.pause()
-                    }
-                },
-                enabled = audioPlayer.asyncReady()
-            ) {
-                if (audioPlayer.isPlaying())
-                    Icon(imageVector = Icons.Filled.Pause, contentDescription = "Pause")
-                else
-                    Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = "Play")
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(30.dp)
-                    ){
-                AudioWaveformCustom(
-                    modifier = Modifier.fillMaxSize(),
-                    amplitudes = audioPlayer.amplitudes(),
-                    spikeHeight = 30.dp,
-                    progress = audioPlayer.position() / audioPlayer.duration(),
-                    onProgressChange = { progressChange ->
-                        audioPlayer.seekTo(audioPlayer.duration() * progressChange)
-                    }
-                )
-            }
+            if (audioPlayer.isPlaying())
+                Icon(imageVector = Icons.Filled.Pause, contentDescription = "Pause")
+            else
+                Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = "Play")
         }
 
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.width(8.dp))
 
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.position().toLong()),
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.Gray,
-                modifier = Modifier.padding(start = 3.dp)
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ){
+            AudioWaveformCustom(
+                modifier = Modifier.fillMaxSize().align(Alignment.Center),
+                amplitudes = audioPlayer.amplitudes(),
+                spikeHeight = 30.dp,
+                progress = audioPlayer.position() / audioPlayer.duration(),
+                onProgressChange = { progressChange ->
+                    audioPlayer.seekTo(audioPlayer.duration() * progressChange)
+                }
             )
 
-            Text(
-                text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.duration().toLong()),
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.Gray,
-                modifier = Modifier.padding(end = 8.dp)
-            )
+            Row(
+                Modifier.fillMaxWidth().align(Alignment.BottomCenter),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.position().toLong()),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color.White,
+                    fontSize = 10.sp,
+                    modifier = Modifier.padding(start = 3.dp)
+                )
+
+                Text(
+                    text = formatMillisecondsAsMinuteAndSeconds(audioPlayer.duration().toLong()),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color.White,
+                    fontSize = 10.sp,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+            }
         }
     }
 }
