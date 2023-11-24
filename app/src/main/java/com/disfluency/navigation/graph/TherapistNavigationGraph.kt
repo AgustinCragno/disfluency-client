@@ -48,7 +48,7 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
             MyPatientsScreen(therapist = therapist, navController = navHostController, viewModel = patientsViewModel)
         }
         composable(Route.Therapist.MyExercises.path){
-            MyExercisesScreen(therapist = therapist, navController = navHostController)
+            MyExercisesScreen(therapist = therapist, navController = navHostController, exercisesViewModel = exercisesViewModel)
         }
         composable(Route.Therapist.MyForms.path){
             MyFormsScreen(therapist = therapist, navController = navHostController)
@@ -171,7 +171,8 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
                     therapist = therapist,
                     navController = navHostController,
                     viewModel = patientsViewModel,
-                    assignmentsViewModel = assignmentsViewModel
+                    assignmentsViewModel = assignmentsViewModel,
+                    exercisesViewModel = exercisesViewModel
                 )
             }
         }

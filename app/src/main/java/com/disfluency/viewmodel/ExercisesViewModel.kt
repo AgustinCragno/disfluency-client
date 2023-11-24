@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.disfluency.api.error.ExerciseAssignmentNotFoundException
 import com.disfluency.data.ExerciseRepository
 import com.disfluency.model.analysis.Analysis
+import com.disfluency.model.exercise.Exercise
 import com.disfluency.model.exercise.ExerciseAssignment
 import kotlinx.coroutines.launch
 
@@ -14,6 +15,7 @@ class ExercisesViewModel : ViewModel() {
 
     private val exerciseRepository = ExerciseRepository()
 
+    val exercises: MutableState<List<Exercise>?> = mutableStateOf(null)
     val assignments: MutableState<List<ExerciseAssignment>?> = mutableStateOf(null)
     val analysis: MutableState<Analysis?> = mutableStateOf(null)
 
@@ -27,5 +29,9 @@ class ExercisesViewModel : ViewModel() {
 
     fun getAssignmentById(assignmentId: String): ExerciseAssignment? {
         return assignments.value?.first { it.id == assignmentId }
+    }
+
+    fun getExercisesByTherapistId(therapistId: String) = viewModelScope.launch {
+        exercises.value = exerciseRepository.getExercisesByTherapistId(therapistId)
     }
 }

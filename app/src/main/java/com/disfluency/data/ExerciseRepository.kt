@@ -4,10 +4,7 @@ import android.util.Log
 import com.disfluency.api.DisfluencyAPI
 import com.disfluency.api.dto.AssignExercisesDTO
 import com.disfluency.api.dto.NewExerciseDTO
-import com.disfluency.api.error.AnalysisNotFoundException
-import com.disfluency.api.error.AssignExerciseException
-import com.disfluency.api.error.ExerciseCreationException
-import com.disfluency.api.error.PatientNotFoundException
+import com.disfluency.api.error.*
 import com.disfluency.model.analysis.Analysis
 import com.disfluency.model.exercise.Exercise
 import com.disfluency.model.exercise.ExerciseAssignment
@@ -45,11 +42,15 @@ class ExerciseRepository {
         return DisfluencyAPI.exerciseService.getExerciseSamplePreSignedUrl(therapistId).recordingUrl
     }
 
-    suspend fun createExercise(therapistId: String, newExercise: NewExerciseDTO): Exercise {
+    suspend fun createExercise(therapistId: String, newExercise: NewExerciseDTO, audio: File): Exercise {
         Log.i("exercises", "Creating new exercise of therapist: $therapistId")
         try {
             val dto = DisfluencyAPI.exerciseService.createExerciseOfTherapist(newExercise, therapistId)
             Log.i("exercises", "Successfully created exercise ${dto.title} for therapist: $therapistId")
+            DisfluencyAPI.audioUploadString.uploadAudioToS3(
+                newExercise.sampleRecordingUrl,
+                audio.asRequestBody("audio/mpeg".toMediaTypeOrNull())
+            )
             return dto.asExercise()
         }
         catch (e: HttpException){
@@ -81,6 +82,19 @@ class ExerciseRepository {
         catch (e: HttpException){
             Log.i("exercises", "An error occurred assigning exercises $exerciseIds to patients $patientIds")
             throw AssignExerciseException(exerciseIds, patientIds)
+        }
+    }
+
+    suspend fun getExercisesByTherapistId(therapistId: String): List<Exercise> {
+        Log.i("exercises", "Getting exercises from therapist $therapistId")
+        try {
+            val dto = DisfluencyAPI.exerciseService.getExercisesByTherapistId(therapistId)
+            Log.i("exercises", "Successfully retrieved exercises from therapist $therapistId")
+            return dto.map { it.asExercise() }
+        }
+        catch (e: HttpException){
+            Log.i("exercises", "An error occurred getting exercises from therapist $therapistId")
+            throw TherapistNotFoundException(therapistId)
         }
     }
 }

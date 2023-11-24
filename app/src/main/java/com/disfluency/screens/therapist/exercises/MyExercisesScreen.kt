@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -27,13 +28,18 @@ import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.BottomNavigationItem
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BottomNavigationScaffold
+import com.disfluency.viewmodel.ExercisesViewModel
 
 @Composable
 fun MyExercisesScreen(
     therapist: Therapist,
-    navController: NavHostController
+    navController: NavHostController,
+    exercisesViewModel: ExercisesViewModel
 ){
     val filterQuery = rememberSaveable { mutableStateOf("") }
+    LaunchedEffect(Unit){
+        exercisesViewModel.getExercisesByTherapistId(therapist.id)
+    }
 
     BottomNavigationScaffold(
         bottomNavigationItems = BottomNavigationItem.Therapist.items(),
@@ -47,8 +53,9 @@ fun MyExercisesScreen(
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 SearchBar(filterQuery = filterQuery)
-
-                ExerciseList(exercises = therapist.exercises, navController = navController, filter = filterQuery.value)
+                exercisesViewModel.exercises.value?.let {
+                    ExerciseList(exercises = it, navController = navController, filter = filterQuery.value)
+                }
             }
 
             ExerciseCreationButton(navController = navController)

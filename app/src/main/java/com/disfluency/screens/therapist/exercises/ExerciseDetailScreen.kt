@@ -27,6 +27,7 @@ import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.viewmodel.AssignmentsViewModel
+import com.disfluency.viewmodel.ExercisesViewModel
 import com.disfluency.viewmodel.PatientsViewModel
 import kotlinx.coroutines.delay
 
@@ -36,9 +37,10 @@ fun ExerciseDetailScreen(
     therapist: Therapist,
     navController: NavHostController,
     viewModel: PatientsViewModel,
-    assignmentsViewModel: AssignmentsViewModel
+    assignmentsViewModel: AssignmentsViewModel,
+    exercisesViewModel: ExercisesViewModel
 ){
-    val exercise = therapist.exercises.find { it.id == exerciseId }
+    val exercise = exercisesViewModel.exercises.value!!.find { it.id == exerciseId }
 
     BackNavigationScaffold(
         title = stringResource(R.string.exercise),
@@ -47,16 +49,15 @@ fun ExerciseDetailScreen(
         Column(modifier = Modifier.padding(paddingValues)) {
             exercise?.let {
                 ExerciseDetailPanelFixed(exercise = it)
-
-                ExerciseAssignmentButton(
-                    exerciseId = it.id,
-                    therapistId = therapist.id,
-                    navController = navController,
-                    viewModel = viewModel,
-                    assignmentsViewModel = assignmentsViewModel
-                )
             }
         }
+        ExerciseAssignmentButton(
+            exerciseId = exerciseId,
+            therapistId = therapist.id,
+            navController = navController,
+            viewModel = viewModel,
+            assignmentsViewModel = assignmentsViewModel
+        )
     }
 }
 

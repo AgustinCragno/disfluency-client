@@ -25,4 +25,7 @@ sealed interface ExerciseService{
 
     @GET("exercisesPractices/{practiceId}/analysis")
     suspend fun getAnalysisByExercisePracticeId(@Path("practiceId") practiceId: String): AnalysisDTO
+
+    @GET("therapist/{therapistId}/exercises")
+    suspend fun getExercisesByTherapistId(@Path("therapistId") therapistId: String): List<ExerciseDTO>
 }
