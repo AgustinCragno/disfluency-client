@@ -1,5 +1,6 @@
 package com.disfluency.screens.login
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
@@ -14,8 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.disfluency.R
@@ -23,6 +26,7 @@ import com.disfluency.components.animation.DisfluencyLogo
 import com.disfluency.components.inputs.text.EmailInput
 import com.disfluency.components.inputs.text.NoValidation
 import com.disfluency.components.inputs.text.PasswordInput
+import com.disfluency.dataStore
 import com.disfluency.model.user.Patient
 import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
@@ -30,12 +34,28 @@ import com.disfluency.navigation.structure.BackNavigationScaffold
 import com.disfluency.viewmodel.LoggedUserViewModel
 import com.disfluency.viewmodel.states.LoginState
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun LoginScreen(
     navController: NavHostController,
     viewModel: LoggedUserViewModel = viewModel()
 ){
+
+    val context = LocalContext.current
+    val gckTokenKey = stringPreferencesKey("gcm_token")
+    val fcmToken = flow {
+        context.dataStore.data.map {
+            it[gckTokenKey]
+        }.collect(collector = {
+            if (it != null){
+                this.emit(it)
+            }
+        })
+    }.collectAsState(initial = "")
+    Log.v("FCMTOKEN", fcmToken.value)
+
     BackNavigationScaffold(title = stringResource(R.string.login), navController = navController, onBackNavigation = { navController.navigate(Route.Launch.path) }) {
         Box(modifier = Modifier.fillMaxSize()){
             Column(
@@ -52,7 +72,7 @@ fun LoginScreen(
 
             UsernameAndPasswordForm(
                 viewModel = viewModel,
-                onSubmit = { account, password -> viewModel.login(account, password) }
+                onSubmit = { account, password -> viewModel.login(account, password, fcmToken.value) }
             )
         }
     }

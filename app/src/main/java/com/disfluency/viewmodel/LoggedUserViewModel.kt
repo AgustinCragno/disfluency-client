@@ -25,10 +25,10 @@ class LoggedUserViewModel(private val navHostController: NavHostController) : Vi
     var loginState by mutableStateOf(LoginState.INPUT)
         private set
 
-    fun login(account: String, password: String) = viewModelScope.launch {
+    fun login(account: String, password: String, fcmToken: String) = viewModelScope.launch {
         loginState = LoginState.SUBMITTED
         try {
-            val user = userRepository.login(account, password)
+            val user = userRepository.login(account, password, fcmToken)
             registerLoggedUser(user)
         }
         catch (exception: UserNotFoundException){
