@@ -31,8 +31,7 @@ fun HomeTherapistScreen(therapist: Therapist, navController: NavHostController, 
     ) { paddingValues ->
         Surface(
             modifier = Modifier
-                .fillMaxSize(),
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+                .fillMaxSize()
         ){
             Column(
                 modifier = Modifier

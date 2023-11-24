@@ -16,6 +16,6 @@ data class AnalysisDTO(
 ) {
     fun asAnalysis(): Analysis {
         val analyzedWords = transcription.map { it.asAnalysedWord() }
-        return Analysis(id, recordingUrl, date, analyzedWords)
+        return Analysis(id, recordingUrl, date, analyzedWords.toMutableList())
     }
 }

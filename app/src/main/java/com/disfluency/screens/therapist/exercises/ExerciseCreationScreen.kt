@@ -2,6 +2,10 @@ package com.disfluency.screens.therapist.exercises
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -19,6 +23,7 @@ import com.disfluency.R
 import com.disfluency.components.audio.AudioMediaType
 import com.disfluency.components.audio.AudioPlayer
 import com.disfluency.components.button.RecordButtonSmall
+import com.disfluency.components.dialogs.RecordingRecommendationsDialog
 import com.disfluency.components.inputs.text.CleanLabeledTextField
 import com.disfluency.components.stepper.PageStepper
 import com.disfluency.components.stepper.StepScreen
@@ -43,9 +48,28 @@ fun ExerciseCreationScreen(
     viewModel: ExercisesViewModel,
     recordViewModel: RecordExerciseExampleViewModel
 ){
+    var openInfoDialog by remember {
+        mutableStateOf(false)
+    }
+
+    if (openInfoDialog){
+        RecordingRecommendationsDialog {
+            openInfoDialog = false
+        }
+    }
+
     BackNavigationScaffold(
         title = stringResource(R.string.new_exercise),
-        navController = navController
+        navController = navController,
+        actions = {
+            IconButton(
+                onClick = {
+                    openInfoDialog = true
+                }
+            ) {
+                Icon(imageVector = Icons.Outlined.Info, contentDescription = null)
+            }
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier

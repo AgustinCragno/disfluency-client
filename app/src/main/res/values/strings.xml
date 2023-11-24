@@ -309,4 +309,13 @@
     <string name="form_alert_title">Ya completado</string>
     <string name="form_alert_text">Ya completaste este cuestionario en el dia de hoy. ¡Vuelve a intentarlo mañana!</string>
     <string name="form_alert_button">OK</string>
+    <string name="mantain_pressed_to_record_session">Mantenga presionado el boton para comenzar a grabar la sesion</string>
+    <string name="disfluency_analisys">Analisis de Disfluencias</string>
+    <string name="analysis_guide">Realice una grabacion de su paciente mientras habla durante la sesion, para luego poder realizar el analisis automatico y detectar todas las disfluencias producidas por la persona en ese lapso de tiempo.</string>
+    <string name="step_one_recording">1. grabación</string>
+    <string name="step_two_transcription">2. transcripción</string>
+    <string name="step_three_analysis">3. análisis</string>
+    <string name="audio_recording">Grabacion de audios</string>
+    <string name="audio_recording_description">Para obtener resultados optimos, asegurese de colocarse cerca del dispositivo y hablar directo al microfono del mismo</string>
+    <string name="manual_editor">Editor Manual</string>
 </resources>

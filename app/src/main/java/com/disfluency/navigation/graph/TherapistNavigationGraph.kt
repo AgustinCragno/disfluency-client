@@ -116,11 +116,15 @@ fun TherapistNavigationGraph(therapist: Therapist, loggedUserViewModel: LoggedUs
         }
 
         composable(Route.Therapist.NewSession.path, listOf(navArgument("id"){})){ backStackEntry ->
-            backStackEntry.arguments?.getString("id")?.let {
+            backStackEntry.arguments?.getString("id")?.let { patientId ->
+
+                val patient = patientsViewModel.getPatientById(patientId) ?: therapist.todayPatients.find { it.id == patientId }!!
+                val sessionCount = analysisViewModel.patientAnalysis.value?.size ?: 0
+                
                 RecordSessionScreen(
-                    patientId = it,
+                    patient = patient,
+                    sessionNumber = sessionCount + 1,
                     navController = navHostController,
-                    viewModel = analysisViewModel,
                     recordViewModel = recordViewModel
                 )
             }
