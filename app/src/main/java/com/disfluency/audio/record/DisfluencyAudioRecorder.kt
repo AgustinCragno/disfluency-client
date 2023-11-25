@@ -71,10 +71,16 @@ class DisfluencyAudioRecorder(private val context: Context) {
         isRecording.value = false
         hasRecorded.value = true
 
-        recorder?.stop()
-        recorder?.reset()
-        recorder?.release()
-        recorder = null
+        //stop failed: -1007
+        recorder = try {
+            recorder?.stop()
+            recorder?.reset()
+            recorder?.release()
+            null
+        } catch (e: java.lang.RuntimeException){
+            null
+        }
+
     }
 
     fun reset(){
