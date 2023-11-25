@@ -210,4 +210,12 @@ object MockedData {
         ),
         analysisResults
     )
+
+    val nullAnalysis = Analysis(
+        "1",
+        "https://pf5302.s3.us-east-2.amazonaws.com/audios/velocidad.mp3",
+        LocalDate.now(),
+        null,
+        analysisResults
+    )
 }

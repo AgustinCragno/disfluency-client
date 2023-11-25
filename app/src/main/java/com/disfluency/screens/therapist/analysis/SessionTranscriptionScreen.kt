@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.outlined.ArrowRight
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.QueryStats
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -59,7 +61,7 @@ import java.time.LocalDate
 @Composable
 private fun AnalysisScreenPreview(){
     val analysisViewModel = AnalysisViewModel()
-    analysisViewModel.patientAnalysis.value = listOf(MockedData.longAnalysis)
+    analysisViewModel.patientAnalysis.value = listOf(MockedData.nullAnalysis)
 
     DisfluencyTheme() {
         SessionTranscriptionScreen(
@@ -149,14 +151,7 @@ fun AnalysisTranscription(
             if (isInEditMode.value)
                 MaterialTheme.colorScheme.onPrimaryContainer.lighten(0.2f)
             else
-                Color.Transparent,
-//        onBackNavigation = {
-//            if (isInEditMode.value)
-//                analysis.resetToOriginalAnalysis()
-//            else
-//                navController.popBackStack()
-//            //TODO: cancelar el edit si va para atras cuando esta editando
-//        }
+                Color.Transparent
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -169,7 +164,9 @@ fun AnalysisTranscription(
                 TranscriptionPanel(
                     analysis = analysis,
                     title = title,
-                    modifier = Modifier.padding(bottom = 86.dp).fillMaxHeight(),
+                    modifier = Modifier
+                        .padding(bottom = 86.dp)
+                        .fillMaxHeight(),
                     onWordEdit = {
                         wordForEdit.value = it
                         isInWordEditMode = true
@@ -260,7 +257,9 @@ private fun SessionPlayerPanel(
     modifier: Modifier = Modifier
 ){
     Box(
-        modifier = modifier.wrapContentHeight().fillMaxWidth()
+        modifier = modifier
+            .wrapContentHeight()
+            .fillMaxWidth()
     ) {
         Card(
             modifier = Modifier
@@ -361,45 +360,68 @@ private fun Transcription(
     Box(
         modifier = Modifier
     ){
-        FlowRow(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 16.dp, horizontal = 32.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            analysis.analysedWords?.forEach { word ->
-                Column(
-                    modifier = Modifier.wrapContentWidth()
+        if (analysis.analysedWords == null){
+            Box(
+                modifier = Modifier.fillMaxSize().height(250.dp),
+                contentAlignment = Alignment.Center
+            ){
+                Text(
+                    text = "Ocurrio un error al realizar el analisis, puede re-intentar el analisis",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(16.dp)
+                )
+
+                FilledIconButton(
+                    onClick = { /*TODO*/ },
+                    colors = IconButtonDefaults.filledIconButtonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    modifier = Modifier.offset(y = 50.dp)
                 ) {
-                    WordDisfluencyDisplay(word = word)
+                    Icon(imageVector = Icons.Default.Repeat, contentDescription = null)
+                }
+            }
+        }
+        else {
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 16.dp, horizontal = 32.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                analysis.analysedWords?.forEach { word ->
+                    Column(
+                        modifier = Modifier.wrapContentWidth()
+                    ) {
+                        WordDisfluencyDisplay(word = word)
 
-                    var expanded by remember { mutableStateOf(false) }
-                    var nestedExpanded by remember { mutableStateOf(false) }
+                        var expanded by remember { mutableStateOf(false) }
+                        var nestedExpanded by remember { mutableStateOf(false) }
 
-                    Box {
-                        Text(
-                            text = word.word + " ",
-                            fontSize = 18.sp,
-                            color = Color.Black,
-                            modifier = Modifier
-                                .combinedClickable(
-                                    onClick = {  },
-                                    onLongClick = { expanded = true },
-                                )
-                        )
-                        DisfluencySelectionMainMenu(
-                            expanded = expanded,
-                            word = word,
-                            updateEditing = updateEditing,
-                            updateNestedExpanded = { nestedExpanded = it },
-                            updateExpanded = { expanded = it },
-                            onWordEdit = onWordEdit
-                        )
-                        DisfluencySelectionNestedMenu(nestedExpanded, word, updateEditing) { nestedExpanded = it }
+                        Box {
+                            Text(
+                                text = word.word + " ",
+                                fontSize = 18.sp,
+                                color = Color.Black,
+                                modifier = Modifier
+                                    .combinedClickable(
+                                        onClick = {  },
+                                        onLongClick = { expanded = true },
+                                    )
+                            )
+                            DisfluencySelectionMainMenu(
+                                expanded = expanded,
+                                word = word,
+                                updateEditing = updateEditing,
+                                updateNestedExpanded = { nestedExpanded = it },
+                                updateExpanded = { expanded = it },
+                                onWordEdit = onWordEdit
+                            )
+                            DisfluencySelectionNestedMenu(nestedExpanded, word, updateEditing) { nestedExpanded = it }
+                        }
                     }
                 }
             }
         }
+
     }
 }
 
