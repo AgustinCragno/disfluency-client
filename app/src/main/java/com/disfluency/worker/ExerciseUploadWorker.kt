@@ -36,7 +36,8 @@ class ExerciseUploadWorker(appContext: Context, params: WorkerParameters) : File
             sampleRecordingUrl = url
         )
 
-        val exercise = exerciseRepository.createExercise(therapistId, newExerciseDTO)
+        val file = File(filePath!!)
+        val exercise = exerciseRepository.createExercise(therapistId, newExerciseDTO, file)
         val exerciseAsString = ObjectMapper().writeValueAsString(ExerciseDTO.from(exercise))
 
         return Result.success(

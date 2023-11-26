@@ -51,7 +51,7 @@ import java.time.LocalDateTime
 @Composable
 fun ExerciseAssignmentDetailScreen(patientId: String, assignmentId: String, navController: NavHostController, viewModel: ExercisesViewModel){
     LaunchedEffect(Unit){
-        viewModel.getAssignmentsOfPatient(patientId)
+        //viewModel.getAssignmentsOfPatient(patientId) //TODO revisar tuvimos que comentar esta linea para que no se ejecuten dos llamados al back en esta pantalla
     }
 
     BackNavigationScaffold(title = stringResource(R.string.exercises), navController = navController) { paddingValues ->
