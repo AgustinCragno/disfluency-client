@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "883393410183",
+    "project_id": "dislfuencyapp",
+    "storage_bucket": "dislfuencyapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883393410183:android:3a6182bc1e8c16b8617422",
+        "android_client_info": {
+          "package_name": "com.disfluency"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "117091200229590504588",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPYJ8z5ldW7sHEY6xoadxnb7b97HcWFdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "117091200229590504588",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

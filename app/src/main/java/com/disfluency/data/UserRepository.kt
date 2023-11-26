@@ -12,10 +12,10 @@ import retrofit2.HttpException
 
 class UserRepository {
 
-    suspend fun login(account: String, password: String): UserRole {
+    suspend fun login(account: String, password: String, fcmToken: String): UserRole {
         Log.i("login", "User login attempt: $account")
         try {
-            val dto = UserDTO(account, password)
+            val dto = UserDTO(account, password, fcmToken)
             val loginDTO = DisfluencyAPI.userService.login(dto)
             Log.i("login", "Successfully logged in as user: $account")
             SessionManager.saveAccessToken(loginDTO.accessToken)

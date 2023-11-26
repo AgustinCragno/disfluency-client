@@ -173,7 +173,7 @@ private fun SessionListItem(analysis: Analysis, index: Int, navController: NavHo
 @Composable
 private fun PendingSessionListItem(index: Int){
     ListItem(
-        title = "Sesion #$index",
+        title = "Sesión #$index",
         subtitle = stringResource(R.string.in_analysis_process),
         subtitleColor = MaterialTheme.colorScheme.secondary,
         leadingContent = {
