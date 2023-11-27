@@ -338,8 +338,20 @@ private fun Pending(
             fontSize = 24.sp
         )
 
-        val pendingExercises = patient.progressInfo!!.pendingExercises
-        val pendingForms = patient.progressInfo.pendingForms
+        val pendingExercises = patient.progressInfo!!.pendingExercises.toMutableList()
+        val pendingForms = patient.progressInfo.pendingForms.toMutableList()
+
+        patient.progressInfo.lastAssignedExercise?.let {
+            if (pendingExercises.map { e -> e.id }.contains(it.id)){
+                pendingExercises.removeIf { e -> e.id == it.id }
+            }
+        }
+
+        patient.progressInfo.lastAssignedForm?.let {
+            if (pendingForms.map { f -> f.id }.contains(it.id)){
+                pendingForms.removeIf { f -> f.id == it.id }
+            }
+        }
 
         if (pendingExercises.isEmpty() && pendingForms.isEmpty()){
             Spacer(modifier = Modifier.height(8.dp))
