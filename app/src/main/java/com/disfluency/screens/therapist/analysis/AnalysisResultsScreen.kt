@@ -46,6 +46,7 @@ fun AnalysisResultsScreen(
     viewModel: AnalysisViewModel
 ){
     LaunchedEffect(Unit){
+        viewModel.analysisResults.value = null
         viewModel.getResults(analysisId)
     }
 
