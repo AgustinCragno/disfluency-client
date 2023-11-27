@@ -123,7 +123,7 @@ fun FormQuestionResponseBurnDown(
             ChartScaleText(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(bottom = 175.dp),
+                    .padding(bottom = 185.dp),
                 text = formQuestion.maxValue,
                 color = color.lighten(0.2f)
             )
@@ -131,7 +131,7 @@ fun FormQuestionResponseBurnDown(
             ChartScaleText(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(top = 145.dp),
+                    .padding(top = 155.dp),
                 text = formQuestion.minValue,
                 color = color.darken(0.2f)
             )
@@ -156,7 +156,7 @@ private fun ChartScaleText(
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
         fontSize = 11.sp,
-        modifier = modifier.width(40.dp)
+        modifier = modifier.width(45.dp)
     )
 }
 
