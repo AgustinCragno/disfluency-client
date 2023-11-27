@@ -52,7 +52,7 @@ fun FluencyIndexChart(analysisResults: AnalysisResults){
                 append(stringResource(R.string.fluency_index_prefix))
                 withStyle(style = SpanStyle(color = Color.Black) ) {
                     pushStringAnnotation(tag = fi, annotation = fi)
-                    append(fi)
+                    append(" $fi ")
                 }
                 append(stringResource(R.string.fluency_index_suffix))
             }

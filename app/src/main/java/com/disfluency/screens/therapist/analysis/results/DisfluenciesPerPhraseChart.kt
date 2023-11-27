@@ -30,7 +30,7 @@ fun DisfluenciesPerPhraseChart(analysisResults: AnalysisResults){
                 append(stringResource(R.string.average_disfluencies_per_phrase_prefix))
                 withStyle(style = SpanStyle(color = Color.Black) ) {
                     pushStringAnnotation(tag = adpf, annotation = adpf)
-                    append(adpf)
+                    append(" $adpf ")
                 }
                 append(stringResource(R.string.average_disfluencies_per_phrase_suffix))
             }
