@@ -410,8 +410,8 @@ fun PendingFormListItem(
             Icon(
                 imageVector = Icons.Outlined.Assignment,
                 contentDescription = null,
-                modifier = Modifier.size(25.dp),
-                tint = stringToRGB(formAssignment.form.title)
+                modifier = Modifier.size(17.dp),
+                tint = MaterialTheme.colorScheme.primary
             )
         },
         onClick = {
@@ -434,8 +434,8 @@ fun PendingExerciseListItem(exerciseAssignment: ExerciseAssignment, navControlle
             Icon(
                 imageVector = Icons.Outlined.RecordVoiceOver,
                 contentDescription = null,
-                modifier = Modifier.size(25.dp),
-                tint = stringToRGB(exerciseAssignment.exercise.title)
+                modifier = Modifier.size(17.dp),
+                tint = MaterialTheme.colorScheme.primary
             )
         },
         onClick = {
