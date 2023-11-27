@@ -9,8 +9,8 @@ import java.io.File
 import kotlin.math.roundToInt
 
 private const val MIN_AMPLITUDE_VALUE = 0F
-const val MAX_AMPLITUDE_VALUE = 32762F
-//const val MAX_AMPLITUDE_VALUE = 9000F
+//const val MAX_AMPLITUDE_VALUE = 32762F
+const val MAX_AMPLITUDE_VALUE = 4000F
 
 private const val MAX_AMPLITUDE_VALUE_INT = 11
 
