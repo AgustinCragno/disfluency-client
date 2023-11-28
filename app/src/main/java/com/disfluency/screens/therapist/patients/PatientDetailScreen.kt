@@ -36,6 +36,7 @@ import com.disfluency.model.user.Patient
 import com.disfluency.model.user.Therapist
 import com.disfluency.navigation.routing.Route
 import com.disfluency.navigation.structure.BackNavigationScaffold
+import com.disfluency.utilities.color.darken
 import com.disfluency.utilities.format.formatWeeklyTurn
 import com.disfluency.viewmodel.PatientsViewModel
 import kotlinx.coroutines.launch
@@ -151,7 +152,7 @@ fun ActivityButton(title: String, icon: ImageVector, onClick: () -> Unit){
             onClick = onClick,
             modifier = Modifier.size(42.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondary
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
             ),
             contentPadding = PaddingValues(1.dp)
         ) {
@@ -177,14 +178,14 @@ fun ActivityButton(title: String, icon: ImageVector, onClick: () -> Unit){
 @Composable
 fun ActivitiesOverview(patient: Patient){
 
-    data class ActivityOverviewItem(val title: String, val number: Int)
+    data class ActivityOverviewItem(val title: String, val number: Int, val color: Color)
 
     val activities = listOf(
-        ActivityOverviewItem(stringResource(R.string.solved_exercises), patient.getCompletedExercisesCount()),
-        ActivityOverviewItem(stringResource(R.string.pending_exercises), patient.getPendingExercisesCount()),
-        ActivityOverviewItem(stringResource(R.string.solved_forms), patient.getCompletedQuestionnairesCount()),
-        ActivityOverviewItem(stringResource(R.string.pending_forms), patient.getPendingQuestionnairesCount()),
-        ActivityOverviewItem(stringResource(R.string.recorded_sessions), patient.getRecordedSessionsCount())
+        ActivityOverviewItem(stringResource(R.string.solved_exercises), patient.getCompletedExercisesCount(), MaterialTheme.colorScheme.primary),
+        ActivityOverviewItem(stringResource(R.string.pending_exercises), patient.getPendingExercisesCount(), MaterialTheme.colorScheme.primary.darken(0.2f)),
+        ActivityOverviewItem(stringResource(R.string.solved_forms), patient.getCompletedQuestionnairesCount(), Color.Red),
+        ActivityOverviewItem(stringResource(R.string.pending_forms), patient.getPendingQuestionnairesCount(), Color.Red.darken(0.2f)),
+        ActivityOverviewItem(stringResource(R.string.recorded_sessions), patient.getRecordedSessionsCount(), Color.Blue.darken(0.2f))
     )
 
     //TODO: lo ideal aca seria que no sea scrolleable, deberiamos ver una forma que cuando no haya espacio para meter todo,
@@ -193,20 +194,20 @@ fun ActivitiesOverview(patient: Patient){
         columns = GridCells.Fixed(2),
         modifier = Modifier
             .padding(16.dp)
-            .height(248.dp),
+            .height(250.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ){
         activities.forEachIndexed { index, activity ->
             item(span = { TwoColumnGridItemSpan(activities.size).adjust(index) }) {
-                ActivityOverviewCard(title = activity.title, number = activity.number)
+                ActivityOverviewCard(title = activity.title, number = activity.number, color = activity.color)
             }
         }
     }
 }
 
 @Composable
-fun ActivityOverviewCard(title: String, number: Int){
+fun ActivityOverviewCard(title: String, number: Int, color: Color = MaterialTheme.colorScheme.primary){
     Card(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         modifier = Modifier
@@ -223,7 +224,7 @@ fun ActivityOverviewCard(title: String, number: Int){
                 modifier = Modifier
                     .size(32.dp)
                     .clip(CircleShape),
-                color = MaterialTheme.colorScheme.primary
+                color = color
             ) {
                 Box(contentAlignment = Alignment.Center){
                     Text(

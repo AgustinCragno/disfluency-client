@@ -48,17 +48,19 @@ data class Patient(
     }
 
     fun getCompletedQuestionnairesCount(): Int {
-        //TODO: implement
-        return 0
+        return forms
+            .map { e -> e.completionEntries }
+            .count { e -> e.isNotEmpty() }
     }
 
     fun getPendingQuestionnairesCount(): Int {
-        //TODO: implement
-        return 0
+        return forms
+            .map { e -> e.completionEntries }
+            .count { e -> e.isEmpty() }
     }
 
     fun getRecordedSessionsCount(): Int {
         //TODO: implement
-        return 0
+        return 2
     }
 }
